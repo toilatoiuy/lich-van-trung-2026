@@ -10,8 +10,8 @@
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%2210%22 y=%2220%22 width=%2280%22 height=%2270%22 rx=%2215%22 fill=%22white%22 stroke=%22%23DC2626%22 stroke-width=%225%22/><path d=%22M10 35h80%22 stroke=%22%23DC2626%22 stroke-width=%225%22/><rect x=%2225%22 y=%2210%22 width=%2210%22 height=%2225%22 rx=%225%22 fill=%22%23DC2626%22/><rect x=%2265%22 y=%2210%22 width=%2210%22 height=%2225%22 rx=%225%22 fill=%22%23DC2626%22/><text x=%2250%22 y=%2275%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22%23DC2626%22 font-family=%22sans-serif%22 font-weight=%22bold%22>31</text></svg>">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Sửa lỗi màn hình trắng: Bỏ data-presets env -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- FIX LỖI: Dùng phiên bản Babel ổn định -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.6/babel.min.js"></script>
     
     <script type="importmap">
     {
@@ -44,7 +44,7 @@
 <body>
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module">
+    <script type="text/babel" data-type="module" data-presets="react">
         import React, { useState, useEffect, useMemo } from 'react';
         import { createRoot } from 'react-dom/client';
         import { 
@@ -78,6 +78,7 @@
         const STORAGE_KEY_CONFIG = 'user_firebase_config';
         const NOTE_COLORS = ['#FEFCE8', '#DBEAFE', '#DCFCE7', '#FCE7F3', '#F3E8FF', '#FFFFFF', '#FFEDD5', '#E0F2FE', '#D1FAE5', '#FAE8FF', '#EDE9FE', '#F5F5F4'];
         
+        // Danh sách ảnh nền đẹp
         const BACKGROUNDS = [
             "https://images.unsplash.com/photo-1501854140884-074cf2b21d25?q=80&w=800&auto=format&fit=crop", 
             "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=800&auto=format&fit=crop", 
@@ -344,52 +345,6 @@
             "Thật hạnh phúc, bạn khi cần thiết\nBiết đủ là hạnh phúc nào hơn.\nVui thay, chết để đức nhân\nKhổ đau chấm dứt, trần gian niết-bàn.",
             "Thật hạnh phúc, dưỡng nuôi cha mẹ\nPhúc nào hơn kính lễ sa-môn\nVui thay, kính bậc thánh hiền\nPhúc thay, chánh niệm hiện tiền ngay đây.",
             "Thật hạnh phúc tuổi già có đức\nPhúc nào hơn tuệ giác cao siêu\nVui thay, chánh tín, hiểu nhiều\nPhúc thay, từ bỏ bao nhiêu ác tà.",
-            "Người tu học tự mình dò xét\nĐánh giá mình nhân cách đục trong\nGiữ gìn chánh niệm, tự phòng\nTrụ an lạc, để tâm không muộn phiền.",
-            "Người tu Phật tự mình nương tựa\nTìm được nguồn ẩn trú bản thân\nTự mình điều phục nguồn tâm\nNhư người buôn có ngựa thuần đường xa.",
-            "Người tu sĩ tâm thường hoan hỷ\nĐặt niềm tin pháp vị cao siêu\nAn lành tịch tịnh trọn nên\nCác hành hữu lậu lặng yên, nhẹ nhàng.",
-            "Bậc hành giả tuổi đời tuy nhỏ\nTu pháp môn sáng tỏ nguồn tâm\nTrí mầu soi sáng thế gian\nNhư vầng trăng thoát mây ngàn bủa giăng.",
-            "Hãy tinh tấn dứt dòng ái dục\nBỏ thú vui vật chất bao đời\nCác hành đoạn diệt, thảnh thơi\nBà-la-môn ấy rạng ngời vô vi.",
-            "Nhờ an trụ pháp tu chỉ, quán\nMà tiến về bỉ ngạn an vui\nBà-la-môn trí sáng ngời\nDiệt trừ kiết sử, thảnh thơi đạo vàng.",
-            "Người không chấp bờ này, bờ nọ\nTâm chẳng màng chấp có, chấp không\nKhổ đau dứt, trói buộc buông\nNgười tu ấy Bà-la-môn tuyệt vời.",
-            "Tu thiền định, ẩn cư, không nhiễm\nLậu hoặc lìa, bổn phận đã xong.\nHoàn thành mục đích tối tôn\nNgười tu ấy Bà-la-môn sáng ngời.",
-            "Trời, trăng sáng ngày, đêm tùy lúc\nCác vua quan sáng rực kiếm cung\nTu thiền chói sáng ngoài trong\nTrí tuệ Phật sáng soi chung đất trời.",
-            "Người dứt ác xứng hàng Phạm chí\nHạnh thanh cao xứng vị Sa-môn\nXuất gia hết cấu uế tâm\nXứng danh thượng sĩ xuất trần xưa nay.",
-            "Đừng hãm hại Sa-môn, Phạm chí\nGặp nghịch duyên xin chớ trả thù.\nKhổ thay, hại bậc chân tu\nChớ nên trả đũa oán cừu mà chi.",
-            "Bậc Phạm chí tâm không tham ái\nKhông trả thù, sân, hại một ai\nKhổ đau dứt sạch trong ngoài\nNiềm vui to lớn, nạn tai không còn.",
-            "Người không tạo nghiệp nhân ác độc\nMiệng, ý, thân trau chuốt, giữ gìn\nHành vi, lối sống tịnh thanh\nXứng danh Phạm chí hiền minh, đức từ.",
-            "Biết đền đáp ân sâu của bậc\nHướng dẫn ta hiểu Phật, Pháp, Tăng\nThành tâm lễ tạ, cúng dàng\nNhư người Phạm chí thờ thần lửa kia.",
-            "Gọi Phạm chí đâu vì bện tóc\nGiai cấp hay chủng tộc bảy đời\nChân thành, chánh niệm, thảnh thơi\nBà-la-môn ấy sáng ngời đức tu.",
-            "Phạm chí “ngố” chỉ lo bện tóc\nLợi ích gì áo mặc da dê\nTâm còn phiền não, u mê\nTu toàn hình thức, đường về còn xa.",
-            "Phạm chí “ngố” mặc y vá nhớp\nDa lộ gân, thân hốc hác gầy.\nNgười tu thiền định đêm ngày\nBà-la-môn ấy sánh tày núi cao.",
-            "Phạm chí thật đâu do huyết thống\nGiai cấp cao, nguồn gốc thọ sanh.\nAi không phiền não, tịnh thanh\nPhạm chí không chấp, cõi tâm an lành.",
-            "Người dứt sạch cả mười trói buộc\nKhông sầu lo được, mất, thua, hơn\nBao điều chấp trước xả buông\nNgười tu ấy Bà-la-môn tuyệt vời.",
-            "Bậc Phạm chí bỏ đai “sân hận”\nCắt cương “tham”, tà kiến, tùy miên\nVô minh hết, trí trọn nên\nHướng về giác ngộ, thoát miền trầm luân.",
-            "Lấy đức nhẫn làm quân xông trận\nKhông ác tâm, phỉ báng, phạt hình\nTừ bi, từ bỏ hận, sân\nBà-la-môn ấy sáng danh đạo đời.",
-            "Không tức giận, làm tròn bổn phận,\nGiới thanh cao, ái, hận không còn\nGiác quan làm chủ luôn luôn\nThân này cuối, Bà-la-môn sáng ngời.",
-            "Người đã dứt dục tâm hoen ố\nCó khác gì “nước đổ lá sen”\nCũng như “hạt cải đầu kim”\nBà-la-môn ấy xứng hàng chân tu.",
-            "Phạm chí học trên đời hiểu rõ\nNào khổ đau, gốc khổ, niết-bàn\nNương theo chánh đạo tu hành\nÁi sạch, giải thoát, rạng danh trên đời.",
-            "Người có trí thực hành hiểu rõ\nNguồn gốc từ hai nẻo chánh tà.\nChứng đạo giải thoát sâu xa\nBà-la-môn ấy thật là xứng danh.",
-            "Không thân thiết cả Tăng lẫn Tục\nHạnh độc cư, thiểu dục, hài lòng\nNhư mây đây đó thong dong\nAn vui, tự tại, không còn sầu đau.",
-            "Ngừng nghiệp sát, tổn thương sinh mạng\nYếu hơn ta hay mạnh khỏe hơn\nKhông ưa sai bảo, tán đồng\nĐây là Phạm chí xứng hàng chân tu.",
-            "Sống thân thiện giữa bao thù nghịch\nGiữ ôn hòa với địch hung hăng\nTịnh thanh giữa chốn hồng trần\nBà-la-môn ấy xứng hàng chân tu.",
-            "Người tu tập không còn dính dáng\nTham, sân, si, kiêu mạn, tị hiềm\nCũng như hạt cải đầu kim\nBà-la-môn ấy trọn nên đạo vàng.",
-            "Người tu tập nói lời từ ái\nChân thật và ích lợi cho đời\nKhông hề làm mất lòng người\nBà-la-môn ấy sáng ngời tấm gương.",
-            "Người tu tập tránh xa trộm cắp\nVật không cho không lấy, chỉa chôm\nCho dù lớn, nhỏ, quý, thường.\nBà-la-môn ấy tấm gương sáng ngời.",
-            "Không tham vọng đời này, đời tới\nKhông dính gì ba cõi trầm luân\nBuông tất cả, giải thoát tâm\nBà-la-môn ấy rạng danh đạo đời.",
-            "Người tu tập không vương ái dục\nTrí tuệ nhiều, nghi hoặc không còn\nChứng vào cảnh giới niết-bàn\nBà-la-môn ấy xứng hàng chân tu.",
-            "Ai không vướng chuyện đời thiện ác,\nTu xả ly, giải thoát buộc ràng\nKhông sầu, thanh tịnh, lạc an\nBà-la-môn ấy xứng hàng chân tu.",
-            "Như trăng sáng thoát mây che khuất\nAn tịnh lòng, hết trược, sáng trong\nĐam mê hiện hữu dứt xong\nBà-la-môn ấy vào dòng thánh nhân.",
-            "Hết tham ái, không nghi, không chấp\nVượt hiểm nguy sống chết, luân hồi\nThực hành thiền định, đến nơi\nPhạm chí tịch tịnh, thảnh thơi vượt dòng.",
-            "Vì lý tưởng xuất gia, học đạo\nLìa gia đình, dục lạc chẳng màng\nDứt trừ hiện hữu, ái tham\nBà-la-môn ấy xứng hàng chân tu.",
-            "Vì lý tưởng xuất gia, học đạo\nLìa gia đình, khát ái chẳng màng\nDứt trừ hiện hữu, ái tham\nBà-la-môn ấy xứng hàng chân tu.",
-            "Tu thoát khỏi buộc ràng hai cõi\nThế giới người, cảnh giới chư thiên\nBuộc ràng, giải thoát không còn\nBà-la-môn ấy vào dòng thánh nhân.",
-            "Không vướng bận những điều ưa ghét\nHết sanh y, năm uẩn vượt qua\nAnh hùng chiến thắng nhiễm ô\nBà-la-môn ấy thật là chân tu.",
-            "Ai hiểu rõ đường đi sống chết\nKhông nhiễm ô, sáng suốt vượt lên\nHọc Tứ đế, ngộ lý chân\nBà-la-môn ấy xứng danh tu hành.",
-            "Với hành giả mà trời, thần, quỷ\nKhông một ai biết chỗ tái sanh\nLậu hoặc hết, chứng thánh nhân\nBà-la-môn ấy xứng hàng chân tu.",
-            "Người không dính vị lai, quá khứ\nHiện tại thì chẳng sở hữu gì\nXả buông, chẳng kẹt thứ chi\nBà-la-môn ấy sánh vì trăng sao.",
-            "Như trâu chúa sức thần uy dũng\nBậc anh hùng, chiến thắng nhiễm tham\nTrí mầu giác ngộ, tịnh thanh\nBà-la-môn ấy xứng danh tu hành.",
-            "Rõ quá khứ, vị lai, hiện tại\nCõi trời, người, cảnh giới tái sanh\nMâu ni, thắng trí, viên thành\nTử sanh kết thúc, sáng danh đạo đời.",
-            // PHẦN 4 (TIẾP)
             "Người tu học tự mình dò xét\nĐánh giá mình nhân cách đục trong\nGiữ gìn chánh niệm, tự phòng\nTrụ an lạc, để tâm không muộn phiền.",
             "Người tu Phật tự mình nương tựa\nTìm được nguồn ẩn trú bản thân\nTự mình điều phục nguồn tâm\nNhư người buôn có ngựa thuần đường xa.",
             "Người tu sĩ tâm thường hoan hỷ\nĐặt niềm tin pháp vị cao siêu\nAn lành tịch tịnh trọn nên\nCác hành hữu lậu lặng yên, nhẹ nhàng.",
@@ -722,7 +677,7 @@
             useEffect(() => {
                 const isNewYear = today.getDate() === 1 && today.getMonth() === 0;
                 if (isNewYear) {
-                     setCurrentVerse(`Nhân dịp năm mới ${today.getFullYear()}.\nXin kính chúc mọi người và gia đình một năm mới dồi dào sức khỏe, hạnh phúc và bình an!`);
+                     setCurrentVerse(`Nhân dịp năm mới ${today.getFullYear()}.\nXin kính chúc mọi người và gia đình một năm mới dồi dào sức khỏe, hạnh phúc và bình an!"\n\n_ Văn Trung`);
                      setIsNewYearWish(true);
                 } else {
                      setIsNewYearWish(false);
@@ -812,7 +767,7 @@
                         </div>
                     );
                 }
-
+                
                 if (viewMode === 'events') {
                      return (
                         <div className="w-full h-full overflow-y-auto no-scrollbar" onTouchStart={stopSwipe} onTouchEnd={stopSwipe}>
