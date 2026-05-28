@@ -6,12 +6,11 @@
     <title>Lịch vạn niên - Văn Trung</title>
     
     <!-- ICON ỨNG DỤNG -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%2210%22 y=%2220%22 width=%2280%22 height=%2270%22 rx=%2215%22 fill=%22white%22 stroke=%22%23DC2626%22 stroke-width=%225%22/><path d=%22M10 35h80%22 stroke=%22%23DC2626%22 stroke-width=%225%22/><rect x=%2225%22 y=%2210%22 width=%2210%22 height=%2225%22 rx=%225%22 fill=%22%23DC2626%22/><rect x=%2265%22 y=%2210%22 width=%2210%22 height=%2225%22 rx=%225%22 fill=%22%23DC2626%22/><text x=%2250%22 y=%2275%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22%23DC2626%22 font-family=%22sans-serif%22 font-weight=%22bold%22>31</text></svg>">
+    <link class="favicon" rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%2210%22 y=%2220%22 width=%2280%22 height=%2270%22 rx=%2215%22 fill=%22white%22 stroke=%22%23DC2626%22 stroke-width=%225%22/><path d=%22M10 35h80%22 stroke=%22%23DC2626%22 stroke-width=%225%22/><rect x=%2225%22 y=%2210%22 width=%2210%22 height=%2225%22 rx=%225%22 fill=%22%23DC2626%22/><rect x=%2265%22 y=%2210%22 width=%2210%22 height=%2225%22 rx=%225%22 fill=%22%23DC2626%22/><text x=%2250%22 y=%2275%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22%23DC2626%22 font-family=%22sans-serif%22 font-weight=%22bold%22>31</text></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%2210%22 y=%2220%22 width=%2280%22 height=%2270%22 rx=%2215%22 fill=%22white%22 stroke=%22%23DC2626%22 stroke-width=%225%22/><path d=%22M10 35h80%22 stroke=%22%23DC2626%22 stroke-width=%225%22/><rect x=%2225%22 y=%2210%22 width=%2210%22 height=%2225%22 rx=%225%22 fill=%22%23DC2626%22/><rect x=%2265%22 y=%2210%22 width=%2210%22 height=%2225%22 rx=%225%22 fill=%22%23DC2626%22/><text x=%2250%22 y=%2275%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22%23DC2626%22 font-family=%22sans-serif%22 font-weight=%22bold%22>31</text></svg>">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FIX LỖI: Dùng phiên bản Babel ổn định -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.6/babel.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
     <script type="importmap">
     {
@@ -33,10 +32,20 @@
         
         /* 3D Animations */
         .perspective-container { perspective: 1000px; }
+        
+        @keyframes rotateInRight {
+            from { transform: translateX(100%) rotateY(-90deg); opacity: 0; }
+            to { transform: translateX(0) rotateY(0); opacity: 1; }
+        }
+        @keyframes rotateInLeft {
+            from { transform: translateX(-100%) rotateY(90deg); opacity: 0; }
+            to { transform: translateX(0) rotateY(0); opacity: 1; }
+        }
+
         .anim-next { animation: rotateInRight 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
         .anim-prev { animation: rotateInLeft 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-        @keyframes rotateInRight { from { transform: translateX(100%) rotateY(-90deg); opacity: 0; } to { transform: translateX(0) rotateY(0); opacity: 1; } }
-        @keyframes rotateInLeft { from { transform: translateX(-100%) rotateY(90deg); opacity: 0; } to { transform: translateX(0) rotateY(0); opacity: 1; } }
+        
+        /* Animation cho menu popup */
         .fade-in { animation: fadeIn 0.2s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     </style>
@@ -44,24 +53,25 @@
 <body>
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module" data-presets="react">
+    <script type="text/babel" data-type="module">
         import React, { useState, useEffect, useMemo } from 'react';
         import { createRoot } from 'react-dom/client';
         import { 
             Calendar, CheckSquare, StickyNote, Plus, Trash2, LogOut, 
             ChevronLeft, ChevronRight, Save, X, User, Settings, AlertCircle, 
-            Clock, Bell, Palette, ArrowUp, ArrowDown, WifiOff, 
-            Sun, Cloud, CloudRain, BookOpen, CalendarDays, Search, MapPin, 
-            MoreVertical, Table
+            Clock, Bell, Palette, ArrowUp, ArrowDown, WifiOff, RefreshCw,
+            Sun, Cloud, CloudRain, BookOpen, Coins, CalendarDays, Search, MapPin, 
+            Eye, EyeOff, MoreVertical, MoreHorizontal, Table, Key
         } from 'lucide-react';
         import { initializeApp } from 'firebase/app';
         import { 
             getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, 
-            onAuthStateChanged, signInWithCustomToken, signOut
+            onAuthStateChanged, signInWithCustomToken, signOut, sendPasswordResetEmail,
+            updatePassword
         } from 'firebase/auth';
         import { 
             getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, 
-            onSnapshot, query, serverTimestamp, Timestamp, orderBy, setDoc, getDoc
+            onSnapshot, query, serverTimestamp, Timestamp, orderBy, setDoc, getDoc, getDocs
         } from 'firebase/firestore';
 
         // --- CẤU HÌNH ---
@@ -90,7 +100,7 @@
             "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop"
         ];
 
-        // --- DANH SÁCH KINH PHÁP CÚ (ĐẦY ĐỦ 431 BÀI) ---
+        // --- DANH SÁCH KINH PHÁP CÚ MỚI (ĐẦY ĐỦ 431 BÀI THEO THỨ TỰ) ---
         const DEFAULT_VERSES = [
             "Buông xuống đi, hãy buông xuống đi!\nChớ giữ làm chi, có ích gì.\nThở ra chẳng lại, còn chi nữa?\nVạn pháp vô thường, buông xuống đi!",
             "Buông xuống đi, hãy buông xuống đi!\nChớ giữ làm chi, có ích gì?\nÔm vào đau khổ vô cùng tận,\nBuông xuống ngay liền vạn khổ đi!",
@@ -110,7 +120,7 @@
             "Người như thế bị ma đánh bại\nCũng giống như gió thổi ngã cây.\nKhổ đau, bất lực nào hay\nĐều do buông thả, đắm say sắc trần.",
             "Không nhiễm đắm, quán thân nhơ uế\nGiữ gìn tâm, làm chủ giác quan\nUống ăn tiết độ, siêng năng\nVững vàng như núi trước ngàn bão giông.",
             "Dù khoát áo cà-sa đĩnh đạc\nMà tâm còn uế trược tham, sân\nSống không chân thật, buông lung\nLàm sao xứng hạnh sa-môn sáng ngời?",
-            "Ai giải phóng tham, sân, trược uế\nSống thanh cao, giữ giới nghiêm minh\nChánh chân, làm chủ được mình\nNgười tu như thế thật tình đáng khen.",
+            "AI giải phóng tham, sân, trược uế\nSống thanh cao, giữ giới nghiêm minh\nChánh chân, làm chủ được mình\nNgười tu như thế thật tình đáng khen.",
             "“Không chân thật lại cho chân thật\nChân thật thì lầm tưởng dối gian”\nTà tư, tà hạnh làm nhân\nDo vậy khó đạt chánh chân trong đời.",
             "“Cái chân thật thì cho chân thật\nKhông chân thì khẳng định không chân”\nChánh tư, chánh hạnh làm nhân\nNhờ vậy đạt được chánh chân trong đời.",
             "Nhà vụng lợp có nhiều lỗ dột\nMột trận mưa làm ướt tả tơi.\nNgười không tu tập, mải chơi\nDục tham xâm nhập, cả đời khổ đau.",
@@ -128,7 +138,7 @@
             "Luôn nỗ lực vượt qua phóng dật\nTự điều thân, làm chủ giác quan\nTrí nhân như đảo vững vàng\nBão giông không thể ngập tràn được đâu.",
             "Kẻ thiếu trí đam mê phóng dật\nBám nghiệp duyên, rồi gặt quả sầu\nTrí nhân tinh tấn trước sau\nNhư gìn của báu làm giàu bản thân.",
             "Cảnh hưởng thụ không thèm màng tới\nDục lạc đời chẳng luyến ái tham.\nSiêng tu thiền định, chánh tâm,\nNiềm vui sâu lắng đạt thành khó chi.",
-            "Người có trí dẹp tan phóng dật\nTrên lầu cao tuệ giác nhìn trông\nKhông sầu khổ, hết buồn vương\nThương người ngu dưới kiếp hồng trần kia.",
+            "Người có trí dẹp tan phóng dật\nOn lầu cao tuệ giác nhìn trông\nKhông sầu khổ, hết buồn vương\nThương người ngu dưới kiếp hồng trần kia.",
             "Sống tinh tấn giữa người phóng đãng\nTỉnh thức luôn bên cạnh kẻ say\nTrí nhân như ngựa khéo nài\nBỏ xa ngựa yếu cả bầy sau lưng.",
             "Như Đế Thích do tu tinh tấn\nKhi tái sanh làm chủ cõi thiên\nKhông còn phóng dật được khen.\nĐời hay chỉ trích kẻ ghiền buông lung.",
             "Tâm luôn thích niềm vui tinh tấn\nSợ buông lung phá hạnh thanh cao\nTu theo pháp Phật nhiệm mầu\nĐốt tiêu trói buộc, sầu đau bao đời.",
@@ -147,7 +157,6 @@
             "Ai chinh phục địa cầu, thiên giới\nVượt lên trên cả cõi Diêm-ma\nSao bằng ngộ pháp Phật-đà\nNhư người khéo kết tràng hoa đẹp màu.",
             "Bậc hữu học vượt qua trời đất\nVượt lên trên cả cõi Diêm-ma\nLại thông chánh pháp Phật-đà\nNhư người khéo kết tràng hoa đẹp màu.",
             "Khi tỏ ngộ thân như bọt nước\nẢo ảnh như điện chớp trên không\nBẻ tan tên của Ma quân\nVượt tầm thần chết hàng ngàn dặm xa.",
-            // PHẦN 2 (TIẾP)
             "Dùng vũ khí, gậy dao đánh đập\nHành hạ người, trù dập tơi bời\nQuả sầu mười loại sau đây:\nMột là đau nhức đêm ngày rên la;",
             "Hai, tai biến; ba là thương tật;\nBốn, độn căn, ngu ngốc, hay quên;\nNăm thường lận đận luật quan;\nSáu vương trọng tội bị oan, hiểu lầm.",
             "Bảy, thân quyến, họ hàng ly tán\nTám, chẳng may tài sản tiêu tan\nChín là hỏa hoạn, nghèo nàn\nMười sau khi chết đọa làm súc sinh.",
@@ -196,7 +205,7 @@
             "Thật hạnh phúc, làm người nhân đức\nQuả khó thay, sống thật tịnh thanh\nKhó thay, nghe pháp, thực hành\nKhó thay, gặp Phật chứng thành quả cao.",
             "Mọi hoàn cảnh không làm bất thiện\nDù khó khăn, phát triển nhân lành\nLuyện tâm, rèn ý tịnh thanh\nLà lời Phật dạy đành rành xưa nay.",
             "Tu nhẫn nhục: Khổ hành đáng quý\nĐạt niết-bàn: Quả vị tối cao\nChúng sinh: Chẳng hại tơ hào\nHạnh sa-môn ấy cao sâu khó bàn.",
-            "Không phỉ báng, không làm thương tổn\nLàm chủ mình, giới bổn vẹn toàn\nĐiều hòa ăn uống, định thiền\nSống đời an tịnh, không phiền một ai.",
+            "Không phỉ báng, không làm thương tổn\nLàm chủ mình, giới bổn vẹn toàn\nĐoạn điệu ăn uống, định thiền\nSống đời an tịnh, không phiền một ai.",
             "Dù mưa rãi bạc vàng chưa thỏa\nLòng dục tham không đáy xưa nay\nTrí nhân hiểu rõ điều này\nKhổ nhiều, vui ít, không sai bao giờ.",
             "Ngộ lẽ ấy, người tu học Phật\nChẳng đam mê dục lạc người, trời\nQuyết lòng chuyển hóa, thảnh thơi\nKhông còn tham ái, rạng ngời nhân gian.",
             "Trong nguy khổ, người tìm nương tựa\nHoặc thần linh, rừng rú, non cao,\nMiếu, đình, cây, vật, hang sâu,\nVái van, hiến tế, mong sao an lành.",
@@ -206,7 +215,7 @@
             "Nương tựa ấy tạo nên quả phước\nNguồn tâm linh, thể đạt an vui\nNgười khôn nương tựa đời đời\nVẫy chào đau khổ, thảnh thơi cuộc đời.",
             "Bậc trí tuệ vun bồi giới đức\nTìm khắp nơi hiếm được một người\nChỗ nào có bậc trí tài\nXóm làng hạnh phúc, cuộc đời bình an.",
             "Ôi hạnh phúc, Như Lai thị hiện\nPháp cao siêu lăn chuyển khắp nơi\nTăng đoàn hòa hợp đạo đời\nBốn hàng đệ tử cùng vui tu hành.",
-            "Biết lễ kính những người đáng kính\nPhật, thánh hiền đức hạnh thanh cao\nNhững người chướng ngại sạch làu\nNão phiền dứt sạch, khổ đau giã từ.",
+            "Biết lễ kính những người đáng kính\nPhật, thánh hiền đức hạnh thanh cao\nNhững người chướng ngại sạch làu\nNhỏ phiền dứt sạch, khổ đau giã từ.",
             "Nhờ cung kính chân tu quảng đại\nBậc tịnh an, tự tại thấy nghe,\nKhông còn sợ hãi, sầu, mê,\nPhước lành mỹ mãn đề huề bên ta.",
             "Phúc thay sống giữa người thù hận\nLòng thảnh thơi, chẳng giận hờn ai\nLành thay, sống giữa chua cay\nKhông hề oán hận, nguôi ngoai cõi lòng.",
             "Phúc thay sống giữa người đau bệnh\nChẳng hề chi, khỏe mạnh tấm thân,\nLành thay, sống giữa nguy nan\nBình an, vô sự, an toàn trước sau.",
@@ -223,11 +232,11 @@
             "Cố đeo đuổi điều nên xa lánh\nViệc đáng theo lại tránh không làm.\nBỏ mục tiêu, vướng ái tham\nNỡ nào ganh ghét người ham tu hành?!",
             "Chớ gần gũi người thương quá đỗi\nĐừng gần người bực bội, ghét mình\nThương không gặp, khổ muôn phần\nTiếp duyên kẻ ghét ngút ngàn khổ đau.",
             "Hiểu được thế, chớ yêu chớ nhớ\nYêu xa nhau, đau khổ biệt ly\nVẫy chào yêu ghét, sầu bi\nCắt dây trói buộc, còn gì sướng hơn!",
-            "Gốc tham ái sanh ra đau khổ\nTạo sầu bi, lo sợ ngã nhân\nAi trừ tham ái khỏi tâm\nXa lìa sợ hãi, không còn sầu bi.",
-            "Gốc luyến ái sanh ra đau khổ\nTạo sầu bi, lo sợ ngã nhân\nAi trừ luyến ái khỏi tâm\nXa lìa sợ hãi, không còn sầu bi.",
-            "Gốc hỷ ái sanh ra đau khổ\nTạo sầu bi, lo sợ ngã nhân\nAi trừ hỷ ái khỏi tâm\nXa lìa sợ hãi, không còn sầu bi.",
-            "Gốc dục ái sanh ra đau khổ\nTạo sầu bi, lo sợ ngã nhân\nAi trừ dục ái khỏi tâm\nXa lìa sợ hãi, không còn sầu bi.",
-            "Gốc khát ái sanh ra đau khổ\nTạo sầu bi, lo sợ ngã nhân\nAi trừ khát ái khỏi tâm\nXa lìa sợ hãi, không còn sầu bi.",
+            "Gốc tham ái sanh ra đau khổ\nTạo sầu bi, lo sợ ngã nhân\nAI trừ tham ái khỏi tâm\nXa lìa sợ hãi, không còn sầu bi.",
+            "Gốc luyến ái sanh ra đau khổ\nTạo sầu bi, lo sợ ngã nhân\nAI trừ luyến ái khỏi tâm\nXa lìa sợ hãi, không còn sầu bi.",
+            "Gốc hỷ ái sanh ra đau khổ\nTạo sầu bi, lo sợ ngã nhân\nAI trừ hỷ ái khỏi tâm\nXa lìa sợ hãi, không còn sầu bi.",
+            "Gốc dục ái sanh ra đau khổ\nTạo sầu bi, lo sợ ngã nhân\nAI trừ dục ái khỏi tâm\nXa lìa sợ hãi, không còn sầu bi.",
+            "Gốc khát ái sanh ra đau khổ\nTạo sầu bi, lo sợ ngã nhân\nAI trừ khát ái khỏi tâm\nXa lìa sợ hãi, không còn sầu bi.",
             "Người giới đức, tuệ tri đầy đủ\nNương pháp lành, chứng ngộ lý chân\nLàm xong những việc phải làm\nMọi người kính nể mười phân vẹn mười.",
             "Niết-bàn chứng ly ngôn tông chỉ\nQuả tam hiền, tuệ trí viên thông\nLìa dục lạc, tịnh cõi lòng\nBậc chân nhân đó ngược dòng thế gian.",
             "Như lữ khách biệt tăm, xa vắng\nNay trở về lành lặn, bình an\nBạn bè, thân quyến hân hoan\nChúc mừng sum họp, xóm làng chia vui.",
@@ -237,13 +246,13 @@
             "Dùng “không hận” vượt qua cơn giận\nBố thí nhiều chiến thắng san tham\nNhân từ chinh phục ác gian\nDùng tâm chân thật thắng ngàn ngụy trang.",
             "Dù nghèo khó, thực hành ban tặng\nChuyển hóa tâm, sân hận không còn\nNói lời ái ngữ, thực lòng:\nĐây là điều kiện sanh lên cõi trời.",
             "Người gieo rắc tình thương, bất hại\nKhắp mọi nơi, tự tại thân, tâm\nLìa phiền não, hướng niết-bàn\nKhổ đau kết thúc, bình an giữa đời.",
-            "Người tỉnh thức ngày đêm tinh tấn,\nHọc và tu cố gắng song hành\nMột lòng hướng đến niết-bàn\nVượt qua lậu hoặc, dễ dàng thành công.",
+            "Người tỉnh thức ngày đêm tinh tấn,\nHọc và tu cố gắng song hành\nMột lòng hướng đến niết-bàn\nMột lậu hoặc, dễ dàng thành công.",
             "Người im lặng bị chê không biết\nKẻ phát ngôn mang tiếng lắm lời\nCó ai không bị chê cười?\nThị phi là thói miệng đời xưa nay.",
             "Như quy luật điều này kim cổ\nChẳng ai từng toàn bị chê thôi\nCũng không mãi được khen hoài\nKhen chê là thói miệng đời, bận chi!",
-            "“Người có trí sống không tỳ vết\nGiới hạnh và định, tuệ tròn đầy.”\nAi thường thẩm sát vị này\nCông tâm tán thán, nể người chân tu.",
+            "“Người có trí sống không tỳ vết\nGiới hạnh và định, tuệ tròn đầy.”\nAI thường thẩm sát vị này\nCông tâm tán thán, nể người chân tu.",
             "Người giữ giới như vàng óng ánh\nMột lòng tu, đức hạnh cao vời\nXứng danh khen ngợi của đời\nPhạm thiên cũng phải ngỏ lời tán dương.",
             "Thân làm chủ thì đừng cáu giận\nPhòng hộ thân sẽ đặng an lành\nCác điều xấu ác chớ làm\nNhững điều đạo đức tinh cần không quên.",
-            "Làm chủ miệng thì đừng cáu giận\nPhòng hộ lời sẽ đặng an lành\nKhông lời thô ác, cộc cằn\nNhững lời từ ái tinh cần không quên.",
+            "Làm chủ miệng thì đừng cáu giận\nPhòng hộ lời sẽ đặng an lành\nKhông lời thô ác, cộc cần\nNhững lời từ ái tinh cần không quên.",
             "Làm chủ ý thì không cáu giận\nPhòng hộ tâm sẽ đặng an lành\nTâm không tà kiến, dữ dằn\nTư duy chân chánh tinh cần không quên.",
             "Bậc hiền trí điều thân, miệng, ý\nGìn cả ba tỉ mỉ không quên\nThân lành, lời đẹp, ý chơn\nHoàn thành điều phục, không còn bợn nhơ.",
             "Thân thể sẽ tàn như lá úa\nThần chết luôn chầu chực kề bên\nỞ đời, mạng sống vô thường\n“Hành trang” chưa đủ, đường trường mệt hơi.",
@@ -259,51 +268,11 @@
             "Đẹp biết mấy, người thường hổ thẹn\nSống vô tư, khiêm tốn, hài hòa\nBuộc ràng nhất quyết lìa xa\nGiữ tâm sáng suốt, thật thà, tịnh thanh.",
             "Có những kẻ sát sanh, hại vật\nCủa không cho cướp đoạt về mình\nDối gian, nghiện ngập, ngoại tình\nTự đào mộ huyệt, tự chôn cuộc đời.",
             "Chính vì thế người khôn nên biết\nChế ngự tâm thì ác diệt vong\nTham lam tội lỗi cùng đường\nKhổ đau, lận đận, đoạn trường khó ngưng.",
-            "Do tâm đạo hoặc lòng hoan hỷ\nMà có người bố thí, cúng dường.\nAi người bất mãn, ganh, hờn\nNgày đêm khó được định tâm an lành.",
-            "Ai bỏ được hờn căm, ganh ghét\nBiết vui theo hạnh phúc của người\nNgày đêm tùy hỷ, tươi cười\nĐịnh tâm đạt được giữa đời trái ngang.",
+            "Do tâm đạo hoặc lòng hoan hỷ\nMà có người bố thí, cúng dường.\nAI người bất mãn, ganh, hờn\nNgày đêm khó được định tâm an lành.",
+            "AI bỏ được hờn căm, ganh ghét\nBiết vui theo hạnh phúc của người\nNgày đêm tùy hỷ, tươi cười\nĐịnh tâm đạt được giữa đời trái ngang.",
             "Lửa dữ nhất là tham ái nặng\nChấp nào hơn thù hận tái tê\nLưới nào hơn lưới si mê\nSông tình bể dục kéo lê bao người.",
             "Bươi móc lỗi của người quá dễ\nNhư quạt quay, thổi trấu ra ngoài\nLỗi mình che giấu đêm ngày\nKhác gì gian lận chơi bài quen tay.",
-            "Kẻ nhếch mắt truy tìm lầm lỗi\nThường cống cao, chỉ trích, chê bai\nNão phiền theo đó tăng hoài\nCõi lòng an tịnh biết ngày nào đây?",
-            "Hư không vốn không lưu dấu vết\nNgoài Phật môn khó kiếm sa-môn\nĐời ham tranh luận vui mồm\nNhư Lai an tịnh, không còn hơn thua.",
-            "Hư không vốn không lưu dấu vết\nNgoài Phật môn khó kiếm sa-môn\nHữu vi biến đổi, vô thường\nNhư Lai an tịnh, không còn động tâm.",
-            "Bậc pháp trụ  là người chuẩn mực\nKhông sống theo chuyên chế, cực đoan\nTrí nhân cư xử cân phân\nChánh tà, đen trắng rõ ràng không sai.",
-            "Bậc pháp trụ là người trí giác\nSống công bằng, dẫn dắt mọi người\nKhông còn chuyên chế, lộng quyền\nSống theo luật pháp cho đời thăng hoa.",
-            "Bậc hiền trí chẳng do hiểu rộng\nHay nói nhiều những chuyện trên đời\nKhông thù, không oán sợ người\nAn hòa, đức độ, rạng ngời chánh chân.",
-            "Người trì pháp chẳng do lắm miệng\nBiết noi theo chuẩn mực pháp mầu\nThực hành chẳng chút lãng xao\nKhông còn phóng túng, thẩm sâu đạo vàng.",
-            "Gọi trưởng lão chẳng vì tóc bạc\nHoặc sống lâu, tuổi tác đã cao\nNhững ai đức, trí không sâu\nGià đầu mê muội khác nào “lão ngu.”",
-            "Người thông đạt bốn điều chân lý\nChủ giác quan, tuệ trí, chánh chân\nKhông còn lậu hoặc, tịnh thanh\nTrưởng lão như vậy xứng danh đạo đời.",
-            "Đâu phải đẹp, hoặc tài hùng biện\nMà trở thành người thiện chánh chân.\nAi không ích kỷ, hờn ganh\nKhông còn cao ngạo xứng danh bậc hiền.",
-            "Bậc hiền thiện là người dứt được\nTham, sân, si – nguồn gốc khổ đau\nTỏ thông trí tuệ làu làu\nĐức tài ngời sáng, đạo mầu tràn dâng.",
-            "Là tu sĩ đâu do đầu trọc.\nPhải thực hành, dứt sạch dục tham\nKhông còn phóng túng, dối gian\nHạng sa-môn ấy chánh chân trọn đời.",
-            "Ai chuyển hóa ác nhân lớn nhỏ\nDứt tham, sân, sáng tỏ nguồn tâm\nKhông còn ác pháp, tịnh thanh\nHạng sa-môn ấy xứng danh trên đời.",
-            "Người tu sĩ phải đâu hành khất\nChỉ biết ôm bình bát xin ăn\nNgười tu chánh pháp hiểu rành\nGiới hạnh đầy đủ, trí nhân sáng ngời.",
-            "Người tu sĩ vượt qua thiện, ác\nSống giữ gìn giới đức thanh cao\nDùng nguồn trí tuệ cao sâu\nXét soi vạn pháp, đạo mầu tràn dâng.",
-            "Chỉ im lặng mà tâm vô trí\nĐâu gọi là ẩn sĩ đạo cao?\nTrí nhân chọn thiện rất mau\nCán cân hạnh phúc đi đầu mọi duyên.",
-            "Bậc ẩn sĩ trong ngoài thấu hiểu\nĐời bây giờ và kiếp tương lai\nDứt trừ ác pháp hôm nay\nXứng danh Thích tử mâu-ni nhiệm mầu.",
-            "Bậc hiền thánh không gieo nghiệp sát\nHại con người, động vật, sinh linh.\nTâm từ thương khắp chúng sinh\nLoài vô tình lẫn hữu tình như nhau.",
-            "Chẳng vì cớ giữ gìn giới luật\nHay dựa vào học đủ hiểu nhiều\nChẳng vì thiền định cao siêu\nSống nơi thanh vắng sớm chiều độc cư...",
-            "Mà có thể tự cho chứng đắc\nTự mãn lòng được phước viễn ly\nChớ nên xao lãng hành trì\nĐến khi lậu hoặc hết thì mới xong.",
-            "Bát chánh đạo là đường độc lộ\nChân lý thì Tứ đế cao sâu\nLìa tham ái – quả nhiệm mầu\nChứng nên pháp nhãn dẫn đầu hai chân.",
-            "Bát chánh đạo không đường nào khác\nTuệ cao siêu, giải thoát, tịnh thanh\nNoi theo đường ấy thực hành\nNão phiền dứt sạch, ma quân quy hàng.",
-            "Theo chánh đạo khổ đau chấm dứt\nCác chướng duyên kết thúc dễ dàng\nNhư Lai chỉ rõ con đường\nTrí tuệ tăng trưởng, không còn tái sinh.",
-            "Hãy thực tập nhiệt tình, miên mật\nĐức Như Lai là bậc chỉ đường\nSiêng tu thiền định chuyên ròng\nVượt qua lưới ái ma vương nhiều đời.",
-            "Bằng tuệ quán chiếu soi thế giới\nCác hành  kia dính với vô thường\nKhông còn đau khổ sầu vương\nThênh thang cất bước con đường an vui.",
-            // PHẦN 3 (TIẾP)
-            "Bằng tuệ quán chiếu soi thế giới\nCác hành kia dính với khổ đau\nKhông còn bất hạnh, muộn sầu\nCon đường thanh tịnh, đạo mầu an vui.",
-            "Bằng tuệ quán chiếu soi tất cả\nCác hành kia vô ngã xưa nay\nKhông còn đau khổ ngay đây\nĐạo vàng an lạc phút giây hiện tiền.",
-            "Khi cần thiết thì không nỗ lực\nLúc trẻ trung biếng nhác, buông lung\nCầu an, nhu nhược, thủ thường\nLàm sao tìm được con đường cao siêu?",
-            "Gìn tâm thức, thân không làm ác\nGiữ ngữ ngôn rất mực chánh chân\nHộ phòng ba nghiệp, thân tâm\nChứng nên đạo giác thánh nhân chỉ bày.",
-            "Tu thiền định tăng nhanh trí tuệ\nHiểu con đường hai ngã diệt sanh\nTự mình nỗ lực thực hành\nTrau dồi tuệ giác, đạt thành quả cao.",
-            "Trong rừng núi, dục là số một\nRừng dục làm sợ hãi, sầu vương\nĐốn rừng ái dục sạch trơn\nNgười tu tịch tịnh con đường thanh cao.",
-            "Dây tình ái gái trai chưa bỏ\nThì khó mong làm chủ được tâm\nRơi vào tình trạng buộc ràng\n“Bò con vú mẹ” dặm đàng chẳng buông.",
-            "Tự vứt bỏ sợi dây ái dục\nNhư dùng tay bẻ đứt sen thu\nĐạo tịch tịnh, hãy tiến tu\nNiết-bàn an lạc từ từ chứng nên.",
-            "Mùa đông, hạ, nơi đây ta ở\nRồi mùa mưa cũng trụ chỗ này\nNgười ngu ỷ lại như vầy\nĐâu ngờ hiểm “chết” bủa vây, ngóng chờ.",
-            "Người vướng kẹt chấp nê sở hữu\nCon cái tôi, tài sản của tôi\nTử thần theo bắt, kéo lôi\nNhư cơn lũ lớn cuốn trôi cả làng.",
-            "Khi thần chết kề bên kiếp số\nCha mẹ nào bảo hộ được đâu\nNgười thân, con cái sầu đau\nNghiệp ai nấy chịu, làm sao cứu nàn?",
-            "Vô thường đến không ai giúp được\nHiểu được rồi, giới luật trang nghiêm\nMau tu chuyển hóa tinh chuyên\nNiết-bàn chứng đắc trọn nên đạo vàng.",
-            "Nhờ từ bỏ niềm vui nhỏ nhặt\nMà đạt thành hạnh phúc lớn hơn\nThú vui ngũ dục chẳng màng\nTrí nhân hưởng đạt niết-bàn an vui.",
-            "Gieo đau khổ cho người bị hại\nLại cầu mong gặt hái bình an\nNhững ai thù hận buộc ràng\nKhông sao thoát khỏi trái ngang trong đời.",
-            "Việc xứng đáng lại không làm tốt\nViệc chẳng gì lại trút vào thân.\nNgười ngu ngạo mạn, buông lung\nNão phiền, lậu hoặc gia tăng đêm ngày.",
+            "Kẻ nhếch mắt truy tìm lầm lỗi\nThường cống cao, chỉ trích, chê bai\nNote sầu, lậu hoặc gia tăng đêm ngày.",
             "Quán thân thể do duyên, bất tịnh\nSiêng năng làm những việc đáng làm\nGiữ gìn chánh niệm thân tâm\nNão phiền, lậu hoặc tiêu tan hết liền.",
             "Giết mẹ ái, cha già ngã mạn\nTrừ hai vua tà kiến: đoạn, thường.\nDẹp mười hai xứ, ái tham\nVị Phạm chí ấy xứng hàng vô ưu.",
             "Giết mẹ ái, cha già ngã mạn\nTrừ hai vua tà kiến: đoạn, thường.\nDiệt luôn hỗ tướng nghi nan\nVị Phạm chí ấy xứng hàng vô ưu.",
@@ -335,7 +304,7 @@
             "Voi, ngựa quý được đưa dự hội\nĐược vua quan chọn cưỡi trên lưng\nNgười hiền số một hồng trần\nChịu bao phỉ báng của phường ác gian.",
             "Như “ngựa” giống và “la” thuần chủng\nHay voi to, ngà trắng, đẹp ngần\nNhững ai điều phục bản thân\nTrang nghiêm giới hạnh, xứng hàng tối cao.",
             "Chẳng do cỡi ngựa voi quý đắt\nMà giúp người chứng đạt niết-bàn\nNhững người chiến thắng bản thân\nMục tiêu cứu cánh đắc thành dễ thôi.",
-            "Voi Tài Hộ hung hăng, khó phục\nTiết mồ hôi, phát dục mỗi khi\nNhốt giam, chẳng uống ăn gì\nNgày đêm canh cánh hướng về rừng voi.",
+            "Voi Tài Hộ hung hăng, khó phục\nTiết mồ hô, phát dục mỗi khi\nNhốt giam, chẳng uống ăn gì\nNgày đêm canh cánh hướng về rừng voi.",
             "Người biếng nhác thường ham hưởng thụ\nĂn uống nhiều, nằm ngủ cả ngày\nKhác gì như lợn mập thây\nKẻ ngu sinh tử, khó ngày thoát ra.",
             "Bao ngày trước, tâm thường lêu lổng\nTheo thú vui, dục vọng quay cuồng.\nHôm nay, chế ngự được lòng\nNhư người quản tượng cương thường điều voi.",
             "Hãy vui thích với không phóng dật\nGiữ gìn tâm, tỉnh thức, lạc an\nVượt ngoài kiết sử buộc ràng\nNhư voi nỗ lực thoát vòng lầy sa.",
@@ -345,6 +314,7 @@
             "Thật hạnh phúc, bạn khi cần thiết\nBiết đủ là hạnh phúc nào hơn.\nVui thay, chết để đức nhân\nKhổ đau chấm dứt, trần gian niết-bàn.",
             "Thật hạnh phúc, dưỡng nuôi cha mẹ\nPhúc nào hơn kính lễ sa-môn\nVui thay, kính bậc thánh hiền\nPhúc thay, chánh niệm hiện tiền ngay đây.",
             "Thật hạnh phúc tuổi già có đức\nPhúc nào hơn tuệ giác cao siêu\nVui thay, chánh tín, hiểu nhiều\nPhúc thay, từ bỏ bao nhiêu ác tà.",
+            // PHẦN 4
             "Người tu học tự mình dò xét\nĐánh giá mình nhân cách đục trong\nGiữ gìn chánh niệm, tự phòng\nTrụ an lạc, để tâm không muộn phiền.",
             "Người tu Phật tự mình nương tựa\nTìm được nguồn ẩn trú bản thân\nTự mình điều phục nguồn tâm\nNhư người buôn có ngựa thuần đường xa.",
             "Người tu sĩ tâm thường hoan hỷ\nĐặt niềm tin pháp vị cao siêu\nAn lành tịch tịnh trọn nên\nCác hành hữu lậu lặng yên, nhẹ nhàng.",
@@ -359,7 +329,7 @@
             "Bậc Phạm chí tâm không tham ái\nKhông trả thù, sân, hại một ai\nKhổ đau dứt sạch trong ngoài\nNiềm vui to lớn, nạn tai không còn.",
             "Người không tạo nghiệp nhân ác độc\nMiệng, ý, thân trau chuốt, giữ gìn\nHành vi, lối sống tịnh thanh\nXứng danh Phạm chí hiền minh, đức từ.",
             "Biết đền đáp ân sâu của bậc\nHướng dẫn ta hiểu Phật, Pháp, Tăng\nThành tâm lễ tạ, cúng dàng\nNhư người Phạm chí thờ thần lửa kia.",
-            "Gọi Phạm chí đâu vì bện tóc\nGiai cấp hay chủng tộc bảy đời\nChân thành, chánh niệm, thảnh thơi\nBà-la-môn ấy sáng ngời đức tu.",
+            "Gọi Phạm chí đâu vì bện tóc\nGiai cấp hay chủng tộc đóng gánh\nChân thành, chánh niệm, thảnh thơi\nBà-la-môn ấy sáng ngời đức tu.",
             "Phạm chí “ngố” chỉ lo bện tóc\nLợi ích gì áo mặc da dê\nTâm còn phiền não, u mê\nTu toàn hình thức, đường về còn xa.",
             "Phạm chí “ngố” mặc y vá nhớp\nDa lộ gân, thân hốc hác gầy.\nNgười tu thiền định đêm ngày\nBà-la-môn ấy sánh tày núi cao.",
             "Phạm chí thật đâu do huyết thống\nGiai cấp cao, nguồn gốc thọ sanh.\nAi không phiền não, tịnh thanh\nPhạm chí không chấp, cõi tâm an lành.",
@@ -377,7 +347,7 @@
             "Người tu tập nói lời từ ái\nChân thật và ích lợi cho đời\nKhông hề làm mất lòng người\nBà-la-môn ấy sáng ngời tấm gương.",
             "Người tu tập tránh xa trộm cắp\nVật không cho không lấy, chỉa chôm\nCho dù lớn, nhỏ, quý, thường.\nBà-la-môn ấy tấm gương sáng ngời.",
             "Không tham vọng đời này, đời tới\nKhông dính gì ba cõi trầm luân\nBuông tất cả, giải thoát tâm\nBà-la-môn ấy rạng danh đạo đời.",
-            "Người tu tập không vương ái dục\nTrí tuệ nhiều, nghi hoặc không còn\nChứng vào cảnh giới niết-bàn\nBà-la-môn ấy xứng hàng chân tu.",
+            "Người tu tập không vương á dục\nTrí tuệ nhiều, nghi hoặc không còn\nChứng vào cảnh giới niết-bàn\nBà-la-môn ấy xứng hàng chân tu.",
             "Ai không vướng chuyện đời thiện ác,\nTu xả ly, giải thoát buộc ràng\nKhông sầu, thanh tịnh, lạc an\nBà-la-môn ấy xứng hàng chân tu.",
             "Như trăng sáng thoát mây che khuất\nAn tịnh lòng, hết trược, sáng trong\nĐam mê hiện hữu dứt xong\nBà-la-môn ấy vào dòng thánh nhân.",
             "Hết tham ái, không nghi, không chấp\nVượt hiểm nguy sống chết, luân hồi\nThực hành thiền định, đến nơi\nPhạm chí tịch tịnh, thảnh thơi vượt dòng.",
@@ -386,7 +356,7 @@
             "Tu thoát khỏi buộc ràng hai cõi\nThế giới người, cảnh giới chư thiên\nBuộc ràng, giải thoát không còn\nBà-la-môn ấy vào dòng thánh nhân.",
             "Không vướng bận những điều ưa ghét\nHết sanh y, năm uẩn vượt qua\nAnh hùng chiến thắng nhiễm ô\nBà-la-môn ấy thật là chân tu.",
             "Ai hiểu rõ đường đi sống chết\nKhông nhiễm ô, sáng suốt vượt lên\nHọc Tứ đế, ngộ lý chân\nBà-la-môn ấy xứng danh tu hành.",
-            "Với hành giả mà trời, thần, quỷ\nKhông một ai biết chỗ tái sanh\nLậu hoặc hết, chứng thánh nhân\nBà-la-môn ấy xứng hàng chân tu.",
+            "With hành giả mà trời, thần, quỷ\nKhông một ai biết chỗ tái sanh\nLậu hoặc hết, chứng thánh nhân\nBà-la-môn ấy xứng hàng chân tu.",
             "Người không dính vị lai, quá khứ\nHiện tại thì chẳng sở hữu gì\nXả buông, chẳng kẹt thứ chi\nBà-la-môn ấy sánh vì trăng sao.",
             "Như trâu chúa sức thần uy dũng\nBậc anh hùng, chiến thắng nhiễm tham\nTrí mầu giác ngộ, tịnh thanh\nBà-la-môn ấy xứng danh tu hành.",
             "Rõ quá khứ, vị lai, hiện tại\nCõi trời, người, cảnh giới tái sanh\nMâu ni, thắng trí, viên thành\nTử sanh kết thúc, sáng danh đạo đời."
@@ -457,16 +427,47 @@
         };
 
         // --- CÁC COMPONENT CON ---
-        const SettingsModal = ({ theme, onSave, onClose }) => {
+        const SettingsModal = ({ theme, onSave, onClose, auth }) => {
             const [localTheme, setLocalTheme] = useState(theme);
+            const [newPassword, setNewPassword] = useState('');
+            const [passwordMessage, setPasswordMessage] = useState('');
+            const [passwordError, setPasswordError] = useState('');
+            const [showChangePassword, setShowChangePassword] = useState(false);
+
+            // Tính năng Đổi mật khẩu
+            const handleChangePassword = async (e) => {
+                e.preventDefault();
+                setPasswordMessage('');
+                setPasswordError('');
+                if (!newPassword.trim()) {
+                    setPasswordError("Vui lòng nhập mật khẩu mới.");
+                    return;
+                }
+                try {
+                    if (auth.currentUser) {
+                        await updatePassword(auth.currentUser, newPassword);
+                        setPasswordMessage("Đổi mật khẩu thành công!");
+                        setNewPassword('');
+                    } else {
+                        setPasswordError("Không tìm thấy thông tin phiên đăng nhập.");
+                    }
+                } catch (err) {
+                    if (err.code === 'auth/requires-recent-login') {
+                        setPasswordError("⚠️ Để đổi mật khẩu, bạn cần Đăng xuất và Đăng nhập lại để xác thực danh tính.");
+                    } else {
+                        setPasswordError("Lỗi: " + err.message);
+                    }
+                }
+            };
+
             return (
                 <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white w-full max-w-sm rounded-xl shadow-2xl overflow-hidden">
-                        <div className="bg-gray-800 text-white p-4 flex justify-between items-center">
-                            <h3 className="font-bold flex items-center gap-2"><Palette size={18}/> Giao Diện</h3>
+                    <div className="bg-white w-full max-w-sm rounded-xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+                        <div className="bg-gray-800 text-white p-4 flex justify-between items-center shrink-0">
+                            <h3 className="font-bold flex items-center gap-2"><Palette size={18}/> Giao Diện & Bảo Mật</h3>
                             <button onClick={onClose}><X size={20}/></button>
                         </div>
-                        <div className="p-6 space-y-6">
+                        <div className="p-6 space-y-6 overflow-y-auto flex-1">
                             <div>
                                 <label className="block text-sm font-bold text-gray-700 mb-2">Màu Nền Ứng Dụng</label>
                                 <input type="color" className="w-full h-12 rounded cursor-pointer border-2 border-gray-200" value={localTheme.bgColor} onChange={e => setLocalTheme({...localTheme, bgColor: e.target.value})} />
@@ -481,6 +482,32 @@
                             </div>
                             <button onClick={() => onSave(localTheme)} className="w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 shadow-md">Lưu & Đồng Bộ</button>
                             <button onClick={() => onSave({ bgColor: '#f3f4f6', noteColor: '#FEFCE8', textColor: '#1F2937' })} className="w-full border border-gray-300 text-gray-600 py-2 rounded-lg text-sm">Khôi phục mặc định</button>
+                            
+                            {/* Khu vực tính năng đổi mật khẩu */}
+                            <div className="border-t pt-4 mt-4">
+                                <button 
+                                    type="button"
+                                    onClick={() => setShowChangePassword(!showChangePassword)} 
+                                    className="w-full flex items-center justify-center gap-2 border border-slate-300 text-slate-700 py-2 rounded-lg text-sm font-bold hover:bg-slate-50 transition"
+                                >
+                                    <Key size={16} /> {showChangePassword ? "Ẩn đổi mật khẩu" : "Đổi mật khẩu"}
+                                </button>
+                                {showChangePassword && (
+                                    <form onSubmit={handleChangePassword} className="mt-4 space-y-3 p-3 bg-slate-50 rounded-lg border border-slate-200 animate-in fade-in">
+                                        <label className="block text-xs font-bold text-slate-600">Mật khẩu mới</label>
+                                        <input 
+                                            type="password" 
+                                            className="w-full px-3 py-2 border rounded-lg text-sm text-slate-800 focus:ring-1 focus:ring-blue-500 outline-none"
+                                            placeholder="Nhập mật khẩu mới..."
+                                            value={newPassword}
+                                            onChange={e => setNewPassword(e.target.value)}
+                                        />
+                                        {passwordError && <p className="text-red-500 text-xs">{passwordError}</p>}
+                                        {passwordMessage && <p className="text-green-600 text-xs font-medium">{passwordMessage}</p>}
+                                        <button type="submit" className="w-full bg-slate-800 text-white text-xs font-bold py-2 rounded-lg hover:bg-slate-700 transition">Xác nhận đổi mật khẩu</button>
+                                    </form>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -492,10 +519,13 @@
             const [email, setEmail] = useState('');
             const [password, setPassword] = useState('');
             const [error, setError] = useState('');
+            const [message, setMessage] = useState('');
+            const [showPassword, setShowPassword] = useState(false);
 
             const handleAuth = async (e) => {
                 e.preventDefault();
                 setError('');
+                setMessage('');
                 try {
                     if (isLogin) await signInWithEmailAndPassword(auth, email, password);
                     else await createUserWithEmailAndPassword(auth, email, password);
@@ -504,20 +534,68 @@
                 }
             };
 
+            // Tính năng Quên mật khẩu
+            const handleForgotPassword = async () => {
+                setError('');
+                setMessage('');
+                if (!email.trim()) {
+                    setError("Vui lòng nhập Email để nhận liên kết đặt lại mật khẩu.");
+                    return;
+                }
+                try {
+                    await sendPasswordResetEmail(auth, email);
+                    setMessage("Liên kết đặt lại mật khẩu đã được gửi vào Email của bạn!");
+                } catch (err) {
+                    setError("Lỗi khi gửi email khôi phục: " + err.message);
+                }
+            };
+
             return (
-                <div className="flex h-screen items-center justify-center bg-blue-50 p-6">
+                <div className="flex h-screen items-center justify-center bg-blue-50 p-6 font-sans">
                     <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-8 border border-blue-100">
                         <div className="flex justify-center mb-6"><div className="bg-blue-100 p-4 rounded-full"><User className="text-blue-600" size={32} /></div></div>
                         <h2 className="text-2xl font-bold text-center text-gray-800 mb-2">{isLogin ? 'Đăng Nhập' : 'Đăng Ký'}</h2>
                         <div className="text-center mb-6"><span className="text-[10px] px-2 py-1 rounded font-mono border bg-green-100 text-green-700 border-green-200">Server: <b>{appId}</b></span></div>
                         <form onSubmit={handleAuth} className="space-y-4">
-                            <input type="email" required className="w-full px-4 py-3 border border-gray-200 rounded-lg" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-                            <input type="password" required className="w-full px-4 py-3 border border-gray-200 rounded-lg" placeholder="Mật khẩu" value={password} onChange={e => setPassword(e.target.value)} />
-                            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-                            <button type="submit" className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg shadow-md">{isLogin ? 'Vào Ứng Dụng' : 'Tạo Tài Khoản'}</button>
+                            <input type="email" required className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+                            
+                            {/* Ô nhập mật khẩu tích hợp ẩn/hiện mật khẩu */}
+                            <div className="relative w-full">
+                                <input 
+                                    type={showPassword ? "text" : "password"} 
+                                    required 
+                                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 pr-12" 
+                                    placeholder="Mật khẩu" 
+                                    value={password} 
+                                    onChange={e => setPassword(e.target.value)} 
+                                />
+                                <button 
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
+                                >
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
+
+                            {error && <p className="text-red-500 text-sm text-center bg-red-50 p-2 rounded">{error}</p>}
+                            {message && <p className="text-green-600 text-sm text-center bg-green-50 p-2 rounded font-medium">{message}</p>}
+                            
+                            <button type="submit" className="w-full bg-blue-600 text-white font-bold py-3 rounded-lg shadow-md hover:bg-blue-700 transition">{isLogin ? 'Vào Ứng Dụng' : 'Tạo Tài Khoản'}</button>
                         </form>
-                        <div className="mt-6 text-center text-sm">
-                            <button onClick={() => setIsLogin(!isLogin)} className="text-blue-600 hover:underline">{isLogin ? 'Chưa có tài khoản? Đăng ký ngay' : 'Đã có tài khoản? Đăng nhập'}</button>
+
+                        <div className="mt-6 flex flex-col items-center gap-3 text-sm">
+                            {/* Nút quên mật khẩu */}
+                            {isLogin && (
+                                <button 
+                                    type="button" 
+                                    onClick={handleForgotPassword} 
+                                    className="text-slate-500 hover:text-blue-600 text-xs transition"
+                                >
+                                    Quên mật khẩu?
+                                </button>
+                            )}
+                            <button onClick={() => { setIsLogin(!isLogin); setError(''); setMessage(''); }} className="text-blue-600 hover:underline font-medium">{isLogin ? 'Chưa có tài khoản? Đăng ký ngay' : 'Đã có tài khoản? Đăng nhập'}</button>
                         </div>
                     </div>
                 </div>
@@ -530,12 +608,8 @@
             const [headers, setHeaders] = useState({ col1: 'Môn - Lớp', col2: 'Ghi chú' });
             
             const weekDays = [
-                { id: 't2', label: 'Thứ 2', color: 'bg-blue-50' }, 
-                { id: 't3', label: 'Thứ 3', color: 'bg-green-50' }, 
-                { id: 't4', label: 'Thứ 4', color: 'bg-yellow-50' },
-                { id: 't5', label: 'Thứ 5', color: 'bg-red-50' }, 
-                { id: 't6', label: 'Thứ 6', color: 'bg-purple-50' }, 
-                { id: 't7', label: 'Thứ 7', color: 'bg-pink-50' },
+                { id: 't2', label: 'Thứ 2' }, { id: 't3', label: 'Thứ 3' }, { id: 't4', label: 'Thứ 4' },
+                { id: 't5', label: 'Thứ 5' }, { id: 't6', label: 'Thứ 6' }, { id: 't7', label: 'Thứ 7' },
             ];
             const periods = [1, 2, 3, 4, 5];
 
@@ -549,19 +623,9 @@
                 }
             }), [tkbRef]);
 
-            const handleChange = (path, value) => {
-                setSchedule(prev => ({...prev, [path]: value}));
+            const saveData = async (path, value) => {
+                await setDoc(tkbRef, { [`schedule.${path}`]: value }, { merge: true });
             };
-
-            // Fix lỗi không lưu: Dùng debounce và update toàn bộ schedule
-            useEffect(() => {
-                const timeoutId = setTimeout(() => {
-                    if (Object.keys(schedule).length > 0) {
-                         setDoc(tkbRef, { schedule }, { merge: true });
-                    }
-                }, 800);
-                return () => clearTimeout(timeoutId);
-            }, [schedule, tkbRef]);
 
             const saveHeader = async (key, value) => {
                 const newHeaders = { ...headers, [key]: value };
@@ -571,7 +635,7 @@
 
             return (
                 <div className="h-full flex flex-col px-4 pb-4 pt-2" style={{ color: theme.textColor }}>
-                     <h2 className="text-xl font-bold mb-2 text-center shrink-0">Thời Khóa Biểu</h2>
+                     <h2 className="text-xl font-bold mb-2 text-center shrink-0">Thời Khoá Biểu</h2>
                     <div className="flex-1 overflow-y-auto bg-white rounded-xl shadow-sm border border-gray-200 mb-4">
                         <table className="w-full text-sm border-collapse">
                             <thead className="sticky top-0 bg-gray-100 z-10 shadow-sm">
@@ -590,27 +654,29 @@
                                 {weekDays.map(day => (
                                     <React.Fragment key={day.id}>
                                         {periods.map((period, index) => (
-                                            <tr key={`${day.id}_${period}`} className={`border-b hover:bg-gray-100 ${day.color}`}>
+                                            <tr key={`${day.id}_${period}`} className="border-b hover:bg-gray-50">
                                                 {index === 0 && (
-                                                    <td className="border p-0 align-middle font-bold text-gray-600 bg-white" rowSpan={5}>
+                                                    <td className="border p-0 align-middle bg-gray-50 text-gray-600" rowSpan={5}>
                                                         <div className="flex flex-col h-full justify-center items-center">
-                                                            <div className="font-bold py-1">{day.label}</div>
+                                                            <div className="font-bold">{day.label}</div>
                                                             <textarea 
-                                                                className="w-full bg-transparent text-center p-1 outline-none text-xs resize-none h-12 overflow-hidden border-t border-dashed"
+                                                                className="w-full bg-transparent text-center p-1 outline-none text-xs resize-none h-12 overflow-hidden"
                                                                 placeholder="Ngày..."
                                                                 value={schedule[`day_${day.id}_date`] || ''}
-                                                                onChange={e=>handleChange(`day_${day.id}_date`, e.target.value)}
+                                                                onChange={e=>setSchedule({...schedule, [`day_${day.id}_date`]: e.target.value})}
+                                                                onBlur={e=>saveData(`day_${day.id}_date`, e.target.value)}
                                                             />
                                                         </div>
                                                     </td>
                                                 )}
-                                                <td className="border p-2 text-center text-gray-500 font-medium align-middle bg-white/50">{period}</td>
+                                                <td className="border p-2 text-center text-gray-500 font-medium align-middle">{period}</td>
                                                 <td className="border p-0 align-middle">
                                                     <textarea 
                                                         className="w-full h-full p-2 outline-none bg-transparent resize-none overflow-hidden" 
                                                         rows={1}
                                                         value={schedule[`${day.id}_${period}_col1`] || ''}
-                                                        onChange={(e) => handleChange(`${day.id}_${period}_col1`, e.target.value)}
+                                                        onChange={(e) => setSchedule({...schedule, [`${day.id}_${period}_col1`]: e.target.value})}
+                                                        onBlur={(e) => saveData(`${day.id}_${period}_col1`, e.target.value)}
                                                     />
                                                 </td>
                                                 <td className="border p-0 align-middle">
@@ -618,7 +684,8 @@
                                                         className="w-full h-full p-2 outline-none bg-transparent resize-none overflow-hidden" 
                                                         rows={1}
                                                         value={schedule[`${day.id}_${period}_col2`] || ''}
-                                                        onChange={(e) => handleChange(`${day.id}_${period}_col2`, e.target.value)}
+                                                        onChange={(e) => setSchedule({...schedule, [`${day.id}_${period}_col2`]: e.target.value})}
+                                                        onBlur={(e) => saveData(`${day.id}_${period}_col2`, e.target.value)}
                                                     />
                                                 </td>
                                             </tr>
@@ -633,8 +700,7 @@
         };
 
         // --- MÀN HÌNH LỊCH NGÀY (DAILY VIEW) ---
-        const DailyView = ({ user, db, appId }) => {
-            const [today, setToday] = useState(new Date());
+        const DailyView = ({ user, db, appId, today, setToday }) => {
             const [weather, setWeather] = useState(null);
             const [verses, setVerses] = useState([]);
             const [currentVerse, setCurrentVerse] = useState(DEFAULT_VERSES[0]);
@@ -673,7 +739,6 @@
             const goPrevDay = () => { setAnimClass('anim-prev'); setTimeout(() => { const d = new Date(today); d.setDate(today.getDate()-1); setToday(d); setAnimClass(''); }, 300); }
             const stopSwipe = (e) => e.stopPropagation();
 
-            // Cập nhật lời chúc năm mới
             useEffect(() => {
                 const isNewYear = today.getDate() === 1 && today.getMonth() === 0;
                 if (isNewYear) {
@@ -767,7 +832,7 @@
                         </div>
                     );
                 }
-                
+
                 if (viewMode === 'events') {
                      return (
                         <div className="w-full h-full overflow-y-auto no-scrollbar" onTouchStart={stopSwipe} onTouchEnd={stopSwipe}>
@@ -818,6 +883,7 @@
                     <div className={`relative z-10 flex-1 flex flex-col items-center gap-2 overflow-hidden ${animClass}`}>
                         
                         {/* Khu vực Ngày chính */}
+                        {/* Thay đổi: click vào đây sẽ reset về Hôm nay thông qua setToday (lifting state) */}
                         <div className="text-center drop-shadow-lg mt-12 z-20 flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" onClick={() => setToday(new Date())} title="Về hôm nay">
                             <p className="text-2xl font-light uppercase tracking-widest mb-1 text-white/90">{getDayOfWeek(today)}</p>
                             <h2 className="text-[7rem] md:text-[8rem] font-bold leading-none text-white">{today.getDate()}</h2>
@@ -849,9 +915,8 @@
         };
 
         // --- LỊCH VIEW (THÁNG) ---
-        const CalendarView = ({ user, db, appId }) => {
-            const [currentDate, setCurrentDate] = useState(new Date());
-            const [selectedDate, setSelectedDate] = useState(new Date());
+        // Thay đổi: Nâng trạng thái 'currentDate' và 'selectedDate' lên App
+        const CalendarView = ({ user, db, appId, currentDate, setCurrentDate, selectedDate, setSelectedDate, onTabChange }) => {
             const [events, setEvents] = useState([]);
             const [showEventModal, setShowEventModal] = useState(false);
             const [animClass, setAnimClass] = useState('');
@@ -875,12 +940,9 @@
             const hasEvent = (date) => {
                 if (!date) return false;
                 const dateStr = date.toDateString();
-                const lunar = getLunarDetails(date);
                 return events.some(e => {
-                    if (!e.repeat || e.repeat === 'none') return e.date && new Date(e.date.seconds * 1000).toDateString() === dateStr;
-                    if (e.repeat === 'lunar') return e.lunarDay === lunar.day && e.lunarMonth === lunar.month;
-                    if (e.repeat === 'solar' && e.date) { const d = new Date(e.date.seconds * 1000); return d.getDate() === date.getDate() && d.getMonth() === date.getMonth(); }
-                    return false;
+                    if (!e.date) return false;
+                    return new Date(e.date.seconds * 1000).toDateString() === dateStr;
                 });
             };
             const getEventsForDate = (date) => {
@@ -933,8 +995,10 @@
                             )
                         })}
                     </div>
-                    <div className="mt-6 flex justify-center">
-                         <button onClick={() => setShowEventModal(true)} className="bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm font-bold active:scale-95 transition-transform"><Plus size={16}/> Thêm sự kiện cho ngày {selectedDate.getDate()}/{selectedDate.getMonth()+1}</button>
+                    <div className="mt-6 flex justify-center gap-2">
+                         <button onClick={() => setShowEventModal(true)} className="bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm font-bold active:scale-95 transition-transform"><Plus size={16}/> Thêm sự kiện</button>
+                         {/* Nút hỗ trợ chuyển về tab Hôm nay nhanh chóng */}
+                         <button onClick={() => onTabChange('day')} className="bg-slate-800 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm font-bold active:scale-95 transition-transform">Hôm nay</button>
                     </div>
                     {showEventModal && <EventModal date={selectedDate} events={getEventsForDate(selectedDate)} onClose={() => setShowEventModal(false)} onAdd={handleAddEvent} onDelete={async (id) => { await deleteDoc(doc(eventsRef, id)); }} />}
                 </div>
@@ -955,10 +1019,10 @@
                     <div className="bg-white w-full max-w-sm rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[80%]" onClick={(e)=>e.stopPropagation()}>
                         <div className="bg-blue-600 p-4 text-white flex justify-between items-center">
                             <div><h3 className="font-bold">Sự kiện {date.getDate()}/{date.getMonth()+1}</h3><span className="text-xs opacity-80">Âm lịch: {lunar.day}/{lunar.month}</span></div>
-                            <button onClick={onClose} className="p-2"><X size={20}/></button>
+                            <button onClick={onClose}><X size={20}/></button>
                         </div>
                         <div className="p-4 overflow-y-auto flex-1">
-                            {events.length === 0 && <p className="text-center text-gray-500 py-4">Chưa có sự kiện nào.</p>}
+                            {events.length === 0 && <p className="text-center text-gray-400 py-4">Chưa có sự kiện nào.</p>}
                             <ul className="space-y-2">
                                 {events.map(e => (
                                     <li key={e.id} className="flex justify-between items-center bg-blue-50 p-2 rounded text-sm text-gray-800">
@@ -967,7 +1031,7 @@
                                             {e.repeat === 'solar' && <span className="text-[10px] bg-orange-100 text-orange-700 px-1 rounded">Dương</span>}
                                             <span>{e.title}</span>
                                         </div>
-                                        <button onClick={() => handleDelete(e.id)} className={`transition-all ${deleteConfirm === e.id ? 'text-red-600 font-bold text-xs bg-red-100 px-2 py-1 rounded' : 'text-red-400 hover:text-red-600'}`}>{deleteConfirm === e.id ? 'Xóa?' : <Trash2 size={16}/>}</button>
+                                        <button onClick={() => handleDelete(e.id)} className={`transition-all ${deleteConfirm === e.id ? 'text-red-600 font-bold text-xs bg-red-100 px-2 py-1 rounded' : 'text-red-400 hover:text-red-600'}`}>{deleteConfirm === e.id ? <span>Xóa?</span> : <Trash2 size={16}/>}</button>
                                     </li>
                                 ))}
                             </ul>
@@ -1000,9 +1064,9 @@
                         <button onClick={()=>onSave(text, reminder, deadline)} className="text-blue-600 font-bold p-2"><Save size={18}/> Lưu</button>
                     </div>
                     <div className="p-4 flex-1 flex flex-col gap-4">
-                        <div><label className="text-xs font-bold text-gray-500 block mb-1">Nội dung</label><input className="w-full text-lg border-b p-2 outline-none focus:border-blue-500" value={text} onChange={e=>setText(e.target.value)} autoFocus /></div>
+                        <div><label className="text-xs font-bold text-gray-500 block mb-1">Nội dung</label><input className="w-full text-lg border-b p-2 outline-none focus:border-blue-500 bg-transparent" placeholder="Ví dụ: Đi chợ..." value={text} onChange={e=>setText(e.target.value)} autoFocus /></div>
                         <div><label className="text-xs font-bold text-gray-500 block mb-1 flex items-center gap-1"><AlertCircle size={12}/> Hạn chót (Deadline)</label><input type="datetime-local" className="w-full border rounded p-2 text-sm bg-gray-50" value={deadline} onChange={e=>setDeadline(e.target.value)} /></div>
-                        <div><label className="text-xs font-bold text-gray-500 block mb-1 flex items-center gap-1"><Bell size={12}/> Nhắc tôi trước</label><input type="datetime-local" className="w-full border rounded p-2 text-sm bg-gray-50" value={reminder} onChange={e=>setReminder(e.target.value)} /></div>
+                        <div><label className="text-xs font-bold text-gray-500 block mb-1 flex items-center gap-1"><Clock size={12}/> Nhắc tôi trước (Reminder)</label><input type="datetime-local" className="w-full border rounded p-2 text-sm bg-gray-50" value={reminder} onChange={e=>setReminder(e.target.value)} /></div>
                     </div>
                 </div>
             );
@@ -1013,14 +1077,38 @@
             const [editing, setEditing] = useState(null);
             const [deleteConfirm, setDeleteConfirm] = useState(null);
             const todoRef = useMemo(() => collection(db, 'artifacts', appId, 'users', user.uid, 'todos'), [db, appId, user.uid]);
-            useEffect(() => onSnapshot(query(todoRef), snap => {
-                const data = snap.docs.map(d => ({id: d.id, ...d.data()}));
-                data.sort((a, b) => {
-                    if (a.order !== undefined && b.order !== undefined) return a.order - b.order;
-                    return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+            
+            // THAY ĐỔI CHÍNH: Logic tự động sắp xếp danh sách công việc (todos)
+            useEffect(() => {
+                const unsub = onSnapshot(query(todoRef), snap => {
+                    const data = snap.docs.map(d => ({id: d.id, ...d.data()}));
+                    data.sort((a, b) => {
+                        const aActiveDeadline = !a.completed && a.deadlineTime;
+                        const bActiveDeadline = !b.completed && b.deadlineTime;
+
+                        // Ưu tiên 1: Việc nào chưa hoàn thành và có Hạn chót (deadlineTime) ngắn nhất sẽ lên đầu danh sách
+                        if (aActiveDeadline && !bActiveDeadline) return -1;
+                        if (!aActiveDeadline && bActiveDeadline) return 1;
+
+                        if (aActiveDeadline && bActiveDeadline) {
+                            const aSecs = a.deadlineTime.seconds || 0;
+                            const bSecs = b.deadlineTime.seconds || 0;
+                            if (aSecs !== bSecs) {
+                                return aSecs - bSecs;
+                            }
+                        }
+
+                        // Ưu tiên 2: Việc không có deadline hoặc cùng deadline, sắp xếp dựa theo order thủ công
+                        if (a.order !== undefined && b.order !== undefined) {
+                            return a.order - b.order;
+                        }
+                        return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+                    });
+                    setTodos(data);
                 });
-                setTodos(data);
-            }), [todoRef]);
+                return unsub;
+            }, [todoRef]);
+
             const save = async (text, reminderStr, deadlineStr) => {
                 const reminderData = reminderStr ? Timestamp.fromDate(new Date(reminderStr)) : null;
                 const deadlineData = deadlineStr ? Timestamp.fromDate(new Date(deadlineStr)) : null;
@@ -1070,7 +1158,7 @@
                                             {t.reminderTime && !t.completed && <div className="text-[10px] text-orange-500 flex items-center gap-1"><Bell size={10} /> Nhắc: {formatDisplayDate(t.reminderTime.seconds)}</div>}
                                         </div>
                                     </div>
-                                    <button onClick={(e) => handleDelete(e, t.id)} className={`p-1 rounded transition-all ${deleteConfirm === t.id ? 'bg-red-100 text-red-600 w-16 text-xs font-bold' : 'text-gray-300 hover:text-red-500'}`}>{deleteConfirm === t.id ? 'Xóa?' : <Trash2 size={16}/>}</button>
+                                    <button onClick={(e) => handleDelete(e, t.id)} className={`p-1 rounded transition-all ${deleteConfirm === t.id ? 'bg-red-100 text-red-600 w-16 text-xs font-bold' : 'text-gray-300 hover:text-red-500'}`}>{deleteConfirm === t.id ? <span>Xóa?</span> : <Trash2 size={16}/>}</button>
                                 </div>
                             );
                         })}
@@ -1142,7 +1230,7 @@
                                 {n.reminderTime && <div className="text-[9px] text-orange-600 font-medium mt-1 mb-1 flex items-center gap-1"><Clock size={10}/> {formatDisplayDate(n.reminderTime.seconds)}</div>}
                                 <div className="flex justify-between items-center mt-1 pt-2 border-t border-black/10">
                                     <span className="text-[10px] opacity-60 text-gray-600">{n.updatedAt ? new Date(n.updatedAt.seconds*1000).toLocaleDateString('vi-VN') : ''}</span>
-                                    <button onClick={(e)=>handleDelete(e, n.id)} className={`transition-all ${deleteConfirm === n.id ? 'bg-white text-red-600 px-2 py-1 rounded shadow-sm text-xs font-bold' : 'opacity-40 hover:opacity-100 hover:text-red-500'}`}>{deleteConfirm === n.id ? 'Xóa?' : <Trash2 size={16}/>}</button>
+                                    <button onClick={(e)=>handleDelete(e, n.id)} className={`transition-all ${deleteConfirm === n.id ? 'bg-white text-red-600 px-2 py-1 rounded shadow-sm text-xs font-bold' : 'opacity-40 hover:opacity-100 hover:text-red-500'}`}>{deleteConfirm === n.id ? <span>Xóa?</span> : <Trash2 size={16}/>}</button>
                                 </div>
                             </div>
                         ))}
@@ -1158,13 +1246,23 @@
             const [app, setApp] = useState(null);
             const [showSettings, setShowSettings] = useState(false);
             const [showMenu, setShowMenu] = useState(false);
-            const [connectionError, setConnectionError] = useState('');
+            const [connectionError, setConnectionError] = useState(false);
             
+            // THAY ĐỔI TRỌNG TÂM: Nâng ngày/tháng lên App quản lý để kiểm soát reset hôm nay khi đổi tab
+            const [dailyDate, setDailyDate] = useState(new Date());
+            const [calendarCurrentDate, setCalendarCurrentDate] = useState(new Date());
+            const [calendarSelectedDate, setCalendarSelectedDate] = useState(new Date());
+
+            // Thêm State để lưu danh sách sự kiện cần báo trong ngày hôm nay
+            const [activeAlerts, setActiveAlerts] = useState([]);
+            const [showAlertModal, setShowAlertModal] = useState(false);
+
             const [theme, setTheme] = useState(() => {
                 try { return JSON.parse(localStorage.getItem('app_theme')) || { bgColor: '#f3f4f6', noteColor: '#FEFCE8', textColor: '#1F2937' }; } 
                 catch(e) { return { bgColor: '#f3f4f6', noteColor: '#FEFCE8', textColor: '#1F2937' }; }
             });
 
+            // 1. Logic Khởi Tạo & Xác Thực Hệ Thống (Mở là Báo - Check On Open)
             useEffect(() => {
                 const init = async () => {
                     try {
@@ -1173,59 +1271,148 @@
                         const auth = getAuth(newApp);
                         const db = getFirestore(newApp);
                         
-                        if ('Notification' in window && Notification.permission !== 'granted') Notification.requestPermission();
-                        setInterval(() => checkNotification(db, auth.currentUser?.uid), 60000); 
+                        if ('Notification' in window && Notification.permission !== 'granted') {
+                            Notification.requestPermission();
+                        }
 
                         onAuthStateChanged(auth, async (u) => {
                             setUser(u);
                             if (u) {
                                 const docSnap = await getDoc(doc(db, 'artifacts', MANUAL_CONFIG.projectId, 'users', u.uid, 'settings', 'theme'));
                                 if (docSnap.exists()) setTheme(docSnap.data());
+                                
+                                // THAY ĐỔI CHÍNH (Yêu cầu 1): Gọi hàm kiểm tra thông báo ngay khi dữ liệu sẵn sàng khi vừa mở app
                                 checkDailyEvents(db, u.uid);
                             }
                             setLoading(false);
                         });
-                        setConnectionError('');
+                        setConnectionError(false);
                     } catch (e) {
-                        setConnectionError("Lỗi kết nối Server.");
+                        setConnectionError(true);
                     }
                 };
                 init();
             }, []);
 
-            const checkNotification = async (db, uid) => {
-                if (!uid) return;
-                const now = new Date();
-                if (now.getHours() === 5 && now.getMinutes() === 0) checkDailyEvents(db, uid);
-            };
-
+            // THAY ĐỔI CHÍNH: Thiết lập cơ chế "MỞ LÀ BÁO" tránh lặp lại bằng sessionStorage và bộ lọc hợp lệ hoàn chỉnh
             const checkDailyEvents = async (db, uid) => {
-                const eventsRef = collection(db, 'artifacts', MANUAL_CONFIG.projectId, 'users', uid, 'events');
+                const alreadyNotifiedInSession = sessionStorage.getItem('vt_notified_session');
+                if (alreadyNotifiedInSession === 'true') {
+                    return; // Đã báo trong phiên này thì bỏ qua
+                }
+
                 const today = new Date();
                 const todayStr = today.toDateString();
-                const lastCheck = localStorage.getItem('last_event_check');
-                
-                onSnapshot(query(eventsRef), snap => {
-                    const events = snap.docs.map(d => d.data());
-                    const lunar = getLunarDetails(today);
-                    events.forEach(e => {
-                        let isToday = false;
-                        if (!e.repeat || e.repeat === 'none') isToday = e.date && new Date(e.date.seconds*1000).toDateString() === todayStr;
-                        else if (e.repeat === 'lunar') isToday = e.lunarDay === lunar.day && e.lunarMonth === lunar.month;
-                        else if (e.repeat === 'solar' && e.date) {
-                            const d = new Date(e.date.seconds*1000);
-                            isToday = d.getDate() === today.getDate() && d.getMonth() === today.getMonth();
-                        }
-                        if (isToday) sendNotification("📅 Nhắc Lịch Hôm Nay", e.title);
+
+                // Lấy tất cả sự kiện, công việc, ghi chú thuộc ngày hôm nay
+                const eventsRef = collection(db, 'artifacts', MANUAL_CONFIG.projectId, 'users', uid, 'events');
+                const todosRef = collection(db, 'artifacts', MANUAL_CONFIG.projectId, 'users', uid, 'todos');
+                const notesRef = collection(db, 'artifacts', MANUAL_CONFIG.projectId, 'users', uid, 'notes');
+
+                try {
+                    // Thu thập danh sách từ onSnapshot một lần
+                    const unsubEvents = onSnapshot(query(eventsRef), snapEvents => {
+                        const allEvents = snapEvents.docs.map(d => ({ type: 'Sự kiện', ...d.data() }));
+                        const unsubTodos = onSnapshot(query(todosRef), snapTodos => {
+                            const allTodos = snapTodos.docs.map(d => ({ type: 'Công việc', ...d.data() }));
+                            const unsubNotes = onSnapshot(query(notesRef), snapNotes => {
+                                const allNotes = snapNotes.docs.map(d => ({ type: 'Ghi chú', ...d.data() }));
+
+                                // Ghép tất cả
+                                const combined = [...allEvents, ...allTodos, ...allNotes];
+                                const lunar = getLunarDetails(today);
+                                const validAlerts = [];
+
+                                combined.forEach(item => {
+                                    // 1. Kiểm tra trạng thái hoàn thành (Bỏ qua nếu completed)
+                                    if (item.completed === true) return;
+
+                                    let isToday = false;
+                                    let targetTime = null; // Lưu trữ mốc thời gian cụ thể để so sánh giờ hiện tại
+
+                                    // Lấy thời điểm hẹn của item để kiểm tra
+                                    const timeSource = item.date || item.deadlineTime || item.reminderTime;
+                                    if (timeSource) {
+                                        targetTime = new Date(timeSource.seconds * 1000);
+                                    }
+
+                                    // Phân loại định dạng lặp và ngày cụ thể
+                                    if (item.type === 'Sự kiện') {
+                                        if (!item.repeat || item.repeat === 'none') {
+                                            isToday = targetTime && targetTime.toDateString() === todayStr;
+                                        } else if (item.repeat === 'lunar') {
+                                            isToday = item.lunarDay === lunar.day && item.lunarMonth === lunar.month;
+                                        } else if (item.repeat === 'solar' && targetTime) {
+                                            isToday = targetTime.getDate() === today.getDate() && targetTime.getMonth() === today.getMonth();
+                                        }
+                                    } else {
+                                        // Với Todo hoặc Note, kiểm tra dựa trên deadlineTime hoặc reminderTime
+                                        isToday = targetTime && targetTime.toDateString() === todayStr;
+                                    }
+
+                                    if (isToday) {
+                                        // 2. Kiểm tra thời gian đã trôi qua (Bỏ qua nếu giờ hẹn đã qua so với hiện tại)
+                                        if (targetTime) {
+                                            const itemHours = targetTime.getHours();
+                                            const itemMinutes = targetTime.getMinutes();
+                                            const currentHours = today.getHours();
+                                            const currentMinutes = today.getMinutes();
+
+                                            // Nếu giờ hẹn nhỏ hơn hiện tại, hoặc bằng giờ hiện tại nhưng phút nhỏ hơn hiện tại thì coi như đã trôi qua
+                                            if (itemHours < currentHours || (itemHours === currentHours && itemMinutes < currentMinutes)) {
+                                                return; // Bỏ qua sự kiện đã trôi qua
+                                            }
+                                        }
+
+                                        // Hợp lệ -> đưa vào danh sách hiển thị
+                                        validAlerts.push({
+                                            title: item.title || item.text || "Lịch hẹn chưa đặt tên",
+                                            type: item.type,
+                                            time: targetTime ? targetTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : 'Cả ngày'
+                                        });
+                                    }
+                                });
+
+                                if (validAlerts.length > 0) {
+                                    setActiveAlerts(validAlerts);
+                                    setShowAlertModal(true);
+
+                                    // Gửi thông báo hệ thống nổi (Native System Notification)
+                                    validAlerts.forEach(alertItem => {
+                                        sendNotification(`🔔 ${alertItem.type}: ${alertItem.title}`, `Thời gian: ${alertItem.time}`);
+                                    });
+                                }
+
+                                // Lưu vào sessionStorage để tránh lặp lại thông báo trong phiên này
+                                sessionStorage.setItem('vt_notified_session', 'true');
+
+                                // Dọn dẹp listener sau khi quét xong lần đầu
+                                unsubEvents();
+                                unsubTodos();
+                                unsubNotes();
+                            });
+                        });
                     });
-                    localStorage.setItem('last_event_check', todayStr);
-                });
+                } catch (err) {
+                    console.error("Lỗi quét dữ liệu thông báo:", err);
+                }
             };
 
             const handleSaveTheme = async (newTheme) => {
                 setTheme(newTheme);
                 setShowSettings(false);
                 if (user) await setDoc(doc(getFirestore(app), 'artifacts', MANUAL_CONFIG.projectId, 'users', user.uid, 'settings', 'theme'), newTheme);
+            };
+
+            // THAY ĐỔI CHÍNH: Hàm kiểm soát đổi Tab và tự động reset ngày về Hôm Nay
+            const handleTabChange = (tab) => {
+                if (tab === 'day') {
+                    setDailyDate(new Date()); // Quay về ngày hiện tại khi bấm Lịch ngày
+                } else if (tab === 'calendar') {
+                    setCalendarCurrentDate(new Date()); // Quay về tháng hiện tại
+                    setCalendarSelectedDate(new Date()); // Đặt ngày chọn mặc định là hôm nay
+                }
+                setActiveTab(tab);
             };
 
             if (loading) return <div className="h-screen flex items-center justify-center text-blue-500">Đang tải...</div>;
@@ -1240,30 +1427,63 @@
                         </div>
                         <div className="flex gap-2">
                             <button onClick={() => setShowSettings(true)}><Settings size={20} /></button>
-                            <button onClick={() => signOut(getAuth(app))}><LogOut size={20} /></button>
+                            <button onClick={() => signOut(getAuth(app))} className="text-xs bg-blue-700 hover:bg-blue-800 px-3 py-1 rounded-full flex items-center gap-1"><LogOut size={14} /> Thoát</button>
                         </div>
                     </header>
 
                     <main className="flex-1 overflow-y-auto relative flex flex-col">
-                        <div style={{ display: activeTab === 'day' ? 'flex' : 'none', flex: 1, flexDirection: 'column' }}><DailyView user={user} db={getFirestore(app)} appId={MANUAL_CONFIG.projectId} /></div>
-                        <div style={{ display: activeTab === 'calendar' ? 'block' : 'none' }}><CalendarView user={user} db={getFirestore(app)} appId={MANUAL_CONFIG.projectId} /></div>
-                        <div style={{ display: activeTab === 'todo' ? 'block' : 'none', height: '100%' }}><TodoView user={user} db={getFirestore(app)} appId={MANUAL_CONFIG.projectId} theme={theme} /></div>
-                        <div style={{ display: activeTab === 'notes' ? 'block' : 'none', height: '100%' }}><NotesView user={user} db={getFirestore(app)} appId={MANUAL_CONFIG.projectId} theme={theme} /></div>
-                        <div style={{ display: activeTab === 'timetable' ? 'flex' : 'none', flex: 1, flexDirection: 'column' }}><TimeTableView user={user} db={getFirestore(app)} appId={MANUAL_CONFIG.projectId} theme={theme} /></div>
+                        <div style={{ display: activeTab === 'day' ? 'flex' : 'none', flex: 1, flexDirection: 'column' }}>
+                            <DailyView 
+                                user={user} 
+                                db={getFirestore(app)} 
+                                appId={MANUAL_CONFIG.projectId} 
+                                today={dailyDate} 
+                                setToday={setDailyDate} 
+                            />
+                        </div>
+                        <div style={{ display: activeTab === 'calendar' ? 'block' : 'none' }}>
+                            <CalendarView 
+                                user={user} 
+                                db={getFirestore(app)} 
+                                appId={MANUAL_CONFIG.projectId} 
+                                currentDate={calendarCurrentDate} 
+                                setCurrentDate={setCalendarCurrentDate} 
+                                selectedDate={calendarSelectedDate} 
+                                setSelectedDate={setCalendarSelectedDate}
+                                onTabChange={handleTabChange}
+                            />
+                        </div>
+                        <div style={{ display: activeTab === 'todo' ? 'block' : 'none', height: '100%' }}>
+                            <TodoView user={user} db={getFirestore(app)} appId={MANUAL_CONFIG.projectId} theme={theme} />
+                        </div>
+                        <div style={{ display: activeTab === 'notes' ? 'block' : 'none', height: '100%' }}>
+                            <NotesView user={user} db={getFirestore(app)} appId={MANUAL_CONFIG.projectId} theme={theme} />
+                        </div>
+                        <div style={{ display: activeTab === 'timetable' ? 'flex' : 'none', flex: 1, flexDirection: 'column' }}>
+                            <TimeTableView user={user} db={getFirestore(app)} appId={MANUAL_CONFIG.projectId} theme={theme} />
+                        </div>
                     </main>
 
                     <nav className="w-full bg-white border-t flex justify-around py-3 shadow-lg z-20 relative shrink-0">
-                        <button onClick={()=>setActiveTab('day')} className={activeTab==='day'?'text-blue-600':'text-gray-400'}><div className="flex flex-col items-center"><CalendarDays size={24}/><span className="text-[10px]">Hôm Nay</span></div></button>
-                        <button onClick={()=>setActiveTab('calendar')} className={activeTab==='calendar'?'text-blue-600':'text-gray-400'}><div className="flex flex-col items-center"><Calendar size={24}/><span className="text-[10px]">Lịch</span></div></button>
-                        <button onClick={()=>setActiveTab('todo')} className={activeTab==='todo'?'text-blue-600':'text-gray-400'}><div className="flex flex-col items-center"><CheckSquare size={24}/><span className="text-[10px]">Việc làm</span></div></button>
-                        <button onClick={()=>setActiveTab('notes')} className={activeTab==='notes'?'text-blue-600':'text-gray-400'}><div className="flex flex-col items-center"><StickyNote size={24}/><span className="text-[10px]">Ghi chú</span></div></button>
+                        <button onClick={()=>handleTabChange('day')} className={activeTab==='day'?'text-blue-600':'text-gray-400'}>
+                            <div className="flex flex-col items-center"><CalendarDays size={24}/><span className="text-[10px]">Hôm Nay</span></div>
+                        </button>
+                        <button onClick={()=>handleTabChange('calendar')} className={activeTab==='calendar'?'text-blue-600':'text-gray-400'}>
+                            <div className="flex flex-col items-center"><Calendar size={24}/><span className="text-[10px]">Lịch</span></div>
+                        </button>
+                        <button onClick={()=>handleTabChange('todo')} className={activeTab==='todo'?'text-blue-600':'text-gray-400'}>
+                            <div className="flex flex-col items-center"><CheckSquare size={24}/><span className="text-[10px]">Việc làm</span></div>
+                        </button>
+                        <button onClick={()=>handleTabChange('notes')} className={activeTab==='notes'?'text-blue-600':'text-gray-400'}>
+                            <div className="flex flex-col items-center"><StickyNote size={24}/><span className="text-[10px]">Ghi chú</span></div>
+                        </button>
                         
                         {/* Nút 3 Chấm (Thêm) */}
                         <div className="relative">
                             <button onClick={()=>setShowMenu(!showMenu)} className={`text-gray-400 ${showMenu ? 'text-blue-600' : ''}`}><div className="flex flex-col items-center"><MoreVertical size={24}/><span className="text-[10px]">Thêm</span></div></button>
                             {showMenu && (
                                 <div className="absolute bottom-12 right-0 bg-white shadow-xl rounded-lg border w-40 overflow-hidden fade-in z-50">
-                                    <button onClick={()=>{setActiveTab('timetable'); setShowMenu(false);}} className="flex items-center gap-2 w-full px-4 py-3 hover:bg-gray-50 text-sm text-gray-700 text-left">
+                                    <button onClick={()=>{handleTabChange('timetable'); setShowMenu(false);}} className="flex items-center gap-2 w-full px-4 py-3 hover:bg-gray-50 text-sm text-gray-700 text-left">
                                         <Table size={16}/> Thời Khóa Biểu
                                     </button>
                                 </div>
@@ -1271,7 +1491,42 @@
                         </div>
                     </nav>
 
-                    {showSettings && <SettingsModal theme={theme} onSave={handleSaveTheme} onClose={()=>setShowSettings(false)} />}
+                    {showSettings && <SettingsModal theme={theme} onSave={handleSaveTheme} onClose={()=>setShowSettings(false)} auth={getAuth(app)} />}
+                    
+                    {/* HỘP THOẠI NỔI BÁO LỊCH KHI MỞ APP */}
+                    {showAlertModal && (
+                        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                            <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                                <div className="bg-blue-600 p-4 text-white flex items-center gap-3">
+                                    <Bell className="animate-bounce" size={24} />
+                                    <div>
+                                        <h3 className="font-bold text-base leading-tight">Lịch trình hôm nay</h3>
+                                        <p className="text-[10px] opacity-80 font-medium">Báo cáo lịch trình tự động</p>
+                                    </div>
+                                </div>
+                                <div className="p-5 max-h-[60vh] overflow-y-auto space-y-3 no-scrollbar">
+                                    {activeAlerts.map((alert, index) => (
+                                        <div key={index} className="flex items-start gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                                            <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-blue-600 border border-blue-100 shrink-0 mt-0.5">{alert.type}</span>
+                                            <div className="flex-1">
+                                                <p className="font-bold text-slate-800 text-sm">{alert.title}</p>
+                                                <p className="text-xs text-slate-400 font-medium flex items-center gap-1 mt-1"><Clock size={12} /> {alert.time}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="p-4 border-t bg-slate-50 flex justify-end">
+                                    <button 
+                                        onClick={() => setShowAlertModal(false)}
+                                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 px-6 rounded-xl shadow-md transition-all active:scale-95"
+                                    >
+                                        Đã hiểu
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {connectionError && (
                         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
                             <div className="bg-white p-6 rounded-lg shadow-xl text-center">
