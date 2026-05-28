@@ -273,7 +273,7 @@
             "Lửa dữ nhất là tham ái nặng\nChấp nào hơn thù hận tái tê\nLưới nào hơn lưới si mê\nSông tình bể dục kéo lê bao người.",
             "Bươi móc lỗi của người quá dễ\nNhư quạt quay, thổi trấu ra ngoài\nLỗi mình che giấu đêm ngày\nKhác gì gian lận chơi bài quen tay.",
             "Kẻ nhếch mắt truy tìm lầm lỗi\nThường cống cao, chỉ trích, chê bai\nNote sầu, lậu hoặc gia tăng đêm ngày.",
-            "Quán thân thể do duyên, bất tịnh\nSiêng năng làm những việc đáng làm\nGiữ gìn chánh niệm thân tâm\nNão phiền, lậu hoặc tiêu tan hết liền.",
+            "Quán thân thể do duyên, bất tịnh\nSiêng năng làm những việc đáng làm\nGiữ gìn chánh niệm thân tâm\nNotes sầu, lậu hoặc tiêu tan hết liền.",
             "Giết mẹ ái, cha già ngã mạn\nTrừ hai vua tà kiến: đoạn, thường.\nDẹp mười hai xứ, ái tham\nVị Phạm chí ấy xứng hàng vô ưu.",
             "Giết mẹ ái, cha già ngã mạn\nTrừ hai vua tà kiến: đoạn, thường.\nDiệt luôn hỗ tướng nghi nan\nVị Phạm chí ấy xứng hàng vô ưu.",
             "Đệ tử Phật đêm ngày tỉnh thức\nNiệm Như Lai mười đức vẹn toàn\nCông phu, làm chủ thân tâm\nOai nghi, chính niệm chuyên cần thường xuyên.",
@@ -347,7 +347,7 @@
             "Người tu tập nói lời từ ái\nChân thật và ích lợi cho đời\nKhông hề làm mất lòng người\nBà-la-môn ấy sáng ngời tấm gương.",
             "Người tu tập tránh xa trộm cắp\nVật không cho không lấy, chỉa chôm\nCho dù lớn, nhỏ, quý, thường.\nBà-la-môn ấy tấm gương sáng ngời.",
             "Không tham vọng đời này, đời tới\nKhông dính gì ba cõi trầm luân\nBuông tất cả, giải thoát tâm\nBà-la-môn ấy rạng danh đạo đời.",
-            "Người tu tập không vương á dục\nTrí tuệ nhiều, nghi hoặc không còn\nChứng vào cảnh giới niết-bàn\nBà-la-môn ấy xứng hàng chân tu.",
+            "Người tu tập không vương ái dục\nTrí tuệ nhiều, nghi hoặc không còn\nChứng vào cảnh giới niết-bàn\nBà-la-môn ấy xứng hàng chân tu.",
             "Ai không vướng chuyện đời thiện ác,\nTu xả ly, giải thoát buộc ràng\nKhông sầu, thanh tịnh, lạc an\nBà-la-môn ấy xứng hàng chân tu.",
             "Như trăng sáng thoát mây che khuất\nAn tịnh lòng, hết trược, sáng trong\nĐam mê hiện hữu dứt xong\nBà-la-môn ấy vào dòng thánh nhân.",
             "Hết tham ái, không nghi, không chấp\nVượt hiểm nguy sống chết, luân hồi\nThực hành thiền định, đến nơi\nPhạm chí tịch tịnh, thảnh thơi vượt dòng.",
@@ -1174,7 +1174,7 @@
             const [reminder, setReminder] = useState(initialReminder || '');
             const [color, setColor] = useState(initialColor || '#FEFCE8'); 
             return (
-                <div className="fixed inset-0 bg-white z-50 flex flex-col animate-in slide-in-from-bottom-5">
+                <div className="fixed inset-0 bg-white z-40 flex flex-col animate-in slide-in-from-bottom-5">
                     <div className="flex justify-between items-center p-4 border-b">
                         <button onClick={onCancel}><X/></button> <button onClick={()=>onSave(title, content, reminder, color)} className="text-blue-600 font-bold"><Save/> Lưu</button>
                     </div>
@@ -1355,12 +1355,16 @@
                                         if (targetTime) {
                                             const itemHours = targetTime.getHours();
                                             const itemMinutes = targetTime.getMinutes();
-                                            const currentHours = today.getHours();
-                                            const currentMinutes = today.getMinutes();
+                                            
+                                            // SỬA LỖI: Chỉ lọc giờ hẹn nếu đó là lịch hẹn/công việc có cài giờ cụ thể (Khác 00:00).
+                                            // Với các Sự kiện cả ngày (00:00) ta giữ nguyên không lọc bỏ.
+                                            if (itemHours !== 0 || itemMinutes !== 0) {
+                                                const currentHours = today.getHours();
+                                                const currentMinutes = today.getMinutes();
 
-                                            // Nếu giờ hẹn nhỏ hơn hiện tại, hoặc bằng giờ hiện tại nhưng phút nhỏ hơn hiện tại thì coi như đã trôi qua
-                                            if (itemHours < currentHours || (itemHours === currentHours && itemMinutes < currentMinutes)) {
-                                                return; // Bỏ qua sự kiện đã trôi qua
+                                                if (itemHours < currentHours || (itemHours === currentHours && itemMinutes < currentMinutes)) {
+                                                    return; // Bỏ qua sự kiện đã trôi qua
+                                                }
                                             }
                                         }
 
@@ -1368,7 +1372,9 @@
                                         validAlerts.push({
                                             title: item.title || item.text || "Lịch hẹn chưa đặt tên",
                                             type: item.type,
-                                            time: targetTime ? targetTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : 'Cả ngày'
+                                            time: targetTime && (targetTime.getHours() !== 0 || targetTime.getMinutes() !== 0) 
+                                                ? targetTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) 
+                                                : 'Cả ngày'
                                         });
                                     }
                                 });
