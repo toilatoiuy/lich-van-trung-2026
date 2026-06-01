@@ -12,6 +12,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
+    <!-- START: CSS của react-toastify -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/react-toastify@9.1.3/dist/ReactToastify.min.css">
+    <!-- END: CSS của react-toastify -->
+
     <script type="importmap">
     {
       "imports": {
@@ -20,13 +24,14 @@
         "lucide-react": "https://esm.sh/lucide-react@0.294.0",
         "firebase/app": "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js",
         "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js",
-        "firebase/firestore": "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"
+        "firebase/firestore": "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js",
+        "react-toastify": "https://esm.sh/react-toastify@9.1.3?external=react,react-dom"
       }
     }
     </script>
 
     <style>
-        body { background-color: #f3f4f6; transition: background-color 0.3s, color 0.3s; overflow-x: hidden; }
+        body { transition: background-color 0.3s, color 0.3s; overflow-x: hidden; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
@@ -50,7 +55,7 @@
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
-<body>
+<body class="bg-gray-100">
     <div id="root"></div>
 
     <script type="text/babel" data-type="module">
@@ -61,8 +66,14 @@
             ChevronLeft, ChevronRight, Save, X, User, Settings, AlertCircle, 
             Clock, Bell, Palette, ArrowUp, ArrowDown, WifiOff, RefreshCw,
             Sun, Cloud, CloudRain, BookOpen, Coins, CalendarDays, Search, MapPin, 
-            Eye, EyeOff, MoreVertical, MoreHorizontal, Table, Key, Lock, Unlock
+            Eye, EyeOff, MoreVertical, MoreHorizontal, Table, Key, Lock, Unlock,
+            Pencil, Check, Wifi
         } from 'lucide-react';
+        
+        // START: Import thư viện react-toastify
+        import { ToastContainer, toast } from 'react-toastify';
+        // END: Import thư viện react-toastify
+
         import { initializeApp } from 'firebase/app';
         import { 
             getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, 
@@ -71,7 +82,8 @@
         } from 'firebase/auth';
         import { 
             getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, 
-            onSnapshot, query, serverTimestamp, Timestamp, orderBy, setDoc, getDoc, getDocs
+            onSnapshot, query, serverTimestamp, Timestamp, orderBy, setDoc, getDoc, getDocs,
+            enableIndexedDbPersistence
         } from 'firebase/firestore';
 
         // --- CẤU HÌNH ---
@@ -117,7 +129,7 @@
             "Trả thù hận bằng tâm oán giận\nMuôn kiếp dài khó đặng thành công\nTừ bi chuyển hóa thù chung\nĐây là định luật công bằng xưa nay.",
             "Trong kiếp sống ai ngờ cái chết\nRình rập ta chẳng sót mảy may\nNgười nào giác ngộ điều này\nHơn thua, tranh chấp... dứt ngay tức thì.",
             "Ai đắm nhiễm năm điều dục lạc\nChẳng giữ tâm, làm chủ giác quan\nUống ăn thái quá hại thân\nTánh hay lười biếng, nhọc nhằn qua loa.",
-            "Người như thế bị ma đánh bại\nCũng giống như gió thổi ngã cây.\nKhổ đau, bất lực nào hay\nĐều do buông thả, đắm say sắc trần.",
+            "Người như thế bị ma đánh bại\nUống ăn thoải mái quay cuồng\nCũng giống như gió thổi ngã cây.\nKhổ đau, bất lực nào hay\nĐều do buông thả, đắm say sắc trần.",
             "Không nhiễm đắm, quán thân nhơ uế\nGiữ gìn tâm, làm chủ giác quan\nUống ăn tiết độ, siêng năng\nVững vàng như núi trước ngàn bão giông.",
             "Dù khoát áo cà-sa đĩnh đạc\nMà tâm còn uế trược tham, sân\nSống không chân thật, buông lung\nLàm sao xứng hạnh sa-môn sáng ngời?",
             "AI giải phóng tham, sân, trược uế\nSống thanh cao, giữ giới nghiêm minh\nChánh chân, làm chủ được mình\nNgười tu như thế thật tình đáng khen.",
@@ -128,7 +140,7 @@
             "Kiếp này khổ, kiếp sau càng khổ\nKẻ ác gian chịu khổ hai đời\nQuả sầu đeo bám khôn nguôi,\nNhớ ác, day dứt khó rời khỏi ta.",
             "Kiếp này sướng, kiếp sau càng sướng\nNgười đức cao được hưởng phước vui\nThiện nhân trổ quả còn hoài\nNhớ thiện, an lạc tràn đầy trong tâm.",
             "Kiếp này khổ, kiếp sau than khổ\nGieo ác nhân phải khổ hai đời\nLương tâm dằn vặt tơi bời\nRơi vào cõi dữ, than hoài chẳng xong.",
-            "Kiếp này sướng, kiếp sau càng sướng\nLàm phúc thì sung sướng hai đời\nPhúc do làm thiện tuyệt vời\nSanh về cõi thiện, thảnh thơi lâu dài.",
+            "Kiếp sướng, kiếp sau càng sướng\nLàm phúc thì sung sướng hai đời\nPhúc do làm thiện tuyệt vời\nSanh về cõi thiện, thảnh thơi lâu dài.",
             "Làu thông cả kho kinh sâu sắc\nKhông thực hành, phóng dật ích chi?\nKhác gì như kẻ làm thuê\nChăn bò cho chủ, có gì của ta?",
             "Người nói ít nhưng hành miên mật\nBỏ tham, sân; tỉnh giác, thong dong\nHai đời dính mắc không còn\nNgười này xứng hạnh sa-môn sáng ngời.",
             "Không phóng dật là con đường sống\nKẻ buông lung làm hỏng cuộc đời.\nKhông còn phóng dật, sáng ngời\nBuông lung như kẻ chết rồi, ích chi.",
@@ -183,12 +195,12 @@
             "Người sáng suốt tự nương mình vững\nKhông tìm cầu, dựa dẫm vào ai\nLành thay, điều phục tâm này\nBiết tự điều phục, không hai trên đời.",
             "Các điều ác do mình tạo tác\nÁc do tâm, ai khác ngoài ta\nÁc nhân nghiền nát người tà\nNhư kim cương cứng nghiền qua đá thường.",
             "Như tầm gửi bám cây Phật pháp\nNgười buông lung giới đức chẳng gìn\nHạnh tà chuốc họa vào thân,\nKẻ thù sung sướng thấy mình tiêu tan.",
-            "Làm điều ác không cần trình độ\nHãm hại ta đau khổ dễ hơn\nKhó thay, làm thiện chánh chơn\nMình người lợi lạc, bình an cõi đời.",
+            "Làm điều ác không cần trình độ\nHãm hại ta đạo khổ dễ hơn\nKhó thay, làm thiện chánh chơn\nMình người lợi lạc, bình an cõi đời.",
             "Kẻ ác kiến ngu si, phỉ báng\nGiáo pháp hàng La-hán nhiệm mầu\nHại mình như ngọn trúc lau\nNgay khi trổ quả nhuốm màu diệt vong.",
             "Các điều ác do mình tự tạo\nRồi vướng vào khổ não, họa tai.\nĐiều lành ta tạo hôm nay\nQuả an vui đến sớm mai là thường.",
             "Nên hiểu rõ sạch trong, nhơ uế\nHành động do gốc rễ từ tâm\nCậy nhờ tha lực khó thành\nĐỗ lỗi “tại, bởi” sao đành, không nên.",
             "Dù phụng sự, vị tha thiết thực\nXin chớ quên thực tập lợi mình\nChuyên tâm học pháp cao minh\nHướng về giải thoát, đạt thành mới thôi.",
-            "Người sáng suốt chớ ôm tà kiến\nSống buông lung, ti tiện qua ngày.\nNghiệp tà vạy, chớ kéo dài\nĐược vầy, sinh tử luân hồi sớm ra.",
+            "Người sáng suốt chớ ôm tà kiến\nSống buông lung, ti tiện qua ngày.\nNệp tà vạy, chớ kéo dài\nĐược vầy, sinh tử luân hồi sớm ra.",
             "Luôn tinh tấn không mê lạc thú\nHạnh thanh cao, tu sĩ thường ghi\nTrang nghiêm giới đức, hành trì\nHai đời hưởng phúc chỉ vì tu tâm.",
             "Hãy quán tưởng trong đời trần tục\nMọi thứ như bọt nước, huyễn vong.\nĐến khi ngộ lẽ vô thường\nTử thần không thể lần đường chân nhân.",
             "Cõi hồng trần đẹp tuồng ảo mộng\nNhư xe vua hoành tráng gấm thêu\nKẻ ngu tham đắm, chắt chiêu\nNgười khôn tỉnh thức, chẳng yêu nhiễm đời.",
@@ -200,20 +212,20 @@
             "Kẻ keo kiệt không sanh thiên giới\nNgười dại ngu chẳng đoái tình thương\nNgười hiền thích sống thiện lương\nĐời sau hưởng phúc khác thường thế nhân.",
             "Chứng sơ quả thánh nhân rạng rỡ\nHơn cõi trời Thiên chủ uy quyền\nHơn Trời trong chốn càn khôn\nKhó tìm trong cõi bụi hồng người hơn.",
             "Phật chiến thắng hoàn toàn cõi trược\nTham ái trừ, tuệ giác sâu ngần\nKhông lưu dấu vết trần gian\nĐố ai vẽ được bước chân vượt đời.",
-            "Bậc giải thoát lưới tham, ái dục\nHết tái sanh, tuệ giác sâu ngần\nKhông lưu dấu vết trần gian\nĐố ai vẽ được bước chân vượt đời.",
+            "Bậc giải thoát lưới tham, á dục\nHết tái sanh, tuệ giác sâu ngần\nKhông lưu dấu vết trần gian\nĐố ai vẽ được bước chân vượt đời.",
             "Người có trí thiền hành, tinh tấn\nTìm niềm vui trong hạnh viễn ly\nĐêm ngày tỉnh thức luôn khi\nTrời người kính trọng, sánh vì trăng sao.",
             "Thật hạnh phúc, làm người nhân đức\nQuả khó thay, sống thật tịnh thanh\nKhó thay, nghe pháp, thực hành\nKhó thay, gặp Phật chứng thành quả cao.",
             "Mọi hoàn cảnh không làm bất thiện\nDù khó khăn, phát triển nhân lành\nLuyện tâm, rèn ý tịnh thanh\nLà lời Phật dạy đành rành xưa nay.",
             "Tu nhẫn nhục: Khổ hành đáng quý\nĐạt niết-bàn: Quả vị tối cao\nChúng sinh: Chẳng hại tơ hào\nHạnh sa-môn ấy cao sâu khó bàn.",
             "Không phỉ báng, không làm thương tổn\nLàm chủ mình, giới bổn vẹn toàn\nĐoạn điệu ăn uống, định thiền\nSống đời an tịnh, không phiền một ai.",
-            "Dù mưa rãi bạc vàng chưa thỏa\nLòng dục tham không đáy xưa nay\nTrí nhân hiểu rõ điều này\nKhổ nhiều, vui ít, không sai bao giờ.",
+            "Dù mưa rãi bạc vàng chưa thỏa\nLòng dục tham không đáy xưa nay\nTrí nhân hiệu rõ điều này\nKhổ nhiều, vui ít, không sai bao giờ.",
             "Ngộ lẽ ấy, người tu học Phật\nChẳng đam mê dục lạc người, trời\nQuyết lòng chuyển hóa, thảnh thơi\nKhông còn tham ái, rạng ngời nhân gian.",
             "Trong nguy khổ, người tìm nương tựa\nHoặc thần linh, rừng rú, non cao,\nMiếu, đình, cây, vật, hang sâu,\nVái van, hiến tế, mong sao an lành.",
             "Nương tựa ấy hoàn toàn vô bổ\nTìm loanh quanh, nhiều chỗ bất an\nKhổ đau còn đó, chưa tan\nChỉ do mê tín, chẳng thành tựu chi.",
             "Người có phước, tìm về Tam bảo\nPhật, Pháp, Tăng quý báu khó hơn\nKhó khăn, bất hạnh tựa nương\nDùng Bốn chân lý làm phương thoát nàn.",
             "Thấy đau khổ, nguyên nhân gây khổ\nThấy Niết-bàn, thánh lộ tám ngành\nĐưa người đến chốn bình an\nKhông còn bất hạnh, trần gian muộn phiền.",
             "Nương tựa ấy tạo nên quả phước\nNguồn tâm linh, thể đạt an vui\nNgười khôn nương tựa đời đời\nVẫy chào đau khổ, thảnh thơi cuộc đời.",
-            "Bậc trí tuệ vun bồi giới đức\nTìm khắp nơi hiếm được một người\nChỗ nào có bậc trí tài\nXóm làng hạnh phúc, cuộc đời bình an.",
+            "Bậc trí tuệ vun bồi giới đức\nTìm khắp nơi hiếm được một người\nChỗ nào có bậc trí tài\nXóm làng hạnh phúc, cuộc đời bình An.",
             "Ôi hạnh phúc, Như Lai thị hiện\nPháp cao siêu lăn chuyển khắp nơi\nTăng đoàn hòa hợp đạo đời\nBốn hàng đệ tử cùng vui tu hành.",
             "Biết lễ kính những người đáng kính\nPhật, thánh hiền đức hạnh thanh cao\nNhững người chướng ngại sạch làu\nNhỏ phiền dứt sạch, khổ đau giã từ.",
             "Nhờ cung kính chân tu quảng đại\nBậc tịnh an, tự tại thấy nghe,\nKhông còn sợ hãi, sầu, mê,\nPhước lành mỹ mãn đề huề bên ta.",
@@ -345,9 +357,9 @@
             "Sống thân thiện giữa bao thù nghịch\nGiữ ôn hòa với địch hung hăng\nTịnh thanh giữa chốn hồng trần\nBà-la-môn ấy xứng hàng chân tu.",
             "Người tu tập không còn dính dáng\nTham, sân, si, kiêu mạn, tị hiềm\nCũng như hạt cải đầu kim\nBà-la-môn ấy trọn nên đạo vàng.",
             "Người tu tập nói lời từ ái\nChân thật và ích lợi cho đời\nKhông hề làm mất lòng người\nBà-la-môn ấy sáng ngời tấm gương.",
-            "Người tu tập tránh xa trộm cắp\nVật không cho không lấy, chỉa chôm\nCho dù lớn, nhỏ, quý, thường.\nBà-la-môn ấy tấm gương sáng ngời.",
+            "Người tu tập tránh xa trộm cắp\nVật không cho không lấy, chỉa chôm\nChỗ nào lớn, nhỏ, quý, thường.\nBà-la-môn ấy tấm gương sáng ngời.",
             "Không tham vọng đời này, đời tới\nKhông dính gì ba cõi trầm luân\nBuông tất cả, giải thoát tâm\nBà-la-môn ấy rạng danh đạo đời.",
-            "Người tu tập không vương ái dục\nTrí tuệ nhiều, nghi hoặc không còn\nChứng vào cảnh giới niết-bàn\nBà-la-môn ấy xứng hàng chân tu.",
+            "Người tu tập không vương á dục\nTRí tuệ nhiều, nghi hoặc không còn\nChứng vào cảnh giới niết-bàn\nBà-la-môn ấy xứng hàng chân tu.",
             "AI không vướng chuyện đời thiện ác,\nTu xả ly, giải thoát buộc ràng\nKhông sầu, thanh tịnh, lạc an\nBà-la-môn ấy xứng hàng chân tu.",
             "Như trăng sáng thoát mây che khuất\nAn tịnh lòng, hết trược, sáng trong\nĐam mê hiện hữu dứt xong\nBà-la-môn ấy vào dòng thánh nhân.",
             "Hết tham ái, không nghi, không chấp\nVượt hiểm nguy sống chết, luân hồi\nThực hành thiền định, đến nơi\nPhạm chí tịch tịnh, thảnh thơi vượt dòng.",
@@ -434,7 +446,7 @@
             const [passwordError, setPasswordError] = useState('');
             const [showChangePassword, setShowChangePassword] = useState(false);
 
-            // Bổ sung thiết lập mật khẩu PIN ứng dụng (Yêu cầu 2)
+            // Bổ sung thiết lập mật khẩu PIN ứng dụng
             const [appPassword, setAppPassword] = useState('');
             const [enableLock, setEnableLock] = useState(false);
             const [lockError, setLockError] = useState('');
@@ -508,7 +520,7 @@
                     }
                 } catch (err) {
                     if (err.code === 'auth/requires-recent-login') {
-                        setPasswordError("⚠️ Để đổi mật khẩu, bạn cần Đăng xuất và Đăng nhập lại để xác thực danh tính.");
+                        setPasswordError("⚠️ Hãy Đăng xuất và Đăng nhập lại để xác thực danh tính trước khi đổi mật khẩu.");
                     } else {
                         setPasswordError("Lỗi: " + err.message);
                     }
@@ -522,23 +534,23 @@
                             <h3 className="font-bold flex items-center gap-2"><Palette size={18}/> Giao Diện & Bảo Mật</h3>
                             <button onClick={onClose}><X size={20}/></button>
                         </div>
-                        <div className="p-6 space-y-6 overflow-y-auto flex-1 no-scrollbar">
+                        <div className="p-6 space-y-6 overflow-y-auto flex-1 no-scrollbar text-slate-800">
                             <div>
                                 <label className="block text-sm font-bold text-gray-700 mb-2">Màu Nền Ứng Dụng</label>
-                                <input type="color" className="w-full h-12 rounded cursor-pointer border-2 border-gray-200" value={localTheme.bgColor} onChange={e => setLocalTheme({...localTheme, bgColor: e.target.value})} />
+                                <input type="color" className="w-full h-12 rounded cursor-pointer border-2 border-gray-200 bg-white" value={localTheme.bgColor} onChange={e => setLocalTheme({...localTheme, bgColor: e.target.value})} />
                             </div>
                             <div>
                                 <label className="block text-sm font-bold text-gray-700 mb-2">Màu Nền Ghi Chú</label>
-                                <input type="color" className="w-full h-12 rounded cursor-pointer border-2 border-gray-200" value={localTheme.noteColor} onChange={e => setLocalTheme({...localTheme, noteColor: e.target.value})} />
+                                <input type="color" className="w-full h-12 rounded cursor-pointer border-2 border-gray-200 bg-white" value={localTheme.noteColor} onChange={e => setLocalTheme({...localTheme, noteColor: e.target.value})} />
                             </div>
                             <div>
                                 <label className="block text-sm font-bold text-gray-700 mb-2">Màu Chữ Chính</label>
-                                <input type="color" className="w-full h-12 rounded cursor-pointer border-2 border-gray-200" value={localTheme.textColor} onChange={e => setLocalTheme({...localTheme, textColor: e.target.value})} />
+                                <input type="color" className="w-full h-12 rounded cursor-pointer border-2 border-gray-200 bg-white" value={localTheme.textColor} onChange={e => setLocalTheme({...localTheme, textColor: e.target.value})} />
                             </div>
                             <button onClick={() => onSave(localTheme)} className="w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 shadow-md">Lưu & Đồng Bộ Màu</button>
                             <button onClick={() => onSave({ bgColor: '#f3f4f6', noteColor: '#FEFCE8', textColor: '#1F2937' })} className="w-full border border-gray-300 text-gray-600 py-2 rounded-lg text-sm">Khôi phục màu mặc định</button>
                             
-                            {/* KHU VỰC: Đặt mã PIN bảo vệ việc làm & ghi chú (Yêu cầu 2) */}
+                            {/* KHU VỰC: Đặt mã PIN bảo vệ việc làm & ghi chú */}
                             <div className="border-t pt-4 mt-4">
                                 <h4 className="font-bold text-sm text-slate-800 flex items-center gap-2 mb-3"><Lock size={16} /> Bảo vệ Ghi chú & Việc cần làm</h4>
                                 <form onSubmit={handleSaveLockSettings} className="space-y-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
@@ -691,28 +703,97 @@
         };
 
         // --- MÀN HÌNH THỜI KHÓA BIỂU (TKB VIEW) ---
+        // START: Thêm điều hướng tuần và ngày tự động vào TKB
         const TimeTableView = ({ user, db, appId, theme }) => {
             const [schedule, setSchedule] = useState({});
             const [headers, setHeaders] = useState({ col1: 'Môn - Lớp', col2: 'Ghi chú' });
             
-            const weekDays = [
-                { id: 't2', label: 'Thứ 2' }, { id: 't3', label: 'Thứ 3' }, { id: 't4', label: 'Thứ 4' },
-                { id: 't5', label: 'Thứ 5' }, { id: 't6', label: 'Thứ 6' }, { id: 't7', label: 'Thứ 7' },
-            ];
+            // Thiết lập State lưu ngày thứ 2 đầu tuần đang hiển thị (mặc định là thứ 2 tuần hiện tại)
+            const [startOfWeekDate, setStartOfWeekDate] = useState(() => {
+                const now = new Date();
+                const day = now.getDay();
+                const diff = now.getDate() - day + (day === 0 ? -6 : 1); // Tính toán để về thứ 2 của tuần này
+                const monday = new Date(now.setDate(diff));
+                monday.setHours(0, 0, 0, 0);
+                return monday;
+            });
+
             const periods = [1, 2, 3, 4, 5];
 
-            const tkbRef = useMemo(() => doc(db, 'artifacts', appId, 'users', user.uid, 'timetable', 'main'), [db, appId, user.uid]);
-
-            useEffect(() => onSnapshot(tkbRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    setSchedule(data.schedule || {});
-                    if(data.headers) setHeaders(data.headers);
+            // Tạo mã nhận diện riêng cho từng tuần của TKB (tránh ghi đè dữ liệu giữa các tuần)
+            const weekKey = useMemo(() => {
+                const yyyy = startOfWeekDate.getFullYear();
+                // Tính tuần số mấy trong năm
+                const target = new Date(startOfWeekDate.valueOf());
+                const dayNr = (startOfWeekDate.getDay() + 6) % 7;
+                target.setDate(target.getDate() - dayNr + 3);
+                const firstThursday = target.valueOf();
+                target.setMonth(0, 1);
+                if (target.getDay() !== 4) {
+                    target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
                 }
-            }), [tkbRef]);
+                const weekNum = 1 + Math.ceil((firstThursday - target) / 604800000);
+                return `${yyyy}_w${weekNum}`;
+            }, [startOfWeekDate]);
+
+            // Tham chiếu chuẩn xác đến tài liệu TKB của tuần này
+            const tkbRef = useMemo(() => doc(db, 'artifacts', appId, 'users', user.uid, 'timetable', `main_${weekKey}`), [db, appId, user.uid, weekKey]);
+
+            useEffect(() => {
+                const unsub = onSnapshot(tkbRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        setSchedule(data.schedule || {});
+                        if(data.headers) setHeaders(data.headers);
+                    } else {
+                        // Reset bảng trống nếu tuần mới chưa có dữ liệu
+                        setSchedule({});
+                        setHeaders({ col1: 'Môn - Lớp', col2: 'Ghi chú' });
+                    }
+                }, err => {
+                    console.warn("Tải thời khóa biểu offline warning (Sử dụng dữ liệu cached):", err);
+                });
+                return unsub;
+            }, [tkbRef]);
+
+            // Tính ngày tháng chi tiết của 6 thứ trong tuần học tập (Thứ 2 -> Thứ 7)
+            const weekDaysInfo = useMemo(() => {
+                const list = [];
+                const daysName = ['t2', 't3', 't4', 't5', 't6', 't7'];
+                for (let i = 0; i < 6; i++) {
+                    const temp = new Date(startOfWeekDate);
+                    temp.setDate(startOfWeekDate.getDate() + i);
+                    const formattedDate = `${String(temp.getDate()).padStart(2, '0')}/${String(temp.getMonth() + 1).padStart(2, '0')}`;
+                    list.push({
+                        id: daysName[i],
+                        label: `Thứ ${i + 2}`,
+                        dateStr: formattedDate
+                    });
+                }
+                return list;
+            }, [startOfWeekDate]);
+
+            // Chuỗi hiển thị khoảng ngày của tuần (Từ thứ 2 đến Chủ nhật)
+            const weekRangeLabel = useMemo(() => {
+                const monday = new Date(startOfWeekDate);
+                const sunday = new Date(startOfWeekDate);
+                sunday.setDate(startOfWeekDate.getDate() + 6);
+                const fMonday = `${String(monday.getDate()).padStart(2, '0')}/${String(monday.getMonth() + 1).padStart(2, '0')}/${monday.getFullYear()}`;
+                const fSunday = `${String(sunday.getDate()).padStart(2, '0')}/${String(sunday.getMonth() + 1).padStart(2, '0')}/${sunday.getFullYear()}`;
+                return `Tuần: ${fMonday} - ${fSunday}`;
+            }, [startOfWeekDate]);
+
+            const changeWeek = (offsetWeeks) => {
+                const newMonday = new Date(startOfWeekDate);
+                newMonday.setDate(startOfWeekDate.getDate() + (offsetWeeks * 7));
+                setStartOfWeekDate(newMonday);
+            };
 
             const saveData = async (path, value) => {
-                await setDoc(tkbRef, { [`schedule.${path}`]: value }, { merge: true });
+                // SỬA LỖI TRẮNG TINH: Lưu lồng cấu trúc map { schedule: { ... } } thay vì Flat Field key (Yêu cầu quan trọng của Firebase merge)
+                await setDoc(tkbRef, { schedule: { [path]: value } }, { merge: true });
+                // Cập nhật State cục bộ đồng bộ lập tức để giao diện hiển thị ngay không bị trắng
+                setSchedule(prev => ({ ...prev, [path]: value }));
             };
 
             const saveHeader = async (key, value) => {
@@ -723,44 +804,57 @@
 
             return (
                 <div className="h-full flex flex-col px-4 pb-4 pt-2" style={{ color: theme.textColor }}>
-                     <h2 className="text-xl font-bold mb-2 text-center shrink-0">Thời Khoá Biểu</h2>
-                    <div className="flex-1 overflow-y-auto bg-white rounded-xl shadow-sm border border-gray-200 mb-4">
-                        <table className="w-full text-sm border-collapse">
+                    <h2 className="text-xl font-bold mb-1 text-center shrink-0">Thời Khoá Biểu</h2>
+                    
+                    {/* BỘ ĐIỀU HƯỚNG TUẦN */}
+                    <div className="flex items-center justify-between mb-3 bg-white p-3 rounded-xl shadow-sm border border-slate-100 shrink-0 text-slate-800">
+                        <button 
+                            onClick={() => changeWeek(-1)} 
+                            className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-600 transition flex items-center gap-1 text-xs font-bold"
+                        >
+                            <ChevronLeft size={16} /> Tuần trước
+                        </button>
+                        <span className="text-xs font-bold text-slate-700 text-center tracking-tight">{weekRangeLabel}</span>
+                        <button 
+                            onClick={() => changeWeek(1)} 
+                            className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-600 transition flex items-center gap-1 text-xs font-bold"
+                        >
+                            Tuần sau <ChevronRight size={16} />
+                        </button>
+                    </div>
+
+                    <div className="flex-1 overflow-y-auto rounded-xl shadow-sm border border-slate-200 mb-4 bg-white">
+                        <table className="w-full text-sm border-collapse table-fixed">
                             <thead className="sticky top-0 bg-gray-100 z-10 shadow-sm">
                                 <tr className="text-gray-700">
-                                    <th className="border p-2 w-16 bg-gray-100 text-center align-middle">Thứ<br/><span className="text-xs font-normal">Ngày</span></th>
-                                    <th className="border p-2 w-10 bg-gray-100 text-center">Tiết</th>
-                                    <th className="border p-0 min-w-[80px] bg-gray-100">
-                                        <input className="w-full bg-transparent text-center font-bold p-2 outline-none placeholder-gray-400" value={headers.col1} onChange={e=>saveHeader('col1', e.target.value)} placeholder="Môn - Lớp" />
+                                    <th className="border p-2 w-14 bg-gray-100 text-center align-middle text-xs font-bold">Thứ</th>
+                                    <th className="border p-2 w-10 bg-gray-100 text-center text-xs font-bold">Tiết</th>
+                                    <th className="border p-0 min-w-[100px] bg-gray-100">
+                                        <input className="w-full bg-transparent text-center font-bold p-2 outline-none placeholder-gray-400 text-slate-800 text-xs" value={headers.col1} onChange={e=>saveHeader('col1', e.target.value)} placeholder="Môn - Lớp" />
                                     </th>
-                                    <th className="border p-0 min-w-[80px] bg-gray-100">
-                                        <input className="w-full bg-transparent text-center font-bold p-2 outline-none placeholder-gray-400" value={headers.col2} onChange={e=>saveHeader('col2', e.target.value)} placeholder="Ghi chú" />
+                                    <th className="border p-0 min-w-[100px] bg-gray-100">
+                                        <input className="w-full bg-transparent text-center font-bold p-2 outline-none placeholder-gray-400 text-slate-800 text-xs" value={headers.col2} onChange={e=>saveHeader('col2', e.target.value)} placeholder="Ghi chú" />
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {weekDays.map(day => (
+                                {weekDaysInfo.map(day => (
                                     <React.Fragment key={day.id}>
                                         {periods.map((period, index) => (
                                             <tr key={`${day.id}_${period}`} className="border-b hover:bg-gray-50">
                                                 {index === 0 && (
-                                                    <td className="border p-0 align-middle bg-gray-50 text-gray-600" rowSpan={5}>
-                                                        <div className="flex flex-col h-full justify-center items-center">
-                                                            <div className="font-bold">{day.label}</div>
-                                                            <textarea 
-                                                                className="w-full bg-transparent text-center p-1 outline-none text-xs resize-none h-12 overflow-hidden"
-                                                                placeholder="Ngày..."
-                                                                value={schedule[`day_${day.id}_date`] || ''}
-                                                                onChange={e=>setSchedule({...schedule, [`day_${day.id}_date`]: e.target.value})}
-                                                                onBlur={e=>saveData(`day_${day.id}_date`, e.target.value)}
-                                                            />
+                                                    <td className="border p-1 align-middle bg-gray-50 text-gray-600 text-center" rowSpan={5}>
+                                                        <div className="flex flex-col h-full justify-center items-center gap-0.5">
+                                                            {/* HIỂN THỊ THỨ VÀ NGÀY THÁNG ĐƯỢC TỰ ĐỘNG TÍNH TOÁN */}
+                                                            <div className="font-extrabold text-xs text-slate-800">{day.label}</div>
+                                                            <div className="text-[10px] text-slate-400 font-bold bg-slate-200/50 px-1.5 py-0.5 rounded-full">{day.dateStr}</div>
                                                         </div>
                                                     </td>
                                                 )}
-                                                <td className="border p-2 text-center text-gray-500 font-medium align-middle">{period}</td>
+                                                <td className="border p-2 text-center text-gray-400 font-bold text-xs align-middle">{period}</td>
                                                 <td className="border p-0 align-middle">
                                                     <textarea 
-                                                        className="w-full h-full p-2 outline-none bg-transparent resize-none overflow-hidden" 
+                                                        className="w-full h-full p-2 outline-none bg-transparent resize-none overflow-hidden text-slate-800 text-xs leading-tight" 
                                                         rows={1}
                                                         value={schedule[`${day.id}_${period}_col1`] || ''}
                                                         onChange={(e) => setSchedule({...schedule, [`${day.id}_${period}_col1`]: e.target.value})}
@@ -769,7 +863,7 @@
                                                 </td>
                                                 <td className="border p-0 align-middle">
                                                     <textarea 
-                                                        className="w-full h-full p-2 outline-none bg-transparent resize-none overflow-hidden" 
+                                                        className="w-full h-full p-2 outline-none bg-transparent resize-none overflow-hidden text-slate-800 text-xs leading-tight" 
                                                         rows={1}
                                                         value={schedule[`${day.id}_${period}_col2`] || ''}
                                                         onChange={(e) => setSchedule({...schedule, [`${day.id}_${period}_col2`]: e.target.value})}
@@ -786,6 +880,7 @@
                 </div>
             );
         };
+        // END: Thêm điều hướng tuần và ngày tự động vào TKB
 
         // --- MÀN HÌNH LỊCH NGÀY (DAILY VIEW) ---
         const DailyView = ({ user, db, appId, today, setToday }) => {
@@ -848,7 +943,6 @@
                 const dateStr = today.toDateString();
                 const lunar = getLunarDetails(today);
                 const todays = allEvents.filter(e => {
-                    // Cập nhật logic lặp trong DailyView hỗ trợ weekly & monthly (Yêu cầu 1)
                     if (!e.repeat || e.repeat === 'none') return e.date && new Date(e.date.seconds * 1000).toDateString() === dateStr;
                     if (e.repeat === 'lunar') return e.lunarDay === lunar.day && e.lunarMonth === lunar.month;
                     if (e.repeat === 'solar' && e.date) { const d = new Date(e.date.seconds * 1000); return d.getDate() === today.getDate() && d.getMonth() === today.getMonth(); }
@@ -974,7 +1068,6 @@
                     <div className={`relative z-10 flex-1 flex flex-col items-center gap-2 overflow-hidden ${animClass}`}>
                         
                         {/* Khu vực Ngày chính */}
-                        {/* Thay đổi: click vào đây sẽ reset về Hôm nay thông qua setToday (lifting state) */}
                         <div className="text-center drop-shadow-lg mt-12 z-20 flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" onClick={() => setToday(new Date())} title="Về hôm nay">
                             <p className="text-2xl font-light uppercase tracking-widest mb-1 text-white/90">{getDayOfWeek(today)}</p>
                             <h2 className="text-[7rem] md:text-[8rem] font-bold leading-none text-white">{today.getDate()}</h2>
@@ -984,7 +1077,7 @@
                             </div>
                         </div>
 
-                        {/* Thẻ Thông Tin Trung Tâm (Tự giãn) */}
+                        {/* Thẻ Thông Tin Trung Tâm */}
                         <div className="w-full max-w-md mt-auto relative group z-30 flex-1 flex flex-col justify-end pb-0">
                             <div className="bg-black/20 backdrop-blur-sm rounded-t-2xl p-6 border-t border-x border-white/10 flex-1 flex flex-col justify-center items-center relative transition-all duration-300">
                                 <div className="absolute top-3 right-3">
@@ -1006,8 +1099,7 @@
         };
 
         // --- LỊCH VIEW (THÁNG) ---
-        // Thay đổi: Nâng trạng thái 'currentDate' và 'selectedDate' lên App
-        const CalendarView = ({ user, db, appId, currentDate, setCurrentDate, selectedDate, setSelectedDate, onTabChange }) => {
+        const CalendarView = ({ user, db, appId, currentDate, setCurrentDate, selectedDate, setSelectedDate, onTabChange, theme }) => {
             const [events, setEvents] = useState([]);
             const [showEventModal, setShowEventModal] = useState(false);
             const [animClass, setAnimClass] = useState('');
@@ -1029,7 +1121,6 @@
             const eventsRef = useMemo(() => collection(db, 'artifacts', appId, 'users', user.uid, 'events'), [db, appId, user.uid]);
             useEffect(() => onSnapshot(query(eventsRef), snap => setEvents(snap.docs.map(d => ({id: d.id, ...d.data()})))), [eventsRef]);
             
-            // Cập nhật logic lọc sự kiện của CalendarView hỗ trợ thêm lặp tuần và lặp tháng (Yêu cầu 1)
             const hasEvent = (date) => {
                 if (!date) return false;
                 const dateStr = date.toDateString();
@@ -1079,16 +1170,16 @@
             const getDayColor = (index) => {
                 if (index === 5) return 'text-[#84cc16]'; 
                 if (index === 6) return 'text-[#ec4899]'; 
-                return 'text-[#0000FF]'; 
+                return 'text-slate-500'; 
             };
             return (
-                <div className="p-4 select-none perspective-container" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-                    <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                <div className="p-4 select-none perspective-container" style={{ color: theme.textColor }}>
+                    <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm border border-slate-150">
                         <button onClick={() => setCurrentDate(new Date(year, month - 1, 1))} className="p-2 hover:bg-gray-100 rounded-full"><ChevronLeft className="text-gray-600" /></button>
                         <h2 className="text-lg font-bold uppercase text-gray-800">Tháng {month + 1} / {year}</h2>
                         <button onClick={() => setCurrentDate(new Date(year, month + 1, 1))} className="p-2 hover:bg-gray-100 rounded-full"><ChevronRight className="text-gray-600" /></button>
                     </div>
-                    <div className="grid grid-cols-7 gap-1 text-center mb-2 bg-[#FEF3C7] py-2 rounded-lg shadow-sm border border-amber-200">
+                    <div className="grid grid-cols-7 gap-1 text-center mb-2">
                         {['T2','T3','T4','T5','T6','T7','CN'].map((d, i) => <div key={d} className={`text-sm font-bold ${getDayColor(i)}`}>{d}</div>)}
                     </div>
                     <div className={`grid grid-cols-7 gap-1 ${animClass}`}>
@@ -1112,18 +1203,61 @@
                     </div>
                     <div className="mt-6 flex justify-center gap-2">
                          <button onClick={() => setShowEventModal(true)} className="bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm font-bold active:scale-95 transition-transform"><Plus size={16}/> Thêm sự kiện</button>
-                         {/* Nút hỗ trợ chuyển về tab Hôm nay nhanh chóng */}
                          <button onClick={() => onTabChange('day')} className="bg-slate-800 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm font-bold active:scale-95 transition-transform">Hôm nay</button>
                     </div>
-                    {showEventModal && <EventModal date={selectedDate} events={getEventsForDate(selectedDate)} onClose={() => setShowEventModal(false)} onAdd={handleAddEvent} onDelete={async (id) => { await deleteDoc(doc(eventsRef, id)); }} />}
+                    {showEventModal && <EventModal 
+                        date={selectedDate} 
+                        events={getEventsForDate(selectedDate)} 
+                        onClose={() => setShowEventModal(false)} 
+                        onAdd={handleAddEvent} 
+                        onDelete={async (id) => { await deleteDoc(doc(eventsRef, id)); }} 
+                        onUpdate={async (id, newTitle, newDateStr, newRepeat) => {
+                            const newDate = newDateStr ? Timestamp.fromDate(new Date(newDateStr)) : null;
+                            const updatePayload = { title: newTitle, repeat: newRepeat };
+                            if (newDate) {
+                                updatePayload.date = newDate;
+                                if (newRepeat === 'lunar') {
+                                    const d = new Date(newDateStr);
+                                    const lunar = getLunarDetails(d);
+                                    updatePayload.lunarDay = lunar.day;
+                                    updatePayload.lunarMonth = lunar.month;
+                                }
+                            }
+                            await updateDoc(doc(eventsRef, id), updatePayload);
+                        }}
+                    />}
                 </div>
             );
         };
 
-        const EventModal = ({ date, events, onClose, onAdd, onDelete }) => {
+        const EventModal = ({ date, events, onClose, onAdd, onDelete, onUpdate }) => {
             const [newEvent, setNewEvent] = useState('');
             const [repeatType, setRepeatType] = useState('none'); 
             const [deleteConfirm, setDeleteConfirm] = useState(null);
+
+            // Các State phục vụ việc Chỉnh sửa Sự kiện
+            const [editingId, setEditingId] = useState(null);
+            const [editTitle, setEditTitle] = useState('');
+            const [editDate, setEditDate] = useState('');
+            const [editRepeat, setEditRepeat] = useState('none');
+
+            const handleStartEdit = (eItem) => {
+                setEditingId(eItem.id);
+                setEditTitle(eItem.title);
+                const d = eItem.date ? new Date(eItem.date.seconds * 1000) : date;
+                const yyyy = d.getFullYear();
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const dd = String(d.getDate()).padStart(2, '0');
+                setEditDate(`${yyyy}-${mm}-${dd}`);
+                setEditRepeat(eItem.repeat || 'none');
+            };
+
+            const handleSaveEdit = async (id) => {
+                if (!editTitle.trim()) return;
+                await onUpdate(id, editTitle, editDate, editRepeat);
+                setEditingId(null);
+            };
+
             const lunar = getLunarDetails(date);
             const handleDelete = (id) => {
                 if (deleteConfirm === id) { onDelete(id); setDeleteConfirm(null); } 
@@ -1139,22 +1273,63 @@
                         <div className="p-4 overflow-y-auto flex-1">
                             {events.length === 0 && <p className="text-center text-gray-400 py-4">Chưa có sự kiện nào.</p>}
                             <ul className="space-y-2">
-                                {events.map(e => (
-                                    <li key={e.id} className="flex justify-between items-center bg-blue-50 p-2 rounded text-sm text-gray-800">
-                                        <div className="flex items-center gap-2 min-w-0 flex-1">
-                                            {e.repeat === 'lunar' && <span className="text-[10px] bg-purple-100 text-purple-700 px-1 rounded shrink-0">Âm</span>}
-                                            {e.repeat === 'solar' && <span className="text-[10px] bg-orange-100 text-orange-700 px-1 rounded shrink-0">Dương</span>}
-                                            {e.repeat === 'weekly' && <span className="text-[10px] bg-indigo-100 text-indigo-700 px-1 rounded shrink-0">Tuần</span>}
-                                            {e.repeat === 'monthly' && <span className="text-[10px] bg-sky-100 text-sky-700 px-1 rounded shrink-0">Tháng</span>}
-                                            <span className="truncate">{e.title}</span>
-                                        </div>
-                                        <button onClick={() => handleDelete(e.id)} className={`transition-all shrink-0 ${deleteConfirm === e.id ? 'text-red-600 font-bold text-xs bg-red-100 px-2 py-1 rounded' : 'text-red-400 hover:text-red-600'}`}>{deleteConfirm === e.id ? <span>Xóa?</span> : <Trash2 size={16}/>}</button>
-                                    </li>
-                                ))}
+                                {events.map(e => {
+                                    if (editingId === e.id) {
+                                        return (
+                                            <li key={e.id} className="flex flex-col gap-2 bg-blue-50 p-3 rounded text-sm text-gray-800">
+                                                <div className="flex flex-col gap-1 w-full">
+                                                    <input 
+                                                        type="text" 
+                                                        value={editTitle} 
+                                                        onChange={ev => setEditTitle(ev.target.value)} 
+                                                        className="border rounded px-2 py-1 text-sm outline-none focus:border-blue-500 text-slate-800 w-full"
+                                                    />
+                                                    <div className="flex gap-2">
+                                                        <input 
+                                                            type="date" 
+                                                            value={editDate} 
+                                                            onChange={ev => setEditDate(ev.target.value)} 
+                                                            className="border rounded px-2 py-1 text-xs outline-none focus:border-blue-500 text-slate-800 flex-1"
+                                                        />
+                                                        <select 
+                                                            value={editRepeat} 
+                                                            onChange={ev => setEditRepeat(ev.target.value)} 
+                                                            className="border rounded px-2 py-1 text-xs outline-none focus:border-blue-500 text-slate-800"
+                                                        >
+                                                            <option value="none">Không lặp</option>
+                                                            <option value="lunar">Lặp Âm</option>
+                                                            <option value="solar">Lặp Dương</option>
+                                                            <option value="weekly">Tuần</option>
+                                                            <option value="monthly">Tháng</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div className="flex justify-end gap-2 mt-1">
+                                                    <button onClick={() => setEditingId(null)} className="p-1 rounded text-gray-400 hover:text-gray-600" title="Hủy"><X size={16} /></button>
+                                                    <button onClick={() => handleSaveEdit(e.id)} className="p-1 rounded text-green-600 hover:text-green-850" title="Lưu"><Check size={16} /></button>
+                                                </div>
+                                            </li>
+                                        );
+                                    }
+                                    return (
+                                        <li key={e.id} className="flex justify-between items-center bg-blue-50 p-2 rounded text-sm text-gray-800">
+                                            <div className="flex items-center gap-2 min-w-0 flex-1">
+                                                {e.repeat === 'lunar' && <span className="text-[10px] bg-purple-100 text-purple-700 px-1 rounded shrink-0">Âm</span>}
+                                                {e.repeat === 'solar' && <span className="text-[10px] bg-orange-100 text-orange-700 px-1 rounded shrink-0">Dương</span>}
+                                                {e.repeat === 'weekly' && <span className="text-[10px] bg-indigo-100 text-indigo-700 px-1 rounded shrink-0">Tuần</span>}
+                                                {e.repeat === 'monthly' && <span className="text-[10px] bg-sky-100 text-sky-700 px-1 rounded shrink-0">Tháng</span>}
+                                                <span className="truncate">{e.title}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 shrink-0">
+                                                <button onClick={() => handleStartEdit(e)} className="text-gray-400 hover:text-blue-600 p-1" title="Sửa sự kiện"><Pencil size={15}/></button>
+                                                <button onClick={() => handleDelete(e.id)} className={`transition-all shrink-0 ${deleteConfirm === e.id ? 'text-red-600 font-bold text-xs bg-red-100 px-2 py-1 rounded' : 'text-red-400 hover:text-red-600'}`}>{deleteConfirm === e.id ? <span>Xóa?</span> : <Trash2 size={16}/>}</button>
+                                            </div>
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </div>
                         <div className="p-4 border-t bg-gray-50 flex flex-col gap-2">
-                            {/* Cập nhật các tùy chọn repeat: Thêm lặp Hàng tuần và Hàng tháng (Yêu cầu 1) */}
                             <div className="flex gap-2 text-[10px] mb-1 text-gray-700 flex-wrap">
                                 <label className="flex items-center gap-1 cursor-pointer"><input type="radio" name="repeat" checked={repeatType === 'none'} onChange={() => setRepeatType('none')} /> Không lặp</label>
                                 <label className="flex items-center gap-1 cursor-pointer"><input type="radio" name="repeat" checked={repeatType === 'lunar'} onChange={() => setRepeatType('lunar')} /> Lặp Âm</label>
@@ -1163,7 +1338,7 @@
                                 <label className="flex items-center gap-1 cursor-pointer"><input type="radio" name="repeat" checked={repeatType === 'monthly'} onChange={() => setRepeatType('monthly')} /> Tháng</label>
                             </div>
                             <div className="flex gap-2">
-                                <input className="flex-1 border rounded px-3 py-2 text-sm outline-none focus:border-blue-500" placeholder="Tên sự kiện..." value={newEvent} onChange={e => setNewEvent(e.target.value)} />
+                                <input className="flex-1 border rounded px-3 py-2 text-sm outline-none focus:border-blue-500 text-slate-800" placeholder="Tên sự kiện..." value={newEvent} onChange={e => setNewEvent(e.target.value)} />
                                 <button onClick={() => { if(newEvent.trim()) { onAdd(newEvent, repeatType); setNewEvent(''); } }} className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"><Plus size={20}/></button>
                             </div>
                         </div>
@@ -1181,12 +1356,12 @@
                     <div className="flex justify-between items-center p-4 border-b bg-gray-50">
                         <button onClick={onCancel} className="p-2 hover:bg-gray-200 rounded-full"><X size={20}/></button> 
                         <h3 className="font-bold text-gray-700">{isNew ? 'Thêm Việc' : 'Sửa Việc'}</h3>
-                        <button onClick={()=>onSave(text, reminder, deadline)} className="text-blue-600 font-bold p-2"><Save size={18}/> Lưu</button>
+                        <button onClick={()=>onSave(text, reminder, deadline)} className="text-blue-600 font-bold p-2"><Check size={18}/> Lưu</button>
                     </div>
                     <div className="p-4 flex-1 flex flex-col gap-4">
-                        <div><label className="text-xs font-bold text-gray-500 block mb-1">Nội dung</label><input className="w-full text-lg border-b p-2 outline-none focus:border-blue-500 bg-transparent text-slate-800" placeholder="Ví dụ: Đi chợ..." value={text} onChange={e=>setText(e.target.value)} autoFocus /></div>
-                        <div><label className="text-xs font-bold text-gray-500 block mb-1 flex items-center gap-1"><AlertCircle size={12}/> Hạn chót (Deadline)</label><input type="datetime-local" className="w-full border rounded p-2 text-sm bg-gray-50 text-slate-800 outline-none" value={deadline} onChange={e=>setDeadline(e.target.value)} /></div>
-                        <div><label className="text-xs font-bold text-gray-500 block mb-1 flex items-center gap-1"><Clock size={12}/> Nhắc tôi trước (Reminder)</label><input type="datetime-local" className="w-full border rounded p-2 text-sm bg-gray-50 text-slate-800 outline-none" value={reminder} onChange={e=>setReminder(e.target.value)} /></div>
+                        <div><label className="text-xs font-bold text-slate-500 block mb-1">Nội dung</label><input className="w-full text-lg border-b p-2 outline-none focus:border-blue-500 bg-transparent text-slate-800 font-bold" placeholder="Ví dụ: Đi chợ..." value={text} onChange={e=>setText(e.target.value)} autoFocus /></div>
+                        <div><label className="text-xs font-bold text-slate-500 block mb-1 flex items-center gap-1"><AlertCircle size={12}/> Hạn chót (Deadline)</label><input type="datetime-local" className="w-full border rounded p-2 text-sm bg-gray-50 text-slate-800 outline-none" value={deadline} onChange={e=>setDeadline(e.target.value)} /></div>
+                        <div><label className="text-xs font-bold text-slate-500 block mb-1 flex items-center gap-1"><Clock size={12}/> Nhắc tôi trước (Reminder)</label><input type="datetime-local" className="w-full border rounded p-2 text-sm bg-gray-50 text-slate-800 outline-none" value={reminder} onChange={e=>setReminder(e.target.value)} /></div>
                     </div>
                 </div>
             );
@@ -1198,7 +1373,7 @@
             const [deleteConfirm, setDeleteConfirm] = useState(null);
             const todoRef = useMemo(() => collection(db, 'artifacts', appId, 'users', user.uid, 'todos'), [db, appId, user.uid]);
             
-            // THAY ĐỔI CHÍNH: Logic tự động sắp xếp danh sách công việc (todos)
+            // Logic tự động sắp xếp danh sách công việc (todos)
             useEffect(() => {
                 const unsub = onSnapshot(query(todoRef), snap => {
                     const data = snap.docs.map(d => ({id: d.id, ...d.data()}));
@@ -1206,7 +1381,6 @@
                         const aActiveDeadline = !a.completed && a.deadlineTime;
                         const bActiveDeadline = !b.completed && b.deadlineTime;
 
-                        // Ưu tiên 1: Việc nào chưa hoàn thành và có Hạn chót (deadlineTime) ngắn nhất sẽ lên đầu danh sách
                         if (aActiveDeadline && !bActiveDeadline) return -1;
                         if (!aActiveDeadline && bActiveDeadline) return 1;
 
@@ -1218,7 +1392,6 @@
                             }
                         }
 
-                        // Ưu tiên 2: Việc không có deadline hoặc cùng deadline, sắp xếp dựa theo order thủ công
                         if (a.order !== undefined && b.order !== undefined) {
                             return a.order - b.order;
                         }
@@ -1271,13 +1444,23 @@
                                         {t.completed ? <CheckSquare className="text-green-500"/> : <div className="w-5 h-5 border-2 rounded"></div>}
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <div className={`font-medium truncate ${t.completed ? 'line-through text-gray-400' : 'text-gray-800'}`}>{t.text}</div>
+                                        <div className={`font-medium truncate ${t.completed ? 'line-through text-gray-400' : ''}`} style={{ color: t.completed ? '#9ca3af' : theme.textColor }}>{t.text}</div>
                                         <div className="flex gap-3 mt-1 flex-wrap">
                                             {t.deadlineTime && <div className={`text-[10px] flex items-center gap-1 ${timeStatus?.isOverdue && !t.completed ? 'text-red-600 font-bold' : 'text-gray-500'}`}><AlertCircle size={10}/> {t.completed ? `Thời hạn: ${formatDisplayDate(t.deadlineTime.seconds)}` : timeStatus?.text}</div>}
                                             {t.reminderTime && !t.completed && <div className="text-[10px] text-orange-500 flex items-center gap-1"><Bell size={10} /> Nhắc: {formatDisplayDate(t.reminderTime.seconds)}</div>}
                                         </div>
                                     </div>
-                                    <button onClick={(e) => handleDelete(e, t.id)} className={`p-1 rounded shrink-0 transition-all ${deleteConfirm === t.id ? 'bg-red-100 text-red-600 w-16 text-xs font-bold' : 'text-gray-300 hover:text-red-500'}`}>{deleteConfirm === t.id ? <span>Xóa?</span> : <Trash2 size={16}/>}</button>
+                                    {/* THÊM TÍNH NĂNG CHỈNH SỬA TODO */}
+                                    <div className="flex items-center gap-2 shrink-0" onClick={e => e.stopPropagation()}>
+                                        <button 
+                                            onClick={(e) => { e.stopPropagation(); setEditing(t); }} 
+                                            className="p-1 rounded text-gray-400 hover:text-blue-500 hover:bg-blue-50 transition-colors"
+                                            title="Sửa"
+                                        >
+                                            <Pencil size={16}/>
+                                        </button>
+                                        <button onClick={(e) => handleDelete(e, t.id)} className={`p-1 rounded transition-all ${deleteConfirm === t.id ? 'bg-red-100 text-red-600 w-16 text-xs font-bold' : 'text-gray-300 hover:text-red-500'}`}>{deleteConfirm === t.id ? <span>Xóa?</span> : <Trash2 size={16}/>}</button>
+                                    </div>
                                 </div>
                             );
                         })}
@@ -1298,7 +1481,7 @@
                         <button onClick={onCancel}><X/></button> <button onClick={()=>onSave(title, content, reminder, color)} className="text-blue-600 font-bold"><Save/> Lưu</button>
                     </div>
                     <div className="px-4 py-2 bg-gray-50 flex gap-3 overflow-x-auto no-scrollbar items-center">
-                        <span className="text-xs text-gray-500 font-bold mr-1 text-slate-700">Màu:</span>
+                        <span className="text-xs text-slate-700 font-bold mr-1">Màu:</span>
                         {NOTE_COLORS.map(c => (
                             <button key={c} onClick={() => setColor(c)} className={`w-8 h-8 rounded-full border border-gray-300 shadow-sm transition-transform hover:scale-110 ${color === c ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`} style={{ backgroundColor: c }} />
                         ))}
@@ -1332,7 +1515,7 @@
             const handleDelete = (e, id) => {
                 e.stopPropagation();
                 if (deleteConfirm === id) { deleteDoc(doc(noteRef, id)); setDeleteConfirm(null); } 
-                else { setDeleteConfirm(id); setTimeout(() => setDeleteConfirm(null), 3000); }
+                else { setDeleteConfirm(id); setTimeout(() => setDeleteConfirm(prev => prev === id ? null : prev), 3000); }
             };
             if (editing) {
                 const currentReminderStr = editing.reminderTime ? formatDateTimeForInput(editing.reminderTime.seconds * 1000) : '';
@@ -1344,16 +1527,16 @@
                     <div className="grid grid-cols-2 gap-3">
                         {notes.length === 0 && <div className="col-span-2 text-center text-gray-400 mt-10"><StickyNote size={48} className="mx-auto mb-2 opacity-20" /><p>Trống trơn...</p></div>}
                         {notes.map(n => (
-                            <div key={n.id} onClick={()=>setEditing(n)} className="p-4 rounded-xl border shadow-sm h-48 flex flex-col relative" style={{backgroundColor: n.color || theme.noteColor, borderColor: '#e5e7eb'}}>
+                            <div key={n.id} onClick={()=>setEditing(n)} className="p-4 rounded-xl border shadow-sm h-48 flex flex-col relative group cursor-pointer hover:shadow-md transition" style={{backgroundColor: n.color || theme.noteColor, borderColor: '#e5e7eb'}}>
                                 <div className="flex justify-between items-start mb-2">
                                     <h4 className="font-bold truncate text-gray-800 flex-1">{n.title}</h4>
                                     {n.reminderTime && <Bell size={12} className="text-orange-500 mt-1 ml-1" />}
                                 </div>
-                                <p className="text-xs text-slate-700 overflow-hidden flex-1 leading-relaxed whitespace-pre-wrap">{n.content}</p>
+                                <p className="text-xs overflow-hidden flex-1 leading-relaxed whitespace-pre-wrap" style={{color: theme.textColor, opacity: 0.8}}>{n.content}</p>
                                 {n.reminderTime && <div className="text-[9px] text-orange-600 font-medium mt-1 mb-1 flex items-center gap-1"><Clock size={10}/> {formatDisplayDate(n.reminderTime.seconds)}</div>}
                                 <div className="flex justify-between items-center mt-1 pt-2 border-t border-black/10">
                                     <span className="text-[10px] text-slate-500">{n.updatedAt ? new Date(n.updatedAt.seconds*1000).toLocaleDateString('vi-VN') : ''}</span>
-                                    <button onClick={(e)=>handleDelete(e, n.id)} className={`transition-all ${deleteConfirm === n.id ? 'bg-white text-red-600 px-2 py-1 rounded shadow-sm text-xs font-bold' : 'text-slate-400 hover:text-red-500'}`}>{deleteConfirm === n.id ? <span>Xóa?</span> : <Trash2 size={16}/>}</button>
+                                    <button onClick={(e)=>handleDelete(e, n.id)} className={`text-slate-400 hover:text-red-500 transition-all ${deleteConfirm === n.id ? 'bg-white text-red-600 px-2 py-1 rounded shadow-sm text-xs font-bold' : ''}`}>{deleteConfirm === n.id ? <span>Xóa?</span> : <Trash2 size={16}/>}</button>
                                 </div>
                             </div>
                         ))}
@@ -1362,7 +1545,7 @@
             );
         };
 
-        // --- COMPONENT MÀN HÌNH KHÓA BẢO VỆ (Yêu cầu 2) ---
+        // --- COMPONENT MÀN HÌNH KHÓA BẢO VỆ ---
         const LockScreen = ({ onUnlock, correctPassword }) => {
             const [pin, setPin] = useState('');
             const [error, setError] = useState('');
@@ -1420,21 +1603,27 @@
             const [showMenu, setShowMenu] = useState(false);
             const [connectionError, setConnectionError] = useState(false);
             
-            // THAY ĐỔI TRỌNG TÂM: Nâng ngày/tháng lên App quản lý để kiểm soát reset hôm nay khi đổi tab
+            // START: Quản lý Trạng thái Ngoại tuyến (UI/UX) - Yêu cầu 2 & 4
+            const [isOffline, setIsOffline] = useState(!navigator.onLine);
+            const [showOfflineBadge, setShowOfflineBadge] = useState(false);
+            // END: Quản lý Trạng thái Ngoại tuyến (UI/UX)
+
             const [dailyDate, setDailyDate] = useState(new Date());
             const [calendarCurrentDate, setCalendarCurrentDate] = useState(new Date());
             const [calendarSelectedDate, setCalendarSelectedDate] = useState(new Date());
 
-            // Thêm State để lưu danh sách sự kiện cần báo trong ngày hôm nay
             const [activeAlerts, setActiveAlerts] = useState([]);
             const [showAlertModal, setShowAlertModal] = useState(false);
 
-            // Bảo mật ứng dụng bằng mã PIN (Yêu cầu 2)
+            // Các State phục vụ việc Chỉnh sửa Sự kiện / Todo trực tiếp trong Modal cảnh báo
+            const [editingAlertId, setEditingAlertId] = useState(null);
+            const [editAlertTitle, setEditAlertTitle] = useState('');
+            const [editAlertTimeStr, setEditAlertTimeStr] = useState('');
+
             const [lockPassword, setLockPassword] = useState('');
             const [lockEnabled, setLockEnabled] = useState(false);
             const [unlockedTabs, setUnlockedTabs] = useState({ todo: false, notes: false });
 
-            // Trạng thái lưu trữ việc hoàn thành thông báo nổi đã tích chọn (LocalStorage)
             const [completedAlerts, setCompletedAlerts] = useState(() => {
                 try {
                     const saved = localStorage.getItem('vt_completed_alerts');
@@ -1454,7 +1643,35 @@
                 localStorage.setItem('vt_completed_alerts', JSON.stringify(completedAlerts));
             }, [completedAlerts]);
 
-            // 1. Logic Khởi Tạo & Xác Thực Hệ Thống (Mở là Báo - Check On Open)
+            // START: Đăng ký lắng nghe tình trạng Internet thay đổi và tự động đồng bộ (Yêu cầu 3)
+            useEffect(() => {
+                const handleOnline = () => {
+                    setIsOffline(false);
+                    setShowOfflineBadge(true);
+                    toast.success("Đã khôi phục kết nối mạng! Dữ liệu đang được đồng bộ tự động.", {
+                        position: "top-center"
+                    });
+                    setTimeout(() => setShowOfflineBadge(false), 3000);
+                };
+                const handleOffline = () => {
+                    setIsOffline(true);
+                    setShowOfflineBadge(true);
+                    toast.warning("Mất kết nối mạng! Ứng dụng chuyển sang chế độ ngoại tuyến.", {
+                        position: "top-center"
+                    });
+                };
+
+                window.addEventListener('online', handleOnline);
+                window.addEventListener('offline', handleOffline);
+
+                return () => {
+                    window.removeEventListener('online', handleOnline);
+                    window.removeEventListener('offline', handleOffline);
+                };
+            }, []);
+            // END: Đăng ký lắng nghe tình trạng Internet thay đổi
+
+            // 1. Logic Khởi Tạo & Xác Thực Hệ Thống (Có tích hợp Offline Persistence)
             useEffect(() => {
                 const init = async () => {
                     try {
@@ -1463,6 +1680,21 @@
                         const auth = getAuth(newApp);
                         const db = getFirestore(newApp);
                         
+                        // Kích hoạt tính năng Offline Persistence của Firebase (Yêu cầu 1)
+                        try {
+                            await enableIndexedDbPersistence(db);
+                        } catch (err) {
+                            if (err.code === 'failed-precondition') {
+                                // Mở trên nhiều tab trình duyệt cùng lúc -> chỉ tab đầu tiên được bật persistence
+                                console.warn("Firebase Offline Persistence failed-precondition: Chỉ cho phép lưu offline trên một tab.");
+                            } else if (err.code === 'unimplemented') {
+                                // Trình duyệt không hỗ trợ IndexedDB
+                                console.warn("Firebase Offline Persistence unimplemented: Trình duyệt không hỗ trợ lưu offline.");
+                            } else {
+                                console.error("Firebase Offline Persistence Error:", err);
+                            }
+                        }
+
                         if ('Notification' in window && Notification.permission !== 'granted') {
                             Notification.requestPermission();
                         }
@@ -1472,9 +1704,13 @@
                             if (u) {
                                 // Tải chủ đề
                                 const docSnap = await getDoc(doc(db, 'artifacts', MANUAL_CONFIG.projectId, 'users', u.uid, 'settings', 'theme'));
-                                if (docSnap.exists()) setTheme(docSnap.data());
+                                if (docSnap.exists()) {
+                                    const loadedTheme = docSnap.data();
+                                    setTheme(loadedTheme);
+                                    localStorage.setItem('app_theme', JSON.stringify(loadedTheme));
+                                }
                                 
-                                // Tải cấu hình bảo vệ (Yêu cầu 2)
+                                // Tải cấu hình bảo vệ
                                 const lockSnap = await getDoc(doc(db, 'artifacts', MANUAL_CONFIG.projectId, 'users', u.uid, 'settings', 'lock'));
                                 if (lockSnap.exists()) {
                                     const lockData = lockSnap.data();
@@ -1487,68 +1723,64 @@
                                     setLockEnabled(savedEnable);
                                 }
 
-                                // Gọi hàm kiểm tra thông báo ngay khi dữ liệu sẵn sàng khi vừa mở app
                                 checkDailyEvents(db, u.uid);
                             }
                             setLoading(false);
                         });
                         setConnectionError(false);
                     } catch (e) {
-                        setConnectionError(true);
+                        // Sửa logic xử lý lỗi kết nối mạng (Yêu cầu 2)
+                        // Nếu do mất mạng không khởi tạo được Firebase khi mở ứng dụng, ta vẫn cho phép chạy tiếp bằng LocalCache
+                        console.warn("Lỗi kết nối khởi tạo hệ thống Google Firebase:", e);
+                        setIsOffline(true);
+                        setLoading(false);
                     }
                 };
                 init();
             }, []);
 
-            // THAY ĐỔI CHÍNH: Thiết lập cơ chế "MỞ LÀ BÁO" tránh lặp lại bằng sessionStorage và bộ lọc hợp lệ hoàn chỉnh
+            // Cơ chế quét sự kiện
             const checkDailyEvents = async (db, uid) => {
                 const alreadyNotifiedInSession = sessionStorage.getItem('vt_notified_session');
                 if (alreadyNotifiedInSession === 'true') {
-                    return; // Đã báo trong phiên này thì bỏ qua
+                    return; 
                 }
 
                 const today = new Date();
                 const todayStr = today.toDateString();
 
-                // Lấy tất cả sự kiện, công việc thuộc ngày hôm nay
                 const eventsRef = collection(db, 'artifacts', MANUAL_CONFIG.projectId, 'users', uid, 'events');
                 const todosRef = collection(db, 'artifacts', MANUAL_CONFIG.projectId, 'users', uid, 'todos');
 
                 try {
-                    // Thu thập danh sách từ onSnapshot một lần
                     const unsubEvents = onSnapshot(query(eventsRef), snapEvents => {
                         const allEvents = snapEvents.docs.map(d => ({ id: d.id, type: 'Sự kiện', ...d.data() }));
                         const unsubTodos = onSnapshot(query(todosRef), snapTodos => {
                             const allTodos = snapTodos.docs.map(d => ({ id: d.id, type: 'Công việc', ...d.data() }));
 
-                            // Ghép tất cả sự kiện và việc cần làm
                             const combined = [...allEvents, ...allTodos];
                             const lunar = getLunarDetails(today);
                             const validAlerts = [];
 
                             combined.forEach(item => {
-                                // 1. Kiểm tra trạng thái hoàn thành (Bỏ qua nếu completed của Todo)
                                 if (item.completed === true) return;
 
-                                // 2. Kiểm tra trạng thái hoàn thành ĐÃ TÍCH CHỌN TRÊN POPUP (LocalStorage)
                                 const storageCompleted = localStorage.getItem('vt_completed_alerts');
                                 if (storageCompleted) {
                                     const parsedObj = JSON.parse(storageCompleted);
                                     if (parsedObj[item.id] === true) {
-                                        return; // Bỏ qua nếu người dùng đã tích hoàn thành trên modal
+                                        return; 
                                     }
                                 }
 
                                 let isToday = false;
-                                let targetTime = null; // Lưu trữ mốc thời gian cụ thể để so sánh giờ hiện tại
+                                let targetTime = null; 
 
-                                // Lấy thời điểm hẹn của item để kiểm tra
                                 const timeSource = item.date || item.deadlineTime || item.reminderTime;
                                 if (timeSource) {
                                     targetTime = new Date(timeSource.seconds * 1000);
                                 }
 
-                                // Phân loại định dạng lặp và ngày cụ thể bao gồm lặp tuần và lặp tháng mới (Yêu cầu 1)
                                 if (item.type === 'Sự kiện') {
                                     if (!item.repeat || item.repeat === 'none') {
                                         isToday = targetTime && targetTime.toDateString() === todayStr;
@@ -1562,33 +1794,29 @@
                                         isToday = targetTime.getDate() === today.getDate();
                                     }
                                 } else {
-                                    // Với Todo, kiểm tra dựa trên deadlineTime hoặc reminderTime
                                     isToday = targetTime && targetTime.toDateString() === todayStr;
                                 }
 
                                 if (isToday) {
-                                    // 3. Kiểm tra thời gian đã trôi qua (Bỏ qua nếu giờ hẹn đã qua so với hiện tại)
                                     if (targetTime) {
                                         const itemHours = targetTime.getHours();
                                         const itemMinutes = targetTime.getMinutes();
                                         
-                                        // Chỉ lọc giờ hẹn nếu đó là lịch hẹn/công việc có cài giờ cụ thể (Khác 00:00).
-                                        // Với các Sự kiện cả ngày (00:00) ta giữ nguyên không lọc bỏ.
                                         if (itemHours !== 0 || itemMinutes !== 0) {
                                             const currentHours = today.getHours();
                                             const currentMinutes = today.getMinutes();
 
                                             if (itemHours < currentHours || (itemHours === currentHours && itemMinutes < currentMinutes)) {
-                                                return; // Bỏ qua sự kiện đã trôi qua
+                                                return; 
                                             }
                                         }
                                     }
 
-                                    // Hợp lệ -> đưa vào danh sách hiển thị
                                     validAlerts.push({
                                         id: item.id,
                                         title: item.title || item.text || "Lịch hẹn chưa đặt tên",
                                         type: item.type,
+                                        rawTime: timeSource, 
                                         time: targetTime && (targetTime.getHours() !== 0 || targetTime.getMinutes() !== 0) 
                                             ? targetTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) 
                                             : 'Cả ngày'
@@ -1600,42 +1828,106 @@
                                 setActiveAlerts(validAlerts);
                                 setShowAlertModal(true);
 
-                                // Gửi thông báo hệ thống nổi (Native System Notification)
                                 validAlerts.forEach(alertItem => {
                                     sendNotification(`🔔 ${alertItem.type}: ${alertItem.title}`, `Thời gian: ${alertItem.time}`);
                                 });
                             }
 
-                            // Lưu vào sessionStorage để tránh lặp lại thông báo trong phiên này
                             sessionStorage.setItem('vt_notified_session', 'true');
-
-                            // Dọn dẹp listener sau khi quét xong lần đầu
                             unsubEvents();
                             unsubTodos();
                         });
+                    }, err => {
+                        console.warn("onSnapshot events offline warning (sử dụng dữ liệu cached):", err);
                     });
                 } catch (err) {
                     console.error("Lỗi quét dữ liệu thông báo:", err);
                 }
             };
 
-            // Hàm xử lý khi người dùng tích chọn hoàn thành trực tiếp trên Modal thông báo nổi
             const handleCheckAlertCompleted = (id) => {
                 setCompletedAlerts(prev => {
                     const updated = { ...prev, [id]: true };
-                    // Đồng thời lọc ngay lập tức ra khỏi danh sách hiển thị trên Modal hiện tại
                     setActiveAlerts(curr => curr.filter(alert => alert.id !== id));
                     return updated;
                 });
             };
 
+            // Hàm kích hoạt chế độ chỉnh sửa Inline ngay trong dòng của Modal Cảnh báo
+            const handleStartEditAlert = (alert) => {
+                setEditingAlertId(alert.id);
+                setEditAlertTitle(alert.title);
+                
+                const rawDate = alert.rawTime ? new Date(alert.rawTime.seconds * 1000) : new Date();
+                
+                if (alert.type === 'Sự kiện') {
+                    const yyyy = rawDate.getFullYear();
+                    const mm = String(rawDate.getMonth() + 1).padStart(2, '0');
+                    const dd = String(rawDate.getDate()).padStart(2, '0');
+                    setEditAlertTimeStr(`${yyyy}-${mm}-${dd}`);
+                } else {
+                    setEditAlertTimeStr(formatDateTimeForInput(rawDate));
+                }
+            };
+
+            // Hàm lưu thông tin cập nhật lên Firebase và cập nhật ngay lập tức State
+            const handleSaveAlertEdit = async (alert) => {
+                if (!editAlertTitle.trim()) return;
+                
+                const db = getFirestore(app);
+                const targetCollection = alert.type === 'Sự kiện' ? 'events' : 'todos';
+                const docRef = doc(db, 'artifacts', MANUAL_CONFIG.projectId, 'users', user.uid, targetCollection, alert.id);
+
+                const newTimestamp = editAlertTimeStr ? Timestamp.fromDate(new Date(editAlertTimeStr)) : null;
+
+                try {
+                    if (alert.type === 'Sự kiện') {
+                        const updateData = { title: editAlertTitle };
+                        if (newTimestamp) updateData.date = newTimestamp;
+                        await updateDoc(docRef, updateData);
+                    } else {
+                        const updateData = { text: editAlertTitle };
+                        if (newTimestamp) {
+                            updateData.deadlineTime = newTimestamp;
+                        }
+                        await updateDoc(docRef, updateData);
+                    }
+
+                    setActiveAlerts(curr => curr.map(item => {
+                        if (item.id === alert.id) {
+                            const updatedDate = newTimestamp ? new Date(newTimestamp.seconds * 1000) : new Date();
+                            const displayTime = updatedDate && (updatedDate.getHours() !== 0 || updatedDate.getMinutes() !== 0)
+                                ? updatedDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+                                : 'Cả ngày';
+                            
+                            return {
+                                ...item,
+                                title: editAlertTitle,
+                                rawTime: newTimestamp,
+                                time: displayTime
+                            };
+                        }
+                        return item;
+                    }));
+
+                    setEditingAlertId(null);
+                    toast.info("Đã lưu dữ liệu tạm thời dưới máy khách.", { position: "top-center" });
+                } catch (e) {
+                    console.error("Lỗi cập nhật dữ liệu từ Modal cảnh báo:", e);
+                }
+            };
+
             const handleSaveTheme = async (newTheme) => {
                 setTheme(newTheme);
                 setShowSettings(false);
+                try {
+                    localStorage.setItem('app_theme', JSON.stringify(newTheme));
+                } catch (e) {
+                    console.error("Lỗi lưu local theme:", e);
+                }
                 if (user) await setDoc(doc(getFirestore(app), 'artifacts', MANUAL_CONFIG.projectId, 'users', user.uid, 'settings', 'theme'), newTheme);
             };
 
-            // THAY ĐỔI CHÍNH: Hàm kiểm soát đổi Tab và tự động reset ngày về Hôm Nay + Kích hoạt lại Lock Screen (Yêu cầu 2)
             const handleTabChange = (tab) => {
                 if (tab === 'day') {
                     setDailyDate(new Date()); 
@@ -1644,12 +1936,10 @@
                     setCalendarSelectedDate(new Date()); 
                 }
                 
-                // Khi chuyển tab, luôn kích hoạt lại trạng thái khoá của tất cả các tab (Yêu cầu 2)
                 setUnlockedTabs({ todo: false, notes: false });
                 setActiveTab(tab);
             };
 
-            // Mở khóa cho tab cụ thể sau khi xác nhận mật khẩu đúng (Yêu cầu 2)
             const handleUnlockTab = (tab) => {
                 setUnlockedTabs(prev => ({ ...prev, [tab]: true }));
             };
@@ -1658,19 +1948,31 @@
             if (!user) return <AuthScreen auth={getAuth(app)} appId={MANUAL_CONFIG.projectId} />;
 
             return (
-                <div className="flex flex-col h-screen max-w-md mx-auto shadow-2xl overflow-hidden relative transition-colors duration-300 animate-fade-in" style={{ backgroundColor: theme.bgColor }}>
+                <div className="flex flex-col h-screen max-w-md mx-auto shadow-2xl overflow-hidden relative transition-colors duration-300 animate-fade-in" style={{ backgroundColor: theme.bgColor, color: theme.textColor }}>
+                    {/* KHU VỰC CHỈ BÁO OFFLINE MINI TẠI HEADER (Yêu cầu 2) */}
+                    {isOffline && (
+                        <div className="bg-amber-500 text-white text-[10px] font-black uppercase text-center py-1 flex items-center justify-center gap-1.5 shrink-0 select-none animate-pulse">
+                            <WifiOff size={10} /> Đang chạy ngoại tuyến (Offline Mode)
+                        </div>
+                    )}
+                    {showOfflineBadge && !isOffline && (
+                        <div className="bg-emerald-600 text-white text-[10px] font-black uppercase text-center py-1 flex items-center justify-center gap-1.5 shrink-0 select-none">
+                            <Wifi size={10} /> Đã khôi phục kết nối trực tuyến (Online)
+                        </div>
+                    )}
+
                     <header className="bg-blue-600 text-white p-2 flex justify-between items-center shadow-md z-20 shrink-0">
                         <div className="flex flex-col overflow-hidden">
-                            <h1 className="text-lg font-bold whitespace-nowrap truncate">Lịch vạn niên đa năng</h1>
-                            <span className="text-[10px] text-blue-100 opacity-80 text-center w-full block">Thiết kế bởi Văn Trung</span>
+                            <h1 className="text-lg font-bold whitespace-nowrap truncate font-sans">Lịch vạn niên đa năng</h1>
+                            <span className="text-[10px] text-blue-100 opacity-80 text-center w-full block font-sans">Thiết kế bởi Văn Trung</span>
                         </div>
                         <div className="flex gap-2 items-center">
                             <button onClick={() => setShowSettings(true)} className="p-1.5 hover:bg-blue-700 rounded-full transition"><Settings size={18} /></button>
-                            <button onClick={() => signOut(getAuth(app))} className="text-xs bg-blue-700 hover:bg-blue-800 px-3 py-1.5 rounded-full flex items-center gap-1 transition"><LogOut size={12} /> Thoát</button>
+                            <button onClick={() => signOut(getAuth(app))} className="text-xs bg-blue-700 hover:bg-blue-800 px-3 py-1.5 rounded-full flex items-center gap-1 transition font-sans"><LogOut size={12} /> Thoát</button>
                         </div>
                     </header>
 
-                    <main className="flex-1 overflow-y-auto relative flex flex-col bg-white">
+                    <main className="flex-1 overflow-y-auto relative flex flex-col font-sans" style={{ backgroundColor: theme.bgColor }}>
                         {/* Tab Lịch ngày */}
                         <div style={{ display: activeTab === 'day' ? 'flex' : 'none', flex: 1, flexDirection: 'column' }}>
                             <DailyView 
@@ -1693,10 +1995,11 @@
                                 selectedDate={calendarSelectedDate} 
                                 setSelectedDate={setCalendarSelectedDate}
                                 onTabChange={handleTabChange}
+                                theme={theme}
                             />
                         </div>
 
-                        {/* Tab Việc cần làm: Tích hợp LockScreen bảo vệ (Yêu cầu 2) */}
+                        {/* Tab Việc cần làm */}
                         <div style={{ display: activeTab === 'todo' ? 'block' : 'none', height: '100%' }}>
                             {lockEnabled && lockPassword && !unlockedTabs.todo ? (
                                 <LockScreen correctPassword={lockPassword} onUnlock={() => handleUnlockTab('todo')} />
@@ -1705,7 +2008,7 @@
                             )}
                         </div>
 
-                        {/* Tab Ghi chú: Tích hợp LockScreen bảo vệ (Yêu cầu 2) */}
+                        {/* Tab Ghi chú */}
                         <div style={{ display: activeTab === 'notes' ? 'block' : 'none', height: '100%' }}>
                             {lockEnabled && lockPassword && !unlockedTabs.notes ? (
                                 <LockScreen correctPassword={lockPassword} onUnlock={() => handleUnlockTab('notes')} />
@@ -1722,24 +2025,23 @@
 
                     <nav className="w-full bg-white border-t flex justify-around py-3 shadow-lg z-20 relative shrink-0">
                         <button onClick={()=>handleTabChange('day')} className={activeTab==='day'?'text-blue-600 font-semibold':'text-gray-400'}>
-                            <div className="flex flex-col items-center"><CalendarDays size={22}/><span className="text-[9px] mt-1">Hôm Nay</span></div>
+                            <div className="flex flex-col items-center"><CalendarDays size={22}/><span className="text-[9px] mt-1 text-slate-500 font-sans">Hôm Nay</span></div>
                         </button>
                         <button onClick={()=>handleTabChange('calendar')} className={activeTab==='calendar'?'text-blue-600 font-semibold':'text-gray-400'}>
-                            <div className="flex flex-col items-center"><Calendar size={22}/><span className="text-[9px] mt-1">Lịch</span></div>
+                            <div className="flex flex-col items-center"><Calendar size={22}/><span className="text-[9px] mt-1 text-slate-500 font-sans">Lịch</span></div>
                         </button>
                         <button onClick={()=>handleTabChange('todo')} className={activeTab==='todo'?'text-blue-600 font-semibold':'text-gray-400'}>
-                            <div className="flex flex-col items-center"><CheckSquare size={22}/><span className="text-[9px] mt-1">Việc làm</span></div>
+                            <div className="flex flex-col items-center"><CheckSquare size={22}/><span className="text-[9px] mt-1 text-slate-500 font-sans">Việc làm</span></div>
                         </button>
                         <button onClick={()=>handleTabChange('notes')} className={activeTab==='notes'?'text-blue-600 font-semibold':'text-gray-400'}>
-                            <div className="flex flex-col items-center"><StickyNote size={22}/><span className="text-[9px] mt-1">Ghi chú</span></div>
+                            <div className="flex flex-col items-center"><StickyNote size={22}/><span className="text-[9px] mt-1 text-slate-500 font-sans">Ghi chú</span></div>
                         </button>
                         
-                        {/* Nút 3 Chấm (Thêm) */}
                         <div className="relative">
-                            <button onClick={()=>setShowMenu(!showMenu)} className={`text-gray-400 ${showMenu ? 'text-blue-600' : ''}`}><div className="flex flex-col items-center"><MoreVertical size={22}/><span className="text-[9px] mt-1">Thêm</span></div></button>
+                            <button onClick={()=>setShowMenu(!showMenu)} className={`text-gray-400 ${showMenu ? 'text-blue-600' : ''}`}><div className="flex flex-col items-center"><MoreVertical size={22}/><span className="text-[9px] mt-1 text-slate-500 font-sans">Thêm</span></div></button>
                             {showMenu && (
                                 <div className="absolute bottom-12 right-0 bg-white shadow-xl rounded-lg border w-40 overflow-hidden fade-in z-50">
-                                    <button onClick={()=>{handleTabChange('timetable'); setShowMenu(false);}} className="flex items-center gap-2 w-full px-4 py-3 hover:bg-gray-50 text-sm text-gray-700 text-left">
+                                    <button onClick={()=>{handleTabChange('timetable'); setShowMenu(false);}} className="flex items-center gap-2 w-full px-4 py-3 hover:bg-gray-50 text-sm text-gray-700 text-left font-sans">
                                         <Table size={16}/> Thời Khóa Biểu
                                     </button>
                                 </div>
@@ -1749,43 +2051,104 @@
 
                     {showSettings && <SettingsModal theme={theme} onSave={handleSaveTheme} onClose={()=>setShowSettings(false)} auth={getAuth(app)} db={getFirestore(app)} appId={MANUAL_CONFIG.projectId} />}
                     
-                    {/* HỘP THOẠI NỔI BÁO LỊCH KHI MỞ APP (Đã cập nhật tính năng tích Checkbox hoàn thành) */}
+                    {/* HỘP THOẠI NỔI BÁO LỊCH KHI MỞ APP */}
                     {showAlertModal && activeAlerts.length > 0 && (
                         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                             <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                                <div className="bg-blue-600 p-4 text-white flex items-center gap-3">
+                                <div className="bg-blue-600 p-4 text-white flex items-center gap-3 shrink-0 font-sans">
                                     <Bell className="animate-bounce" size={24} />
-                                    <div>
+                                    <div className="min-w-0 flex-1">
                                         <h3 className="font-bold text-base leading-tight">Lịch trình hôm nay</h3>
-                                        <p className="text-[10px] opacity-80 font-medium">Đánh dấu tích để ẩn thông báo này</p>
+                                        <p className="text-[10px] opacity-80 font-medium text-slate-100">Bấm bút chì để sửa nhanh nội dung</p>
                                     </div>
                                 </div>
-                                <div className="p-5 max-h-[60vh] overflow-y-auto space-y-3 no-scrollbar">
-                                    {activeAlerts.map((alert, index) => (
-                                        <div key={alert.id || index} className="flex items-start gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100 group transition-all">
-                                            {/* Ô vuông Checkbox để tích hoàn thành */}
-                                            <button 
-                                                onClick={() => handleCheckAlertCompleted(alert.id)}
-                                                className="w-5 h-5 rounded border border-slate-300 hover:border-green-500 bg-white flex items-center justify-center text-green-600 mt-1 shrink-0 transition"
-                                                title="Tích để hoàn thành"
-                                            >
-                                                <div className="w-2.5 h-2.5 rounded bg-transparent group-hover:bg-green-100 transition-colors"></div>
-                                            </button>
-                                            
-                                            <div className="flex-1 min-w-0">
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 border border-blue-100 shrink-0">{alert.type}</span>
-                                                    <p className="text-[10px] text-slate-400 font-medium flex items-center gap-1"><Clock size={11} /> {alert.time}</p>
-                                                </div>
-                                                <p className="font-bold text-slate-800 text-sm truncate">{alert.title}</p>
+                                <div className="p-5 max-h-[50vh] overflow-y-auto space-y-3 no-scrollbar bg-slate-50 font-sans">
+                                    {activeAlerts.map((alert, index) => {
+                                        const isEditingThis = editingAlertId === alert.id;
+                                        return (
+                                            <div key={alert.id || index} className="flex flex-col gap-2 bg-white p-3.5 rounded-xl border border-slate-100 shadow-sm">
+                                                {isEditingThis ? (
+                                                    <div className="flex flex-col gap-2 animate-in fade-in duration-200">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 border border-blue-100 shrink-0">{alert.type}</span>
+                                                            <span className="text-[10px] text-slate-400 font-bold">Chỉnh sửa</span>
+                                                        </div>
+                                                        <input 
+                                                            type="text"
+                                                            value={editAlertTitle}
+                                                            onChange={(ev) => setEditAlertTitle(ev.target.value)}
+                                                            className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg text-sm text-slate-800 focus:ring-1 focus:ring-blue-500 outline-none font-bold"
+                                                            placeholder="Nhập tên mới..."
+                                                        />
+                                                        <div className="flex items-center gap-2">
+                                                            {alert.type === 'Sự kiện' ? (
+                                                                <input 
+                                                                    type="date"
+                                                                    value={editAlertTimeStr}
+                                                                    onChange={(ev) => setEditAlertTimeStr(ev.target.value)}
+                                                                    className="flex-1 px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-800 focus:ring-1 focus:ring-blue-500 outline-none"
+                                                                />
+                                                            ) : (
+                                                                <input 
+                                                                    type="datetime-local"
+                                                                    value={editAlertTimeStr}
+                                                                    onChange={(ev) => setEditAlertTimeStr(ev.target.value)}
+                                                                    className="flex-1 px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs text-slate-800 focus:ring-1 focus:ring-blue-500 outline-none font-sans"
+                                                                />
+                                                            )}
+                                                            <div className="flex items-center gap-1 shrink-0">
+                                                                <button 
+                                                                    onClick={() => setEditingAlertId(null)}
+                                                                    className="p-1.5 hover:bg-slate-100 text-slate-400 hover:text-slate-600 rounded-lg transition"
+                                                                    title="Hủy"
+                                                                >
+                                                                    <X size={16} />
+                                                                </button>
+                                                                <button 
+                                                                    onClick={() => handleSaveAlertEdit(alert)}
+                                                                    className="p-1.5 bg-green-50 text-green-600 hover:bg-green-100 rounded-lg transition"
+                                                                    title="Lưu thay đổi"
+                                                                >
+                                                                    <Check size={16} strokeWidth={2.5} />
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex items-start gap-3 transition-all">
+                                                        <button 
+                                                            onClick={() => handleCheckAlertCompleted(alert.id)}
+                                                            className="w-5 h-5 rounded border border-slate-300 hover:border-green-500 bg-white flex items-center justify-center text-green-600 mt-1 shrink-0 transition"
+                                                            title="Tích để hoàn thành"
+                                                        >
+                                                            <div className="w-2.5 h-2.5 rounded bg-transparent group-hover:bg-green-100 transition-colors"></div>
+                                                        </button>
+                                                        
+                                                        <div className="flex-1 min-w-0">
+                                                            <div className="flex items-center gap-2 mb-1">
+                                                                <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 border border-blue-100 shrink-0">{alert.type}</span>
+                                                                <p className="text-[10px] text-slate-400 font-medium flex items-center gap-1"><Clock size={11} /> {alert.time}</p>
+                                                            </div>
+                                                            <p className="font-bold text-slate-800 text-sm truncate">{alert.title}</p>
+                                                        </div>
+
+                                                        <button 
+                                                            onClick={() => handleStartEditAlert(alert)}
+                                                            className="p-1.5 hover:bg-slate-100 text-slate-400 hover:text-blue-600 rounded-lg transition shrink-0 self-center"
+                                                            title="Sửa"
+                                                        >
+                                                            <Pencil size={14} />
+                                                        </button>
+                                                    </div>
+                                                )}
                                             </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
-                                <div className="p-4 border-t bg-slate-50 flex justify-end">
+                                <div className="p-4 border-t bg-slate-50 flex justify-end shrink-0">
                                     <button 
                                         onClick={() => setShowAlertModal(false)}
-                                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 px-6 rounded-xl shadow-md transition-all active:scale-95"
+                                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs py-2.5 px-6 rounded-xl shadow-md transition-all active:scale-95 font-sans"
                                     >
                                         Đã hiểu
                                     </button>
@@ -1794,16 +2157,31 @@
                         </div>
                     )}
 
+                    {/* SỬA LỖI UI KẾT NỐI (Yêu cầu 2): Chỉ hiển thị Modal cảnh báo lỗi kết nối khi thật sự không thể tải dữ liệu và cho phép đóng để tiếp tục dùng Offline */}
                     {connectionError && (
                         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-                            <div className="bg-white p-6 rounded-lg shadow-xl text-center">
+                            <div className="bg-white p-6 rounded-lg shadow-xl text-center max-w-xs w-full">
                                 <WifiOff size={48} className="text-red-500 mx-auto mb-2" />
-                                <h3 className="font-bold">Mất Kết Nối</h3>
-                                <p className="text-sm text-gray-600 mb-4">Vui lòng kiểm tra mạng.</p>
-                                <button onClick={()=>window.location.reload()} className="bg-blue-600 text-white px-4 py-2 rounded">Thử Lại</button>
+                                <h3 className="font-bold text-slate-800 text-base font-sans">Lỗi kết nối Firebase</h3>
+                                <p className="text-xs text-gray-500 mb-4 font-sans">Chúng tôi tạm thời không kết nối được với dữ liệu đám mây. Bạn vẫn có thể tiếp tục sử dụng ứng dụng ở chế độ Offline.</p>
+                                <div className="flex gap-2">
+                                    <button onClick={() => setConnectionError(false)} className="flex-1 bg-gray-200 hover:bg-gray-300 text-slate-700 py-2 rounded-xl text-xs font-bold transition font-sans">Bỏ qua (Chạy Offline)</button>
+                                    <button onClick={() => window.location.reload()} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl text-xs font-bold transition font-sans">Thử lại</button>
+                                </div>
                             </div>
                         </div>
                     )}
+                    
+                    {/* START: Thêm cổng hiển thị động Toast Container ở cuối cấu phần App */}
+                    <ToastContainer 
+                        position="top-center"
+                        autoClose={3000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={false}
+                    />
+                    {/* END: Thêm cổng hiển thị động Toast Container ở cuối cấu phần App */}
                 </div>
             );
         };
