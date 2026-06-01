@@ -61,7 +61,7 @@
             ChevronLeft, ChevronRight, Save, X, User, Settings, AlertCircle, 
             Clock, Bell, Palette, ArrowUp, ArrowDown, WifiOff, RefreshCw,
             Sun, Cloud, CloudRain, BookOpen, Coins, CalendarDays, Search, MapPin, 
-            Eye, EyeOff, MoreVertical, MoreHorizontal, Table, Key
+            Eye, EyeOff, MoreVertical, MoreHorizontal, Table, Key, Lock, Unlock
         } from 'lucide-react';
         import { initializeApp } from 'firebase/app';
         import { 
@@ -228,7 +228,7 @@
             "Người nếm vị thanh cao ẩn dật\nVui niết-bàn, an lạc khó hơn.\nNhiễm ô, sợ hãi đâu còn\nThấm nhuần pháp hỷ, tâm không vướng gì.",
             "Thật may mắn, thánh nhân gặp mặt\nĐược gần bên hạnh phúc nào hơn!\nPhúc thay, chẳng gặp ngu nhân\nCàng xa khỏi họ, càng an lành nhiều.",
             "Cùng chung sống với người ngu tối\nKhổ khác gì sống với kẻ thù.\nSống chung người trí vô ưu\nNhư cùng thân quyến chẳng lo sợ gì.",
-            "Với những bậc tinh thông, sáng suốt\nNgười giữ gìn, giới đức, thánh nhân\nQuyết lòng gần gũi, kết thân\nNhư trăng soi sáng con đường đang đi.",
+            "With những bậc tinh thông, sáng suốt\nNgười giữ gìn, giới đức, thánh nhân\nQuyết lòng gần gũi, kết thân\nNhư trăng soi sáng con đường đang đi.",
             "Cố đeo đuổi điều nên xa lánh\nViệc đáng theo lại tránh không làm.\nBỏ mục tiêu, vướng ái tham\nNỡ nào ganh ghét người ham tu hành?!",
             "Chớ gần gũi người thương quá đỗi\nĐừng gần người bực bội, ghét mình\nThương không gặp, khổ muôn phần\nTiếp duyên kẻ ghét ngút ngàn khổ đau.",
             "Hiểu được thế, chớ yêu chớ nhớ\nYêu xa nhau, đau khổ biệt ly\nVẫy chào yêu ghét, sầu bi\nCắt dây trói buộc, còn gì sướng hơn!",
@@ -282,7 +282,7 @@
             "Đệ tử Phật đêm ngày tỉnh thức\nQuán thân này cấu uế, do duyên\nCông phu, làm chủ thân tâm\nOai nghi, chính niệm chuyên cần thường xuyên.",
             "Đệ tử Phật đêm ngày tỉnh thức\nHành từ bi, không giết chúng sinh\nCông phu, làm chủ thân tâm\nVui niềm bất hại, chuyên cần thường xuyên.",
             "Đệ tử Phật đêm ngày tỉnh thức\nThực hành thiền, chuyển hóa tham, sân\nCông phu, làm chủ thân tâm\nOai nghi, chính niệm chuyên cần thường xuyên.",
-            "Thật đáng quý xuất gia chân chính\nĐời tại gia lắm chuyện khổ đau\nBuồn thay, bạn chẳng hiểu nhau\nLuân hồi chìm đắm muộn sầu, chớ theo.",
+            "Thật đáng quý xuất gia chân chính\nĐời tại gia lắm chuyện khổ đau\nBuồn thay, bạn chẳng hiểu nhau\nLuân hồi chìm dắm muộn sầu, chớ theo.",
             "Có chính tín, vẹn toàn đức hạnh\nDanh dự tăng, thánh sản cũng tăng\nNơi nào vị ấy đến thăm\nMọi người kính nể, xa gần tôn vinh.",
             "Bậc hiền thiện ở xa vẫn sáng\nNhư núi cao tuyết trắng chói ngời\nÁc nhân gần, chẳng đoái hoài\nNhư tên mất hút đêm dài, vô minh.",
             "Đường độc lộ dứt duyên, thanh vắng\nKhông cô đơn, buồn chán một mình\nNgồi, nằm, đi, đứng lặng thinh\nRừng sâu thoải mái, tịnh thanh cõi lòng.",
@@ -332,7 +332,7 @@
             "Gọi Phạm chí đâu vì bện tóc\nGiai cấp hay chủng tộc đóng gánh\nChân thành, chánh niệm, thảnh thơi\nBà-la-môn ấy sáng ngời đức tu.",
             "Phạm chí “ngố” chỉ lo bện tóc\nLợi ích gì áo mặc da dê\nTâm còn phiền não, u mê\nTu toàn hình thức, đường về còn xa.",
             "Phạm chí “ngố” mặc y vá nhớp\nDa lộ gân, thân hốc hác gầy.\nNgười tu thiền định đêm ngày\nBà-la-môn ấy sánh tày núi cao.",
-            "Phạm chí thật đâu do huyết thống\nGiai cấp cao, nguồn gốc thọ sanh.\nAi không phiền não, tịnh thanh\nPhạm chí không chấp, cõi tâm an lành.",
+            "Phạm chí thật đâu do huyết thống\nGiai cấp cao, nguồn gốc thọ sanh.\nAI không phiền não, tịnh thanh\nPhạm chí không chấp, cõi tâm an lành.",
             "Người dứt sạch cả mười trói buộc\nKhông sầu lo được, mất, thua, hơn\nBao điều chấp trước xả buông\nNgười tu ấy Bà-la-môn tuyệt vời.",
             "Bậc Phạm chí bỏ đai “sân hận”\nCắt cương “tham”, tà kiến, tùy miên\nVô minh hết, trí trọn nên\nHướng về giác ngộ, thoát miền trầm luân.",
             "Lấy đức nhẫn làm quân xông trận\nKhông ác tâm, phỉ báng, phạt hình\nTừ bi, từ bỏ hận, sân\nBà-la-môn ấy sáng danh đạo đời.",
@@ -348,14 +348,14 @@
             "Người tu tập tránh xa trộm cắp\nVật không cho không lấy, chỉa chôm\nCho dù lớn, nhỏ, quý, thường.\nBà-la-môn ấy tấm gương sáng ngời.",
             "Không tham vọng đời này, đời tới\nKhông dính gì ba cõi trầm luân\nBuông tất cả, giải thoát tâm\nBà-la-môn ấy rạng danh đạo đời.",
             "Người tu tập không vương ái dục\nTrí tuệ nhiều, nghi hoặc không còn\nChứng vào cảnh giới niết-bàn\nBà-la-môn ấy xứng hàng chân tu.",
-            "Ai không vướng chuyện đời thiện ác,\nTu xả ly, giải thoát buộc ràng\nKhông sầu, thanh tịnh, lạc an\nBà-la-môn ấy xứng hàng chân tu.",
+            "AI không vướng chuyện đời thiện ác,\nTu xả ly, giải thoát buộc ràng\nKhông sầu, thanh tịnh, lạc an\nBà-la-môn ấy xứng hàng chân tu.",
             "Như trăng sáng thoát mây che khuất\nAn tịnh lòng, hết trược, sáng trong\nĐam mê hiện hữu dứt xong\nBà-la-môn ấy vào dòng thánh nhân.",
             "Hết tham ái, không nghi, không chấp\nVượt hiểm nguy sống chết, luân hồi\nThực hành thiền định, đến nơi\nPhạm chí tịch tịnh, thảnh thơi vượt dòng.",
             "Vì lý tưởng xuất gia, học đạo\nLìa gia đình, dục lạc chẳng màng\nDứt trừ hiện hữu, ái tham\nBà-la-môn ấy xứng hàng chân tu.",
             "Vì lý tưởng xuất gia, học đạo\nLìa gia đình, khát ái chẳng màng\nDứt trừ hiện hữu, ái tham\nBà-la-môn ấy xứng hàng chân tu.",
             "Tu thoát khỏi buộc ràng hai cõi\nThế giới người, cảnh giới chư thiên\nBuộc ràng, giải thoát không còn\nBà-la-môn ấy vào dòng thánh nhân.",
             "Không vướng bận những điều ưa ghét\nHết sanh y, năm uẩn vượt qua\nAnh hùng chiến thắng nhiễm ô\nBà-la-môn ấy thật là chân tu.",
-            "Ai hiểu rõ đường đi sống chết\nKhông nhiễm ô, sáng suốt vượt lên\nHọc Tứ đế, ngộ lý chân\nBà-la-môn ấy xứng danh tu hành.",
+            "AI hiểu rõ đường đi sống chết\nKhông nhiễm ô, sáng suốt vượt lên\nHọc Tứ đế, ngộ lý chân\nBà-la-môn ấy xứng danh tu hành.",
             "With hành giả mà trời, thần, quỷ\nKhông một ai biết chỗ tái sanh\nLậu hoặc hết, chứng thánh nhân\nBà-la-môn ấy xứng hàng chân tu.",
             "Người không dính vị lai, quá khứ\nHiện tại thì chẳng sở hữu gì\nXả buông, chẳng kẹt thứ chi\nBà-la-môn ấy sánh vì trăng sao.",
             "Như trâu chúa sức thần uy dũng\nBậc anh hùng, chiến thắng nhiễm tham\nTrí mầu giác ngộ, tịnh thanh\nBà-la-môn ấy xứng danh tu hành.",
@@ -427,12 +427,67 @@
         };
 
         // --- CÁC COMPONENT CON ---
-        const SettingsModal = ({ theme, onSave, onClose, auth }) => {
+        const SettingsModal = ({ theme, onSave, onClose, auth, db, appId }) => {
             const [localTheme, setLocalTheme] = useState(theme);
             const [newPassword, setNewPassword] = useState('');
             const [passwordMessage, setPasswordMessage] = useState('');
             const [passwordError, setPasswordError] = useState('');
             const [showChangePassword, setShowChangePassword] = useState(false);
+
+            // Bổ sung thiết lập mật khẩu PIN ứng dụng (Yêu cầu 2)
+            const [appPassword, setAppPassword] = useState('');
+            const [enableLock, setEnableLock] = useState(false);
+            const [lockError, setLockError] = useState('');
+            const [lockSuccess, setLockSuccess] = useState('');
+
+            // Tải cấu hình mật khẩu bảo mật hiện tại từ Firebase / localStorage
+            useEffect(() => {
+                if (!auth.currentUser) return;
+                const loadLockConfig = async () => {
+                    try {
+                        const settingsRef = doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'settings', 'lock');
+                        const docSnap = await getDoc(settingsRef);
+                        if (docSnap.exists()) {
+                            const data = docSnap.data();
+                            setAppPassword(data.appPassword || '');
+                            setEnableLock(data.enableLock || false);
+                        } else {
+                            // Dự phòng localStorage
+                            const savedPassword = localStorage.getItem('vt_app_password') || '';
+                            const savedEnable = localStorage.getItem('vt_enable_lock') === 'true';
+                            setAppPassword(savedPassword);
+                            setEnableLock(savedEnable);
+                        }
+                    } catch (e) {
+                        console.error("Lỗi tải thông tin khóa:", e);
+                    }
+                };
+                loadLockConfig();
+            }, [auth.currentUser]);
+
+            // Lưu cài đặt khóa
+            const handleSaveLockSettings = async (e) => {
+                e.preventDefault();
+                setLockError('');
+                setLockSuccess('');
+                if (enableLock && !appPassword.trim()) {
+                    setLockError("Vui lòng nhập mã bảo vệ nếu muốn bật tính năng này.");
+                    return;
+                }
+                try {
+                    const settingsRef = doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'settings', 'lock');
+                    const payload = {
+                        appPassword: appPassword.trim(),
+                        enableLock: enableLock
+                    };
+                    await setDoc(settingsRef, payload, { merge: true });
+                    localStorage.setItem('vt_app_password', appPassword.trim());
+                    localStorage.setItem('vt_enable_lock', enableLock ? 'true' : 'false');
+                    setLockSuccess("Đã cập nhật tính năng bảo vệ thành công!");
+                } catch (err) {
+                    setLockError("Lỗi lưu cấu hình bảo vệ: " + err.message);
+                }
+            };
 
             // Tính năng Đổi mật khẩu
             const handleChangePassword = async (e) => {
@@ -467,7 +522,7 @@
                             <h3 className="font-bold flex items-center gap-2"><Palette size={18}/> Giao Diện & Bảo Mật</h3>
                             <button onClick={onClose}><X size={20}/></button>
                         </div>
-                        <div className="p-6 space-y-6 overflow-y-auto flex-1">
+                        <div className="p-6 space-y-6 overflow-y-auto flex-1 no-scrollbar">
                             <div>
                                 <label className="block text-sm font-bold text-gray-700 mb-2">Màu Nền Ứng Dụng</label>
                                 <input type="color" className="w-full h-12 rounded cursor-pointer border-2 border-gray-200" value={localTheme.bgColor} onChange={e => setLocalTheme({...localTheme, bgColor: e.target.value})} />
@@ -480,9 +535,42 @@
                                 <label className="block text-sm font-bold text-gray-700 mb-2">Màu Chữ Chính</label>
                                 <input type="color" className="w-full h-12 rounded cursor-pointer border-2 border-gray-200" value={localTheme.textColor} onChange={e => setLocalTheme({...localTheme, textColor: e.target.value})} />
                             </div>
-                            <button onClick={() => onSave(localTheme)} className="w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 shadow-md">Lưu & Đồng Bộ</button>
-                            <button onClick={() => onSave({ bgColor: '#f3f4f6', noteColor: '#FEFCE8', textColor: '#1F2937' })} className="w-full border border-gray-300 text-gray-600 py-2 rounded-lg text-sm">Khôi phục mặc định</button>
+                            <button onClick={() => onSave(localTheme)} className="w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 shadow-md">Lưu & Đồng Bộ Màu</button>
+                            <button onClick={() => onSave({ bgColor: '#f3f4f6', noteColor: '#FEFCE8', textColor: '#1F2937' })} className="w-full border border-gray-300 text-gray-600 py-2 rounded-lg text-sm">Khôi phục màu mặc định</button>
                             
+                            {/* KHU VỰC: Đặt mã PIN bảo vệ việc làm & ghi chú (Yêu cầu 2) */}
+                            <div className="border-t pt-4 mt-4">
+                                <h4 className="font-bold text-sm text-slate-800 flex items-center gap-2 mb-3"><Lock size={16} /> Bảo vệ Ghi chú & Việc cần làm</h4>
+                                <form onSubmit={handleSaveLockSettings} className="space-y-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                                    <div className="flex items-center justify-between mb-1">
+                                        <span className="text-xs font-semibold text-slate-600">Trạng thái khóa bảo vệ:</span>
+                                        <label className="relative inline-flex items-center cursor-pointer">
+                                            <input 
+                                                type="checkbox" 
+                                                className="sr-only peer" 
+                                                checked={enableLock} 
+                                                onChange={e => setEnableLock(e.target.checked)} 
+                                            />
+                                            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                        </label>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase">Mã PIN bảo mật</label>
+                                        <input 
+                                            type="password" 
+                                            maxLength={12}
+                                            className="w-full px-3 py-1.5 border rounded-lg text-sm text-slate-800 focus:ring-1 focus:ring-blue-500 outline-none"
+                                            placeholder="Nhập mã bảo vệ cá nhân..."
+                                            value={appPassword}
+                                            onChange={e => setAppPassword(e.target.value)}
+                                        />
+                                    </div>
+                                    {lockError && <p className="text-red-500 text-xs">{lockError}</p>}
+                                    {lockSuccess && <p className="text-green-600 text-xs font-medium">{lockSuccess}</p>}
+                                    <button type="submit" className="w-full bg-slate-800 text-white text-xs font-bold py-2 rounded-lg hover:bg-slate-700 transition">Cập nhật mật khẩu bảo vệ</button>
+                                </form>
+                            </div>
+
                             {/* Khu vực tính năng đổi mật khẩu */}
                             <div className="border-t pt-4 mt-4">
                                 <button 
@@ -490,7 +578,7 @@
                                     onClick={() => setShowChangePassword(!showChangePassword)} 
                                     className="w-full flex items-center justify-center gap-2 border border-slate-300 text-slate-700 py-2 rounded-lg text-sm font-bold hover:bg-slate-50 transition"
                                 >
-                                    <Key size={16} /> {showChangePassword ? "Ẩn đổi mật khẩu" : "Đổi mật khẩu"}
+                                    <Key size={16} /> {showChangePassword ? "Ẩn đổi mật khẩu" : "Đổi mật khẩu tài khoản"}
                                 </button>
                                 {showChangePassword && (
                                     <form onSubmit={handleChangePassword} className="mt-4 space-y-3 p-3 bg-slate-50 rounded-lg border border-slate-200 animate-in fade-in">
@@ -760,9 +848,12 @@
                 const dateStr = today.toDateString();
                 const lunar = getLunarDetails(today);
                 const todays = allEvents.filter(e => {
+                    // Cập nhật logic lặp trong DailyView hỗ trợ weekly & monthly (Yêu cầu 1)
                     if (!e.repeat || e.repeat === 'none') return e.date && new Date(e.date.seconds * 1000).toDateString() === dateStr;
                     if (e.repeat === 'lunar') return e.lunarDay === lunar.day && e.lunarMonth === lunar.month;
                     if (e.repeat === 'solar' && e.date) { const d = new Date(e.date.seconds * 1000); return d.getDate() === today.getDate() && d.getMonth() === today.getMonth(); }
+                    if (e.repeat === 'weekly') { const d = new Date(e.date.seconds * 1000); return d.getDay() === today.getDay(); }
+                    if (e.repeat === 'monthly') { const d = new Date(e.date.seconds * 1000); return d.getDate() === today.getDate(); }
                     return false;
                 });
                 setTodayEvents(todays);
@@ -937,14 +1028,35 @@
 
             const eventsRef = useMemo(() => collection(db, 'artifacts', appId, 'users', user.uid, 'events'), [db, appId, user.uid]);
             useEffect(() => onSnapshot(query(eventsRef), snap => setEvents(snap.docs.map(d => ({id: d.id, ...d.data()})))), [eventsRef]);
+            
+            // Cập nhật logic lọc sự kiện của CalendarView hỗ trợ thêm lặp tuần và lặp tháng (Yêu cầu 1)
             const hasEvent = (date) => {
                 if (!date) return false;
                 const dateStr = date.toDateString();
+                const lunar = getLunarDetails(date);
                 return events.some(e => {
-                    if (!e.date) return false;
-                    return new Date(e.date.seconds * 1000).toDateString() === dateStr;
+                    if (!e.repeat || e.repeat === 'none') {
+                        return e.date && new Date(e.date.seconds * 1000).toDateString() === dateStr;
+                    }
+                    if (e.repeat === 'lunar') {
+                        return e.lunarDay === lunar.day && e.lunarMonth === lunar.month;
+                    }
+                    if (e.repeat === 'solar' && e.date) {
+                        const d = new Date(e.date.seconds * 1000);
+                        return d.getDate() === date.getDate() && d.getMonth() === date.getMonth();
+                    }
+                    if (e.repeat === 'weekly' && e.date) {
+                        const d = new Date(e.date.seconds * 1000);
+                        return d.getDay() === date.getDay();
+                    }
+                    if (e.repeat === 'monthly' && e.date) {
+                        const d = new Date(e.date.seconds * 1000);
+                        return d.getDate() === date.getDate();
+                    }
+                    return false;
                 });
             };
+
             const getEventsForDate = (date) => {
                 if (!date) return [];
                 const dateStr = date.toDateString();
@@ -953,9 +1065,12 @@
                     if (!e.repeat || e.repeat === 'none') return e.date && new Date(e.date.seconds * 1000).toDateString() === dateStr;
                     if (e.repeat === 'lunar') return e.lunarDay === lunar.day && e.lunarMonth === lunar.month;
                     if (e.repeat === 'solar' && e.date) { const d = new Date(e.date.seconds * 1000); return d.getDate() === date.getDate() && d.getMonth() === date.getMonth(); }
+                    if (e.repeat === 'weekly' && e.date) { const d = new Date(e.date.seconds * 1000); return d.getDay() === date.getDay(); }
+                    if (e.repeat === 'monthly' && e.date) { const d = new Date(e.date.seconds * 1000); return d.getDate() === date.getDate(); }
                     return false;
                 });
             };
+
             const handleAddEvent = async (title, repeatType) => {
                 const data = { title, date: Timestamp.fromDate(selectedDate), repeat: repeatType };
                 if (repeatType === 'lunar') { const lunar = getLunarDetails(selectedDate); data.lunarDay = lunar.day; data.lunarMonth = lunar.month; }
@@ -1026,24 +1141,29 @@
                             <ul className="space-y-2">
                                 {events.map(e => (
                                     <li key={e.id} className="flex justify-between items-center bg-blue-50 p-2 rounded text-sm text-gray-800">
-                                        <div className="flex items-center gap-2">
-                                            {e.repeat === 'lunar' && <span className="text-[10px] bg-purple-100 text-purple-700 px-1 rounded">Âm</span>}
-                                            {e.repeat === 'solar' && <span className="text-[10px] bg-orange-100 text-orange-700 px-1 rounded">Dương</span>}
-                                            <span>{e.title}</span>
+                                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                                            {e.repeat === 'lunar' && <span className="text-[10px] bg-purple-100 text-purple-700 px-1 rounded shrink-0">Âm</span>}
+                                            {e.repeat === 'solar' && <span className="text-[10px] bg-orange-100 text-orange-700 px-1 rounded shrink-0">Dương</span>}
+                                            {e.repeat === 'weekly' && <span className="text-[10px] bg-indigo-100 text-indigo-700 px-1 rounded shrink-0">Tuần</span>}
+                                            {e.repeat === 'monthly' && <span className="text-[10px] bg-sky-100 text-sky-700 px-1 rounded shrink-0">Tháng</span>}
+                                            <span className="truncate">{e.title}</span>
                                         </div>
-                                        <button onClick={() => handleDelete(e.id)} className={`transition-all ${deleteConfirm === e.id ? 'text-red-600 font-bold text-xs bg-red-100 px-2 py-1 rounded' : 'text-red-400 hover:text-red-600'}`}>{deleteConfirm === e.id ? <span>Xóa?</span> : <Trash2 size={16}/>}</button>
+                                        <button onClick={() => handleDelete(e.id)} className={`transition-all shrink-0 ${deleteConfirm === e.id ? 'text-red-600 font-bold text-xs bg-red-100 px-2 py-1 rounded' : 'text-red-400 hover:text-red-600'}`}>{deleteConfirm === e.id ? <span>Xóa?</span> : <Trash2 size={16}/>}</button>
                                     </li>
                                 ))}
                             </ul>
                         </div>
                         <div className="p-4 border-t bg-gray-50 flex flex-col gap-2">
-                            <div className="flex gap-2 text-xs mb-1 text-gray-700">
+                            {/* Cập nhật các tùy chọn repeat: Thêm lặp Hàng tuần và Hàng tháng (Yêu cầu 1) */}
+                            <div className="flex gap-2 text-[10px] mb-1 text-gray-700 flex-wrap">
                                 <label className="flex items-center gap-1 cursor-pointer"><input type="radio" name="repeat" checked={repeatType === 'none'} onChange={() => setRepeatType('none')} /> Không lặp</label>
                                 <label className="flex items-center gap-1 cursor-pointer"><input type="radio" name="repeat" checked={repeatType === 'lunar'} onChange={() => setRepeatType('lunar')} /> Lặp Âm</label>
                                 <label className="flex items-center gap-1 cursor-pointer"><input type="radio" name="repeat" checked={repeatType === 'solar'} onChange={() => setRepeatType('solar')} /> Lặp Dương</label>
+                                <label className="flex items-center gap-1 cursor-pointer"><input type="radio" name="repeat" checked={repeatType === 'weekly'} onChange={() => setRepeatType('weekly')} /> Tuần</label>
+                                <label className="flex items-center gap-1 cursor-pointer"><input type="radio" name="repeat" checked={repeatType === 'monthly'} onChange={() => setRepeatType('monthly')} /> Tháng</label>
                             </div>
                             <div className="flex gap-2">
-                                <input className="flex-1 border rounded px-3 py-2 text-sm outline-none focus:border-blue-500 text-black" placeholder="Tên sự kiện..." value={newEvent} onChange={e => setNewEvent(e.target.value)} />
+                                <input className="flex-1 border rounded px-3 py-2 text-sm outline-none focus:border-blue-500" placeholder="Tên sự kiện..." value={newEvent} onChange={e => setNewEvent(e.target.value)} />
                                 <button onClick={() => { if(newEvent.trim()) { onAdd(newEvent, repeatType); setNewEvent(''); } }} className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"><Plus size={20}/></button>
                             </div>
                         </div>
@@ -1057,16 +1177,16 @@
             const [reminder, setReminder] = useState(initialReminder || '');
             const [deadline, setDeadline] = useState(initialDeadline || '');
             return (
-                <div className="fixed inset-0 bg-white z-50 flex flex-col animate-in slide-in-from-bottom-5">
+                <div className="fixed inset-0 bg-white z-40 flex flex-col animate-in slide-in-from-bottom-5">
                     <div className="flex justify-between items-center p-4 border-b bg-gray-50">
                         <button onClick={onCancel} className="p-2 hover:bg-gray-200 rounded-full"><X size={20}/></button> 
                         <h3 className="font-bold text-gray-700">{isNew ? 'Thêm Việc' : 'Sửa Việc'}</h3>
                         <button onClick={()=>onSave(text, reminder, deadline)} className="text-blue-600 font-bold p-2"><Save size={18}/> Lưu</button>
                     </div>
                     <div className="p-4 flex-1 flex flex-col gap-4">
-                        <div><label className="text-xs font-bold text-gray-500 block mb-1">Nội dung</label><input className="w-full text-lg border-b p-2 outline-none focus:border-blue-500 bg-transparent" placeholder="Ví dụ: Đi chợ..." value={text} onChange={e=>setText(e.target.value)} autoFocus /></div>
-                        <div><label className="text-xs font-bold text-gray-500 block mb-1 flex items-center gap-1"><AlertCircle size={12}/> Hạn chót (Deadline)</label><input type="datetime-local" className="w-full border rounded p-2 text-sm bg-gray-50" value={deadline} onChange={e=>setDeadline(e.target.value)} /></div>
-                        <div><label className="text-xs font-bold text-gray-500 block mb-1 flex items-center gap-1"><Clock size={12}/> Nhắc tôi trước (Reminder)</label><input type="datetime-local" className="w-full border rounded p-2 text-sm bg-gray-50" value={reminder} onChange={e=>setReminder(e.target.value)} /></div>
+                        <div><label className="text-xs font-bold text-gray-500 block mb-1">Nội dung</label><input className="w-full text-lg border-b p-2 outline-none focus:border-blue-500 bg-transparent text-slate-800" placeholder="Ví dụ: Đi chợ..." value={text} onChange={e=>setText(e.target.value)} autoFocus /></div>
+                        <div><label className="text-xs font-bold text-gray-500 block mb-1 flex items-center gap-1"><AlertCircle size={12}/> Hạn chót (Deadline)</label><input type="datetime-local" className="w-full border rounded p-2 text-sm bg-gray-50 text-slate-800 outline-none" value={deadline} onChange={e=>setDeadline(e.target.value)} /></div>
+                        <div><label className="text-xs font-bold text-gray-500 block mb-1 flex items-center gap-1"><Clock size={12}/> Nhắc tôi trước (Reminder)</label><input type="datetime-local" className="w-full border rounded p-2 text-sm bg-gray-50 text-slate-800 outline-none" value={reminder} onChange={e=>setReminder(e.target.value)} /></div>
                     </div>
                 </div>
             );
@@ -1120,7 +1240,7 @@
             const handleDelete = (e, id) => {
                 e.stopPropagation();
                 if (deleteConfirm === id) { deleteDoc(doc(todoRef, id)); setDeleteConfirm(null); } 
-                else { setDeleteConfirm(id); setTimeout(() => setDeleteConfirm(null), 3000); }
+                else { setDeleteConfirm(id); setTimeout(() => setDeleteConfirm(prev => prev === id ? null : prev), 3000); }
             };
             const moveItem = async (e, index, direction) => {
                 e.stopPropagation();
@@ -1132,7 +1252,6 @@
                 await updateDoc(doc(todoRef, itemA.id), { order: orderA });
                 await updateDoc(doc(todoRef, itemB.id), { order: orderB });
             };
-            const isOverdue = (timestamp) => timestamp && new Date() > new Date(timestamp.seconds * 1000);
             return (
                 <div className="p-4 pb-24 min-h-full" style={{ color: theme.textColor }}>
                     <div className="flex justify-between items-center mb-4">
@@ -1151,14 +1270,14 @@
                                     <div className="mt-1 mr-3 cursor-pointer text-gray-400" onClick={(e) => { e.stopPropagation(); updateDoc(doc(todoRef, t.id), {completed: !t.completed}); }}>
                                         {t.completed ? <CheckSquare className="text-green-500"/> : <div className="w-5 h-5 border-2 rounded"></div>}
                                     </div>
-                                    <div className="flex-1">
-                                        <div className={`font-medium ${t.completed ? 'line-through text-gray-400' : ''}`} style={{color: t.completed ? undefined : theme.textColor}}>{t.text}</div>
+                                    <div className="flex-1 min-w-0">
+                                        <div className={`font-medium truncate ${t.completed ? 'line-through text-gray-400' : 'text-gray-800'}`}>{t.text}</div>
                                         <div className="flex gap-3 mt-1 flex-wrap">
                                             {t.deadlineTime && <div className={`text-[10px] flex items-center gap-1 ${timeStatus?.isOverdue && !t.completed ? 'text-red-600 font-bold' : 'text-gray-500'}`}><AlertCircle size={10}/> {t.completed ? `Thời hạn: ${formatDisplayDate(t.deadlineTime.seconds)}` : timeStatus?.text}</div>}
                                             {t.reminderTime && !t.completed && <div className="text-[10px] text-orange-500 flex items-center gap-1"><Bell size={10} /> Nhắc: {formatDisplayDate(t.reminderTime.seconds)}</div>}
                                         </div>
                                     </div>
-                                    <button onClick={(e) => handleDelete(e, t.id)} className={`p-1 rounded transition-all ${deleteConfirm === t.id ? 'bg-red-100 text-red-600 w-16 text-xs font-bold' : 'text-gray-300 hover:text-red-500'}`}>{deleteConfirm === t.id ? <span>Xóa?</span> : <Trash2 size={16}/>}</button>
+                                    <button onClick={(e) => handleDelete(e, t.id)} className={`p-1 rounded shrink-0 transition-all ${deleteConfirm === t.id ? 'bg-red-100 text-red-600 w-16 text-xs font-bold' : 'text-gray-300 hover:text-red-500'}`}>{deleteConfirm === t.id ? <span>Xóa?</span> : <Trash2 size={16}/>}</button>
                                 </div>
                             );
                         })}
@@ -1179,7 +1298,7 @@
                         <button onClick={onCancel}><X/></button> <button onClick={()=>onSave(title, content, reminder, color)} className="text-blue-600 font-bold"><Save/> Lưu</button>
                     </div>
                     <div className="px-4 py-2 bg-gray-50 flex gap-3 overflow-x-auto no-scrollbar items-center">
-                        <span className="text-xs text-gray-500 font-bold mr-1">Màu:</span>
+                        <span className="text-xs text-gray-500 font-bold mr-1 text-slate-700">Màu:</span>
                         {NOTE_COLORS.map(c => (
                             <button key={c} onClick={() => setColor(c)} className={`w-8 h-8 rounded-full border border-gray-300 shadow-sm transition-transform hover:scale-110 ${color === c ? 'ring-2 ring-blue-500 ring-offset-2' : ''}`} style={{ backgroundColor: c }} />
                         ))}
@@ -1190,8 +1309,8 @@
                         <input type="datetime-local" className="bg-white border rounded px-2 py-1 text-xs text-gray-700 outline-none" value={reminder} onChange={e=>setReminder(e.target.value)} />
                     </div>
                     <div className="p-4 flex-1 flex flex-col gap-4" style={{ backgroundColor: color }}>
-                        <input className="text-2xl font-bold outline-none placeholder-gray-400 bg-transparent" placeholder="Tiêu đề" value={title} onChange={e=>setTitle(e.target.value)} />
-                        <textarea className="flex-1 resize-none outline-none text-gray-700 leading-relaxed placeholder-gray-400 bg-transparent" placeholder="Nội dung..." value={content} onChange={e=>setContent(e.target.value)} />
+                        <input className="text-2xl font-bold outline-none placeholder-gray-400 bg-transparent text-slate-800" placeholder="Tiêu đề" value={title} onChange={e=>setTitle(e.target.value)} />
+                        <textarea className="flex-1 resize-none outline-none text-slate-700 leading-relaxed placeholder-gray-400 bg-transparent" placeholder="Nội dung..." value={content} onChange={e=>setContent(e.target.value)} />
                     </div>
                 </div>
             );
@@ -1223,17 +1342,70 @@
                 <div className="p-4" style={{color: theme.textColor}}>
                     <div className="flex justify-between mb-4"><h2 className="text-xl font-bold">Sổ tay</h2><button onClick={()=>setEditing({})} className="bg-blue-100 text-blue-600 px-3 py-2 rounded-lg flex items-center gap-1 text-sm font-bold"><Plus size={16}/> Mới</button></div>
                     <div className="grid grid-cols-2 gap-3">
+                        {notes.length === 0 && <div className="col-span-2 text-center text-gray-400 mt-10"><StickyNote size={48} className="mx-auto mb-2 opacity-20" /><p>Trống trơn...</p></div>}
                         {notes.map(n => (
                             <div key={n.id} onClick={()=>setEditing(n)} className="p-4 rounded-xl border shadow-sm h-48 flex flex-col relative" style={{backgroundColor: n.color || theme.noteColor, borderColor: '#e5e7eb'}}>
-                                <div className="flex justify-between items-start mb-2"><h4 className="font-bold truncate text-gray-800 flex-1">{n.title}</h4>{n.reminderTime && <Bell size={12} className="text-orange-500 mt-1 ml-1" />}</div>
-                                <p className="text-xs opacity-80 overflow-hidden flex-1 leading-relaxed whitespace-pre-wrap text-gray-800">{n.content}</p>
+                                <div className="flex justify-between items-start mb-2">
+                                    <h4 className="font-bold truncate text-gray-800 flex-1">{n.title}</h4>
+                                    {n.reminderTime && <Bell size={12} className="text-orange-500 mt-1 ml-1" />}
+                                </div>
+                                <p className="text-xs text-slate-700 overflow-hidden flex-1 leading-relaxed whitespace-pre-wrap">{n.content}</p>
                                 {n.reminderTime && <div className="text-[9px] text-orange-600 font-medium mt-1 mb-1 flex items-center gap-1"><Clock size={10}/> {formatDisplayDate(n.reminderTime.seconds)}</div>}
                                 <div className="flex justify-between items-center mt-1 pt-2 border-t border-black/10">
-                                    <span className="text-[10px] opacity-60 text-gray-600">{n.updatedAt ? new Date(n.updatedAt.seconds*1000).toLocaleDateString('vi-VN') : ''}</span>
-                                    <button onClick={(e)=>handleDelete(e, n.id)} className={`transition-all ${deleteConfirm === n.id ? 'bg-white text-red-600 px-2 py-1 rounded shadow-sm text-xs font-bold' : 'opacity-40 hover:opacity-100 hover:text-red-500'}`}>{deleteConfirm === n.id ? <span>Xóa?</span> : <Trash2 size={16}/>}</button>
+                                    <span className="text-[10px] text-slate-500">{n.updatedAt ? new Date(n.updatedAt.seconds*1000).toLocaleDateString('vi-VN') : ''}</span>
+                                    <button onClick={(e)=>handleDelete(e, n.id)} className={`transition-all ${deleteConfirm === n.id ? 'bg-white text-red-600 px-2 py-1 rounded shadow-sm text-xs font-bold' : 'text-slate-400 hover:text-red-500'}`}>{deleteConfirm === n.id ? <span>Xóa?</span> : <Trash2 size={16}/>}</button>
                                 </div>
                             </div>
                         ))}
+                    </div>
+                </div>
+            );
+        };
+
+        // --- COMPONENT MÀN HÌNH KHÓA BẢO VỆ (Yêu cầu 2) ---
+        const LockScreen = ({ onUnlock, correctPassword }) => {
+            const [pin, setPin] = useState('');
+            const [error, setError] = useState('');
+
+            const handleUnlockSubmit = (e) => {
+                e.preventDefault();
+                setError('');
+                if (pin === correctPassword) {
+                    onUnlock();
+                    setPin('');
+                } else {
+                    setError("Mã bảo vệ không chính xác. Vui lòng nhập lại.");
+                    setPin('');
+                }
+            };
+
+            return (
+                <div className="flex flex-col flex-1 items-center justify-center p-6 bg-slate-50 font-sans">
+                    <div className="w-full max-w-xs text-center space-y-6">
+                        <div className="mx-auto bg-blue-100 text-blue-600 p-4 rounded-full w-16 h-16 flex items-center justify-center">
+                            <Lock size={28} />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-bold text-slate-800">Khu vực bảo mật</h3>
+                            <p className="text-xs text-slate-400 mt-1">Vui lòng cung cấp mã PIN để xem dữ liệu</p>
+                        </div>
+                        <form onSubmit={handleUnlockSubmit} className="space-y-4">
+                            <input 
+                                type="password" 
+                                required
+                                value={pin}
+                                onChange={e => setPin(e.target.value)}
+                                placeholder="Nhập mã bảo vệ..." 
+                                className="w-full px-4 py-3 border border-slate-200 text-center rounded-xl text-lg font-bold tracking-widest text-slate-800 focus:ring-2 focus:ring-blue-500 outline-none bg-white shadow-sm"
+                            />
+                            {error && <p className="text-red-500 text-xs text-center font-medium">{error}</p>}
+                            <button 
+                                type="submit" 
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-md transition"
+                            >
+                                Xác nhận mở khóa
+                            </button>
+                        </form>
                     </div>
                 </div>
             );
@@ -1257,10 +1429,30 @@
             const [activeAlerts, setActiveAlerts] = useState([]);
             const [showAlertModal, setShowAlertModal] = useState(false);
 
+            // Bảo mật ứng dụng bằng mã PIN (Yêu cầu 2)
+            const [lockPassword, setLockPassword] = useState('');
+            const [lockEnabled, setLockEnabled] = useState(false);
+            const [unlockedTabs, setUnlockedTabs] = useState({ todo: false, notes: false });
+
+            // Trạng thái lưu trữ việc hoàn thành thông báo nổi đã tích chọn (LocalStorage)
+            const [completedAlerts, setCompletedAlerts] = useState(() => {
+                try {
+                    const saved = localStorage.getItem('vt_completed_alerts');
+                    return saved ? JSON.parse(saved) : {};
+                } catch (e) {
+                    return {};
+                }
+            });
+
             const [theme, setTheme] = useState(() => {
                 try { return JSON.parse(localStorage.getItem('app_theme')) || { bgColor: '#f3f4f6', noteColor: '#FEFCE8', textColor: '#1F2937' }; } 
                 catch(e) { return { bgColor: '#f3f4f6', noteColor: '#FEFCE8', textColor: '#1F2937' }; }
             });
+
+            // Đồng bộ completedAlerts vào LocalStorage
+            useEffect(() => {
+                localStorage.setItem('vt_completed_alerts', JSON.stringify(completedAlerts));
+            }, [completedAlerts]);
 
             // 1. Logic Khởi Tạo & Xác Thực Hệ Thống (Mở là Báo - Check On Open)
             useEffect(() => {
@@ -1278,10 +1470,24 @@
                         onAuthStateChanged(auth, async (u) => {
                             setUser(u);
                             if (u) {
+                                // Tải chủ đề
                                 const docSnap = await getDoc(doc(db, 'artifacts', MANUAL_CONFIG.projectId, 'users', u.uid, 'settings', 'theme'));
                                 if (docSnap.exists()) setTheme(docSnap.data());
                                 
-                                // THAY ĐỔI CHÍNH (Yêu cầu 1): Gọi hàm kiểm tra thông báo ngay khi dữ liệu sẵn sàng khi vừa mở app
+                                // Tải cấu hình bảo vệ (Yêu cầu 2)
+                                const lockSnap = await getDoc(doc(db, 'artifacts', MANUAL_CONFIG.projectId, 'users', u.uid, 'settings', 'lock'));
+                                if (lockSnap.exists()) {
+                                    const lockData = lockSnap.data();
+                                    setLockPassword(lockData.appPassword || '');
+                                    setLockEnabled(lockData.enableLock || false);
+                                } else {
+                                    const savedPassword = localStorage.getItem('vt_app_password') || '';
+                                    const savedEnable = localStorage.getItem('vt_enable_lock') === 'true';
+                                    setLockPassword(savedPassword);
+                                    setLockEnabled(savedEnable);
+                                }
+
+                                // Gọi hàm kiểm tra thông báo ngay khi dữ liệu sẵn sàng khi vừa mở app
                                 checkDailyEvents(db, u.uid);
                             }
                             setLoading(false);
@@ -1304,104 +1510,123 @@
                 const today = new Date();
                 const todayStr = today.toDateString();
 
-                // Lấy tất cả sự kiện, công việc, ghi chú thuộc ngày hôm nay
+                // Lấy tất cả sự kiện, công việc thuộc ngày hôm nay
                 const eventsRef = collection(db, 'artifacts', MANUAL_CONFIG.projectId, 'users', uid, 'events');
                 const todosRef = collection(db, 'artifacts', MANUAL_CONFIG.projectId, 'users', uid, 'todos');
-                const notesRef = collection(db, 'artifacts', MANUAL_CONFIG.projectId, 'users', uid, 'notes');
 
                 try {
                     // Thu thập danh sách từ onSnapshot một lần
                     const unsubEvents = onSnapshot(query(eventsRef), snapEvents => {
-                        const allEvents = snapEvents.docs.map(d => ({ type: 'Sự kiện', ...d.data() }));
+                        const allEvents = snapEvents.docs.map(d => ({ id: d.id, type: 'Sự kiện', ...d.data() }));
                         const unsubTodos = onSnapshot(query(todosRef), snapTodos => {
-                            const allTodos = snapTodos.docs.map(d => ({ type: 'Công việc', ...d.data() }));
-                            const unsubNotes = onSnapshot(query(notesRef), snapNotes => {
-                                const allNotes = snapNotes.docs.map(d => ({ type: 'Ghi chú', ...d.data() }));
+                            const allTodos = snapTodos.docs.map(d => ({ id: d.id, type: 'Công việc', ...d.data() }));
 
-                                // Ghép tất cả
-                                const combined = [...allEvents, ...allTodos, ...allNotes];
-                                const lunar = getLunarDetails(today);
-                                const validAlerts = [];
+                            // Ghép tất cả sự kiện và việc cần làm
+                            const combined = [...allEvents, ...allTodos];
+                            const lunar = getLunarDetails(today);
+                            const validAlerts = [];
 
-                                combined.forEach(item => {
-                                    // 1. Kiểm tra trạng thái hoàn thành (Bỏ qua nếu completed)
-                                    if (item.completed === true) return;
+                            combined.forEach(item => {
+                                // 1. Kiểm tra trạng thái hoàn thành (Bỏ qua nếu completed của Todo)
+                                if (item.completed === true) return;
 
-                                    let isToday = false;
-                                    let targetTime = null; // Lưu trữ mốc thời gian cụ thể để so sánh giờ hiện tại
-
-                                    // Lấy thời điểm hẹn của item để kiểm tra
-                                    const timeSource = item.date || item.deadlineTime || item.reminderTime;
-                                    if (timeSource) {
-                                        targetTime = new Date(timeSource.seconds * 1000);
+                                // 2. Kiểm tra trạng thái hoàn thành ĐÃ TÍCH CHỌN TRÊN POPUP (LocalStorage)
+                                const storageCompleted = localStorage.getItem('vt_completed_alerts');
+                                if (storageCompleted) {
+                                    const parsedObj = JSON.parse(storageCompleted);
+                                    if (parsedObj[item.id] === true) {
+                                        return; // Bỏ qua nếu người dùng đã tích hoàn thành trên modal
                                     }
-
-                                    // Phân loại định dạng lặp và ngày cụ thể
-                                    if (item.type === 'Sự kiện') {
-                                        if (!item.repeat || item.repeat === 'none') {
-                                            isToday = targetTime && targetTime.toDateString() === todayStr;
-                                        } else if (item.repeat === 'lunar') {
-                                            isToday = item.lunarDay === lunar.day && item.lunarMonth === lunar.month;
-                                        } else if (item.repeat === 'solar' && targetTime) {
-                                            isToday = targetTime.getDate() === today.getDate() && targetTime.getMonth() === today.getMonth();
-                                        }
-                                    } else {
-                                        // Với Todo hoặc Note, kiểm tra dựa trên deadlineTime hoặc reminderTime
-                                        isToday = targetTime && targetTime.toDateString() === todayStr;
-                                    }
-
-                                    if (isToday) {
-                                        // 2. Kiểm tra thời gian đã trôi qua (Bỏ qua nếu giờ hẹn đã qua so với hiện tại)
-                                        if (targetTime) {
-                                            const itemHours = targetTime.getHours();
-                                            const itemMinutes = targetTime.getMinutes();
-                                            
-                                            // SỬA LỖI: Chỉ lọc giờ hẹn nếu đó là lịch hẹn/công việc có cài giờ cụ thể (Khác 00:00).
-                                            // Với các Sự kiện cả ngày (00:00) ta giữ nguyên không lọc bỏ.
-                                            if (itemHours !== 0 || itemMinutes !== 0) {
-                                                const currentHours = today.getHours();
-                                                const currentMinutes = today.getMinutes();
-
-                                                if (itemHours < currentHours || (itemHours === currentHours && itemMinutes < currentMinutes)) {
-                                                    return; // Bỏ qua sự kiện đã trôi qua
-                                                }
-                                            }
-                                        }
-
-                                        // Hợp lệ -> đưa vào danh sách hiển thị
-                                        validAlerts.push({
-                                            title: item.title || item.text || "Lịch hẹn chưa đặt tên",
-                                            type: item.type,
-                                            time: targetTime && (targetTime.getHours() !== 0 || targetTime.getMinutes() !== 0) 
-                                                ? targetTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) 
-                                                : 'Cả ngày'
-                                        });
-                                    }
-                                });
-
-                                if (validAlerts.length > 0) {
-                                    setActiveAlerts(validAlerts);
-                                    setShowAlertModal(true);
-
-                                    // Gửi thông báo hệ thống nổi (Native System Notification)
-                                    validAlerts.forEach(alertItem => {
-                                        sendNotification(`🔔 ${alertItem.type}: ${alertItem.title}`, `Thời gian: ${alertItem.time}`);
-                                    });
                                 }
 
-                                // Lưu vào sessionStorage để tránh lặp lại thông báo trong phiên này
-                                sessionStorage.setItem('vt_notified_session', 'true');
+                                let isToday = false;
+                                let targetTime = null; // Lưu trữ mốc thời gian cụ thể để so sánh giờ hiện tại
 
-                                // Dọn dẹp listener sau khi quét xong lần đầu
-                                unsubEvents();
-                                unsubTodos();
-                                unsubNotes();
+                                // Lấy thời điểm hẹn của item để kiểm tra
+                                const timeSource = item.date || item.deadlineTime || item.reminderTime;
+                                if (timeSource) {
+                                    targetTime = new Date(timeSource.seconds * 1000);
+                                }
+
+                                // Phân loại định dạng lặp và ngày cụ thể bao gồm lặp tuần và lặp tháng mới (Yêu cầu 1)
+                                if (item.type === 'Sự kiện') {
+                                    if (!item.repeat || item.repeat === 'none') {
+                                        isToday = targetTime && targetTime.toDateString() === todayStr;
+                                    } else if (item.repeat === 'lunar') {
+                                        isToday = item.lunarDay === lunar.day && item.lunarMonth === lunar.month;
+                                    } else if (item.repeat === 'solar' && targetTime) {
+                                        isToday = targetTime.getDate() === today.getDate() && targetTime.getMonth() === today.getMonth();
+                                    } else if (item.repeat === 'weekly' && targetTime) {
+                                        isToday = targetTime.getDay() === today.getDay();
+                                    } else if (item.repeat === 'monthly' && targetTime) {
+                                        isToday = targetTime.getDate() === today.getDate();
+                                    }
+                                } else {
+                                    // Với Todo, kiểm tra dựa trên deadlineTime hoặc reminderTime
+                                    isToday = targetTime && targetTime.toDateString() === todayStr;
+                                }
+
+                                if (isToday) {
+                                    // 3. Kiểm tra thời gian đã trôi qua (Bỏ qua nếu giờ hẹn đã qua so với hiện tại)
+                                    if (targetTime) {
+                                        const itemHours = targetTime.getHours();
+                                        const itemMinutes = targetTime.getMinutes();
+                                        
+                                        // Chỉ lọc giờ hẹn nếu đó là lịch hẹn/công việc có cài giờ cụ thể (Khác 00:00).
+                                        // Với các Sự kiện cả ngày (00:00) ta giữ nguyên không lọc bỏ.
+                                        if (itemHours !== 0 || itemMinutes !== 0) {
+                                            const currentHours = today.getHours();
+                                            const currentMinutes = today.getMinutes();
+
+                                            if (itemHours < currentHours || (itemHours === currentHours && itemMinutes < currentMinutes)) {
+                                                return; // Bỏ qua sự kiện đã trôi qua
+                                            }
+                                        }
+                                    }
+
+                                    // Hợp lệ -> đưa vào danh sách hiển thị
+                                    validAlerts.push({
+                                        id: item.id,
+                                        title: item.title || item.text || "Lịch hẹn chưa đặt tên",
+                                        type: item.type,
+                                        time: targetTime && (targetTime.getHours() !== 0 || targetTime.getMinutes() !== 0) 
+                                            ? targetTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) 
+                                            : 'Cả ngày'
+                                    });
+                                }
                             });
+
+                            if (validAlerts.length > 0) {
+                                setActiveAlerts(validAlerts);
+                                setShowAlertModal(true);
+
+                                // Gửi thông báo hệ thống nổi (Native System Notification)
+                                validAlerts.forEach(alertItem => {
+                                    sendNotification(`🔔 ${alertItem.type}: ${alertItem.title}`, `Thời gian: ${alertItem.time}`);
+                                });
+                            }
+
+                            // Lưu vào sessionStorage để tránh lặp lại thông báo trong phiên này
+                            sessionStorage.setItem('vt_notified_session', 'true');
+
+                            // Dọn dẹp listener sau khi quét xong lần đầu
+                            unsubEvents();
+                            unsubTodos();
                         });
                     });
                 } catch (err) {
                     console.error("Lỗi quét dữ liệu thông báo:", err);
                 }
+            };
+
+            // Hàm xử lý khi người dùng tích chọn hoàn thành trực tiếp trên Modal thông báo nổi
+            const handleCheckAlertCompleted = (id) => {
+                setCompletedAlerts(prev => {
+                    const updated = { ...prev, [id]: true };
+                    // Đồng thời lọc ngay lập tức ra khỏi danh sách hiển thị trên Modal hiện tại
+                    setActiveAlerts(curr => curr.filter(alert => alert.id !== id));
+                    return updated;
+                });
             };
 
             const handleSaveTheme = async (newTheme) => {
@@ -1410,34 +1635,43 @@
                 if (user) await setDoc(doc(getFirestore(app), 'artifacts', MANUAL_CONFIG.projectId, 'users', user.uid, 'settings', 'theme'), newTheme);
             };
 
-            // THAY ĐỔI CHÍNH: Hàm kiểm soát đổi Tab và tự động reset ngày về Hôm Nay
+            // THAY ĐỔI CHÍNH: Hàm kiểm soát đổi Tab và tự động reset ngày về Hôm Nay + Kích hoạt lại Lock Screen (Yêu cầu 2)
             const handleTabChange = (tab) => {
                 if (tab === 'day') {
-                    setDailyDate(new Date()); // Quay về ngày hiện tại khi bấm Lịch ngày
+                    setDailyDate(new Date()); 
                 } else if (tab === 'calendar') {
-                    setCalendarCurrentDate(new Date()); // Quay về tháng hiện tại
-                    setCalendarSelectedDate(new Date()); // Đặt ngày chọn mặc định là hôm nay
+                    setCalendarCurrentDate(new Date()); 
+                    setCalendarSelectedDate(new Date()); 
                 }
+                
+                // Khi chuyển tab, luôn kích hoạt lại trạng thái khoá của tất cả các tab (Yêu cầu 2)
+                setUnlockedTabs({ todo: false, notes: false });
                 setActiveTab(tab);
+            };
+
+            // Mở khóa cho tab cụ thể sau khi xác nhận mật khẩu đúng (Yêu cầu 2)
+            const handleUnlockTab = (tab) => {
+                setUnlockedTabs(prev => ({ ...prev, [tab]: true }));
             };
 
             if (loading) return <div className="h-screen flex items-center justify-center text-blue-500">Đang tải...</div>;
             if (!user) return <AuthScreen auth={getAuth(app)} appId={MANUAL_CONFIG.projectId} />;
 
             return (
-                <div className="flex flex-col h-screen max-w-md mx-auto shadow-2xl overflow-hidden relative transition-colors duration-300" style={{ backgroundColor: theme.bgColor }}>
-                    <header className="bg-blue-600 text-white p-2 flex justify-between items-center shadow-md z-20">
+                <div className="flex flex-col h-screen max-w-md mx-auto shadow-2xl overflow-hidden relative transition-colors duration-300 animate-fade-in" style={{ backgroundColor: theme.bgColor }}>
+                    <header className="bg-blue-600 text-white p-2 flex justify-between items-center shadow-md z-20 shrink-0">
                         <div className="flex flex-col overflow-hidden">
                             <h1 className="text-lg font-bold whitespace-nowrap truncate">Lịch vạn niên đa năng</h1>
                             <span className="text-[10px] text-blue-100 opacity-80 text-center w-full block">Thiết kế bởi Văn Trung</span>
                         </div>
-                        <div className="flex gap-2">
-                            <button onClick={() => setShowSettings(true)}><Settings size={20} /></button>
-                            <button onClick={() => signOut(getAuth(app))} className="text-xs bg-blue-700 hover:bg-blue-800 px-3 py-1 rounded-full flex items-center gap-1"><LogOut size={14} /> Thoát</button>
+                        <div className="flex gap-2 items-center">
+                            <button onClick={() => setShowSettings(true)} className="p-1.5 hover:bg-blue-700 rounded-full transition"><Settings size={18} /></button>
+                            <button onClick={() => signOut(getAuth(app))} className="text-xs bg-blue-700 hover:bg-blue-800 px-3 py-1.5 rounded-full flex items-center gap-1 transition"><LogOut size={12} /> Thoát</button>
                         </div>
                     </header>
 
-                    <main className="flex-1 overflow-y-auto relative flex flex-col">
+                    <main className="flex-1 overflow-y-auto relative flex flex-col bg-white">
+                        {/* Tab Lịch ngày */}
                         <div style={{ display: activeTab === 'day' ? 'flex' : 'none', flex: 1, flexDirection: 'column' }}>
                             <DailyView 
                                 user={user} 
@@ -1447,6 +1681,8 @@
                                 setToday={setDailyDate} 
                             />
                         </div>
+
+                        {/* Tab Lịch tháng */}
                         <div style={{ display: activeTab === 'calendar' ? 'block' : 'none' }}>
                             <CalendarView 
                                 user={user} 
@@ -1459,34 +1695,48 @@
                                 onTabChange={handleTabChange}
                             />
                         </div>
+
+                        {/* Tab Việc cần làm: Tích hợp LockScreen bảo vệ (Yêu cầu 2) */}
                         <div style={{ display: activeTab === 'todo' ? 'block' : 'none', height: '100%' }}>
-                            <TodoView user={user} db={getFirestore(app)} appId={MANUAL_CONFIG.projectId} theme={theme} />
+                            {lockEnabled && lockPassword && !unlockedTabs.todo ? (
+                                <LockScreen correctPassword={lockPassword} onUnlock={() => handleUnlockTab('todo')} />
+                            ) : (
+                                <TodoView user={user} db={getFirestore(app)} appId={MANUAL_CONFIG.projectId} theme={theme} />
+                            )}
                         </div>
+
+                        {/* Tab Ghi chú: Tích hợp LockScreen bảo vệ (Yêu cầu 2) */}
                         <div style={{ display: activeTab === 'notes' ? 'block' : 'none', height: '100%' }}>
-                            <NotesView user={user} db={getFirestore(app)} appId={MANUAL_CONFIG.projectId} theme={theme} />
+                            {lockEnabled && lockPassword && !unlockedTabs.notes ? (
+                                <LockScreen correctPassword={lockPassword} onUnlock={() => handleUnlockTab('notes')} />
+                            ) : (
+                                <NotesView user={user} db={getFirestore(app)} appId={MANUAL_CONFIG.projectId} theme={theme} />
+                            )}
                         </div>
+
+                        {/* Tab Thời khóa biểu */}
                         <div style={{ display: activeTab === 'timetable' ? 'flex' : 'none', flex: 1, flexDirection: 'column' }}>
                             <TimeTableView user={user} db={getFirestore(app)} appId={MANUAL_CONFIG.projectId} theme={theme} />
                         </div>
                     </main>
 
                     <nav className="w-full bg-white border-t flex justify-around py-3 shadow-lg z-20 relative shrink-0">
-                        <button onClick={()=>handleTabChange('day')} className={activeTab==='day'?'text-blue-600':'text-gray-400'}>
-                            <div className="flex flex-col items-center"><CalendarDays size={24}/><span className="text-[10px]">Hôm Nay</span></div>
+                        <button onClick={()=>handleTabChange('day')} className={activeTab==='day'?'text-blue-600 font-semibold':'text-gray-400'}>
+                            <div className="flex flex-col items-center"><CalendarDays size={22}/><span className="text-[9px] mt-1">Hôm Nay</span></div>
                         </button>
-                        <button onClick={()=>handleTabChange('calendar')} className={activeTab==='calendar'?'text-blue-600':'text-gray-400'}>
-                            <div className="flex flex-col items-center"><Calendar size={24}/><span className="text-[10px]">Lịch</span></div>
+                        <button onClick={()=>handleTabChange('calendar')} className={activeTab==='calendar'?'text-blue-600 font-semibold':'text-gray-400'}>
+                            <div className="flex flex-col items-center"><Calendar size={22}/><span className="text-[9px] mt-1">Lịch</span></div>
                         </button>
-                        <button onClick={()=>handleTabChange('todo')} className={activeTab==='todo'?'text-blue-600':'text-gray-400'}>
-                            <div className="flex flex-col items-center"><CheckSquare size={24}/><span className="text-[10px]">Việc làm</span></div>
+                        <button onClick={()=>handleTabChange('todo')} className={activeTab==='todo'?'text-blue-600 font-semibold':'text-gray-400'}>
+                            <div className="flex flex-col items-center"><CheckSquare size={22}/><span className="text-[9px] mt-1">Việc làm</span></div>
                         </button>
-                        <button onClick={()=>handleTabChange('notes')} className={activeTab==='notes'?'text-blue-600':'text-gray-400'}>
-                            <div className="flex flex-col items-center"><StickyNote size={24}/><span className="text-[10px]">Ghi chú</span></div>
+                        <button onClick={()=>handleTabChange('notes')} className={activeTab==='notes'?'text-blue-600 font-semibold':'text-gray-400'}>
+                            <div className="flex flex-col items-center"><StickyNote size={22}/><span className="text-[9px] mt-1">Ghi chú</span></div>
                         </button>
                         
                         {/* Nút 3 Chấm (Thêm) */}
                         <div className="relative">
-                            <button onClick={()=>setShowMenu(!showMenu)} className={`text-gray-400 ${showMenu ? 'text-blue-600' : ''}`}><div className="flex flex-col items-center"><MoreVertical size={24}/><span className="text-[10px]">Thêm</span></div></button>
+                            <button onClick={()=>setShowMenu(!showMenu)} className={`text-gray-400 ${showMenu ? 'text-blue-600' : ''}`}><div className="flex flex-col items-center"><MoreVertical size={22}/><span className="text-[9px] mt-1">Thêm</span></div></button>
                             {showMenu && (
                                 <div className="absolute bottom-12 right-0 bg-white shadow-xl rounded-lg border w-40 overflow-hidden fade-in z-50">
                                     <button onClick={()=>{handleTabChange('timetable'); setShowMenu(false);}} className="flex items-center gap-2 w-full px-4 py-3 hover:bg-gray-50 text-sm text-gray-700 text-left">
@@ -1497,26 +1747,37 @@
                         </div>
                     </nav>
 
-                    {showSettings && <SettingsModal theme={theme} onSave={handleSaveTheme} onClose={()=>setShowSettings(false)} auth={getAuth(app)} />}
+                    {showSettings && <SettingsModal theme={theme} onSave={handleSaveTheme} onClose={()=>setShowSettings(false)} auth={getAuth(app)} db={getFirestore(app)} appId={MANUAL_CONFIG.projectId} />}
                     
-                    {/* HỘP THOẠI NỔI BÁO LỊCH KHI MỞ APP */}
-                    {showAlertModal && (
+                    {/* HỘP THOẠI NỔI BÁO LỊCH KHI MỞ APP (Đã cập nhật tính năng tích Checkbox hoàn thành) */}
+                    {showAlertModal && activeAlerts.length > 0 && (
                         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                             <div className="bg-white w-full max-w-sm rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                                 <div className="bg-blue-600 p-4 text-white flex items-center gap-3">
                                     <Bell className="animate-bounce" size={24} />
                                     <div>
                                         <h3 className="font-bold text-base leading-tight">Lịch trình hôm nay</h3>
-                                        <p className="text-[10px] opacity-80 font-medium">Báo cáo lịch trình tự động</p>
+                                        <p className="text-[10px] opacity-80 font-medium">Đánh dấu tích để ẩn thông báo này</p>
                                     </div>
                                 </div>
                                 <div className="p-5 max-h-[60vh] overflow-y-auto space-y-3 no-scrollbar">
                                     {activeAlerts.map((alert, index) => (
-                                        <div key={index} className="flex items-start gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
-                                            <span className="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-50 text-blue-600 border border-blue-100 shrink-0 mt-0.5">{alert.type}</span>
-                                            <div className="flex-1">
-                                                <p className="font-bold text-slate-800 text-sm">{alert.title}</p>
-                                                <p className="text-xs text-slate-400 font-medium flex items-center gap-1 mt-1"><Clock size={12} /> {alert.time}</p>
+                                        <div key={alert.id || index} className="flex items-start gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-100 group transition-all">
+                                            {/* Ô vuông Checkbox để tích hoàn thành */}
+                                            <button 
+                                                onClick={() => handleCheckAlertCompleted(alert.id)}
+                                                className="w-5 h-5 rounded border border-slate-300 hover:border-green-500 bg-white flex items-center justify-center text-green-600 mt-1 shrink-0 transition"
+                                                title="Tích để hoàn thành"
+                                            >
+                                                <div className="w-2.5 h-2.5 rounded bg-transparent group-hover:bg-green-100 transition-colors"></div>
+                                            </button>
+                                            
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 border border-blue-100 shrink-0">{alert.type}</span>
+                                                    <p className="text-[10px] text-slate-400 font-medium flex items-center gap-1"><Clock size={11} /> {alert.time}</p>
+                                                </div>
+                                                <p className="font-bold text-slate-800 text-sm truncate">{alert.title}</p>
                                             </div>
                                         </div>
                                     ))}
