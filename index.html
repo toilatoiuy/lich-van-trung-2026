@@ -2209,17 +2209,7 @@
         const root = createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('Service Worker đã đăng ký thành công!', reg.scope))
-                    .catch(err => console.log('Đăng ký Service Worker thất bại:', err));
-            });
-        }
-    </script>
-    <!-- ĐOẠN SCRIPT ĐĂNG KÝ VÀ KẾT NỐI SERVICE WORKER -->
-    <script>
+   <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
@@ -2228,8 +2218,5 @@
             });
         }
     </script>
-</body>
-</body>
-</html>
 </body>
 </html>
