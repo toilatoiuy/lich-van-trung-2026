@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+    <!-- LIÊN KẾT ĐẾN MANIFEST PWA -->
+<link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lịch vạn niên - Văn Trung</title>
@@ -2216,6 +2218,17 @@
             });
         }
     </script>
+    <!-- ĐOẠN SCRIPT ĐĂNG KÝ VÀ KẾT NỐI SERVICE WORKER -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((reg) => console.log('Đăng ký Service Worker thành công với phạm vi: ', reg.scope))
+                    .catch((err) => console.error('Đăng ký Service Worker thất bại: ', err));
+            });
+        }
+    </script>
+</body>
 </body>
 </html>
 </body>
