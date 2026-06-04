@@ -15,7 +15,7 @@ const ASSETS = [
   'https://esm.sh/react-toastify@9.1.3?external=react,react-dom'
 ];
 
-// Cài đặt Service Worker và lưu tài nguyên vào Cache
+// Cài đặt và ép kích hoạt ngay
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -24,7 +24,7 @@ self.addEventListener('install', (e) => {
   );
 });
 
-// Kích hoạt và dọn dẹp cache cũ
+// Dọn dẹp bộ nhớ đệm phiên bản cũ
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then((keys) => {
@@ -39,20 +39,30 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-// Chiến lược phản hồi Offline: Ưu tiên Cache mạng sau
+// Chiến lược Network-First: Ưu tiên lấy dữ liệu mới nhất từ GitHub/Firebase trước, mất mạng mới dùng Cache Offline
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Trả về kết quả từ cache lập tức để chạy mượt/offline
-        fetch(e.request).then((networkResponse) => {
-          if (networkResponse.status === 200) {
-            caches.open(CACHE_NAME).then((cache) => cache.put(e.request, networkResponse));
+    fetch(e.request)
+      .then((networkResponse) => {
+        // Nếu lấy dữ liệu trực tuyến thành công, cập nhật lại vào cache
+        if (networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(e.request, responseClone));
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        // Khi mất kết nối internet hoàn toàn, lấy tài nguyên từ cache ra dùng
+        return caches.match(e.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
           }
-        }).catch(() => {/* Bỏ qua nếu hoàn toàn mất mạng */});
-        return cachedResponse;
-      }
-      return fetch(e.request);
-    })
+          // Dự phòng trường hợp không tìm thấy file phù hợp trong cache
+          return new Response('Ứng dụng hiện đang ngoại tuyến và tài nguyên này chưa được lưu đệm.', {
+            status: 503,
+            statusText: 'Service Unavailable'
+          });
+        });
+      })
   );
 });
