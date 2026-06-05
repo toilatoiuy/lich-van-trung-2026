@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <!-- LIÊN KẾT ĐẾN MANIFEST PWA -->
-<link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lịch vạn niên - Văn Trung</title>
     
+    <!-- START: Cấu hình Progressive Web App (PWA) -->
+    <meta name="theme-color" content="#2563eb">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Lịch Văn Trung">
+    
+    <!-- Nhúng Web App Manifest trực tiếp qua Data URI Base64 -->
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiTOG7i2NoIFbhuqFuIE5pw6puIC0gVsSDbiBUcnVuZyIsInNob3J0X25hbWUiOiJM4buLY2ggVuG6oW4gTmnDqm4iLCJzdGFydF91cmwiOiIuIiwidGhlbWVfY29sb3IiOiIjMjU2M2ViIiwiYmFja2dyb3VuZF9jb2xvciI6IiNmM2Y0ZjYiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsIm9yaWVudGF0aW9uIjoicG9ydHJhaXQiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLDxzdmcgeG1sbnM9XCJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Z1wiIHZpZXdCb3g9XCIwIDAgMTAwIDEwMFwiPjxyZWN0IHg9XCIxMFwiIHk9XCIyMFwiIHdpZHRoPVwiODBcIiBoZWlnaHQ9XCI3MFwiIHp4PVwiMTVcIiBmaWxsPVwid2hpdGVcIiBzdHJva2U9XCIjREMyNjI2XCIgc3Ryb2tlLXdpZHRoPVwiNVwiLz48cGF0aCBkPVwiTTEwIDM1aDgwXCIgc3Ryb2tlPVwiI0RDMjYyNlwiIHN0cm9rZS13aWR0aD0vNVwiLz48cmVjdCB4PVwiMjVcIiB5PVwiMTBcIiB3aWR0aD1cIjEwXCIgaGVpZ2h0PVwiMjVcIiByeD1cIjVcIiBmaWxsPVwiI0RDMjYyNlwiLz48cmVjdCB4PVwiNjVcIiB5PVwiMTBcIiB3aWR0aD1cIjEwXCIgaGVpZ2h0PVwiMjVcIiByeD1cIjVcIiBmaWxsPVwiI0RDMjYyNlwiLz48dGV4dCB4PVwiNTBcIiB5PVwiNzVcIiBmb250LXNpemU9XCI0MFwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgZmlsbD1cIiNERMyNjI2XCIgZm9udC1mYW1pbHk9XCJzYW5zLXNlcmlmXCIgZm9udC13ZWlnaHQ9XCJib2xkXCI+MzE8L3RleHQ+PC9zdmc+Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3N2Zyt4bWwiLCJwdXJwb3NlIjoiYW55IG1hc2thYmxlIn0seyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWwsPHN2ZyB4bWxucz1cImh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnXCIgdmlld0JveD1cIjAgMCAxMDAgMTAwXCI+PHJlY3QgeD1cIjEwXCIgeT1cIjIwXCIgd2lkdGg9XCI4MFwiIGhlaWdodD1cIjcwXCIgcng9XCIxNVwiIGZpbGw9XCJ3aGl0ZVwiIHN0cm9rZT1cIiNERMyNjI2XCIgc3Ryb2tlLXdpZHRoPVwiNVwiLz48cGF0aCBkPVwiTTEwIDM1aDgwXCIgc3Ryb2tlPVwiI0RDMjYyNlwiIHN0cm9rZS13aWR0aD0vNVwiLz48cmVjdCB4PVwiMjVcIiB5PVwiMTBcIiB3aWR0aD1cIjEwXCIgaGVpZ2h0PVwiMjVcIiByeD1cIjVcIiBmaWxsPVwiI0RDMjYyNlwiLz48cmVjdCB4PVwiNjVcIiB5PVwiMTBcIiB3aWR0aD1cIjEwXCIgaGVpZ2h0PVwiMjVcIiByeD1cIjVcIiBmaWxsPVwiI0RDMjYyNlwiLz48dGV4dCB4PVwiNTBcIiB5PVwiNzVcIiBmb250LXNpemU9XCI0MFwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgZmlsbD1cIiNERMyNjI2XCIgZm9udC1mYW1pbHk9XCJzYW5zLXNlcmlmXCIgZm9udC13ZWlnaHQ9XCJib2xkXCI+MzE8L3RleHQ+PC9zdmc+Iiwic2l6ZXMiOiI1MTJ4NTEyIiwidHlwZSI6ImltYWdlL3N2Zyt4bWwiLCJwdXJwb3NlIjoiYW55IG1hc2thYmxlIn1dfQ==">
+    <!-- END: Cấu hình Progressive Web App (PWA) -->
+
     <!-- ICON ỨNG DỤNG -->
     <link class="favicon" rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%2210%22 y=%2220%22 width=%2280%22 height=%2270%22 rx=%2215%22 fill=%22white%22 stroke=%22%23DC2626%22 stroke-width=%225%22/><path d=%22M10 35h80%22 stroke=%22%23DC2626%22 stroke-width=%225%22/><rect x=%2225%22 y=%2210%22 width=%2210%22 height=%2225%22 rx=%225%22 fill=%22%23DC2626%22/><rect x=%2265%22 y=%2210%22 width=%2210%22 height=%2225%22 rx=%225%22 fill=%22%23DC2626%22/><text x=%2250%22 y=%2275%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22%23DC2626%22 font-family=%22sans-serif%22 font-weight=%22bold%22>31</text></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%2210%22 y=%2220%22 width=%2280%22 height=%2270%22 rx=%2215%22 fill=%22white%22 stroke=%22%23DC2626%22 stroke-width=%225%22/><path d=%22M10 35h80%22 stroke=%22%23DC2626%22 stroke-width=%225%22/><rect x=%2225%22 y=%2210%22 width=%2210%22 height=%2225%22 rx=%225%22 fill=%22%23DC2626%22/><rect x=%2265%22 y=%2210%22 width=%2210%22 height=%2225%22 rx=%225%22 fill=%22%23DC2626%22/><text x=%2250%22 y=%2275%22 font-size=%2240%22 text-anchor=%22middle%22 fill=%22%23DC2626%22 font-family=%22sans-serif%22 font-weight=%22bold%22>31</text></svg>">
@@ -131,7 +140,7 @@
             "Trả thù hận bằng tâm oán giận\nMuôn kiếp dài khó đặng thành công\nTừ bi chuyển hóa thù chung\nĐây là định luật công bằng xưa nay.",
             "Trong kiếp sống ai ngờ cái chết\nRình rập ta chẳng sót mảy may\nNgười nào giác ngộ điều này\nHơn thua, tranh chấp... dứt ngay tức thì.",
             "Ai đắm nhiễm năm điều dục lạc\nChẳng giữ tâm, làm chủ giác quan\nUống ăn thái quá hại thân\nTánh hay lười biếng, nhọc nhằn qua loa.",
-            "Người như thế bị ma đánh bại\nUống ăn thoải mái quay cuồng\nCũng giống như gió thổi ngã cây.\nKhổ đau, bất lực nào hay\nĐều do buông thả, đắm say sắc trần.",
+            "Người như thế bị ma đánh bại\nUống ăn thoải mái quay cuồng\nCấu giống như gió thổi ngã cây.\nKhổ đau, bất lực nào hay\nĐều do buông thả, đắm say sắc trần.",
             "Không nhiễm đắm, quán thân nhơ uế\nGiữ gìn tâm, làm chủ giác quan\nUống ăn tiết độ, siêng năng\nVững vàng như núi trước ngàn bão giông.",
             "Dù khoát áo cà-sa đĩnh đạc\nMà tâm còn uế trược tham, sân\nSống không chân thật, buông lung\nLàm sao xứng hạnh sa-môn sáng ngời?",
             "AI giải phóng tham, sân, trược uế\nSống thanh cao, giữ giới nghiêm minh\nChánh chân, làm chủ được mình\nNgười tu như thế thật tình đáng khen.",
@@ -163,7 +172,7 @@
             "Tâm vi tế, khó nhìn, khó thấy\nTheo dục tham, thoải mái quay cuồng\nTrí nhân làm chủ được tâm\nNiềm vui nội tại phủ trùm khắp nơi.",
             "Đâu cần phải chạy xa, sống ẩn\nVào hang sâu, hóa hiện không thân.\nChi bằng điều phục được tâm\nVượt qua trói buộc của ngàn Ma quân.",
             "Đối với kẻ tâm không an trụ\nPháp nhiệm mầu khó tỏ nguồn khơi\nNiềm tin rúng động ,chơi vơi\nCòn nguồn trí tuệ rạng ngời khó thông.",
-            "Khi tâm thoát dục tham, vướng mắc\nBuông hận thù, ganh ghét, hờn ghen\nVượt trên thiện ác nhị nguyên\nXứng hàng tỉnh thức, không còn sầu lo.",
+            "Khi tâm thoát dục tham, vướng mắc\nBuông hận thù, ganh ghét, hờn ghen\nAn toàn tuyệt đối trước sau,\nVượt trên thiện ác nhị nguyên\nXứng hàng tỉnh thức, không còn sầu lo.",
             "Thân năm uẩn như sành dễ bể\nGiữ gìn tâm như thể thành trì\nVung gươm trí tuệ diệt si\nThắng Ma quân xấu, chớ vì vinh quang.",
             "Thân vô thường, chẳng bao lâu nữa\nNằm vô tri trong cỗ quan tài\nKhi tâm thoát khỏi thân này\nThân như khúc gỗ chẳng xài vào đâu.",
             "Người ác độc diệt trừ đối thủ\nKẻ oan gia trả đũa oan gia\nKhông bằng tâm ác hại ta\nTrầm luân muôn kiếp, đường tà lún sâu.",
@@ -185,7 +194,7 @@
             "Thân mấy chốc đã già, tàn tạ\nNơi chứa đầy bệnh khổ, hôi tanh\nVô thường tổ hợp mong manh\nChết là kết thúc, tái sanh hồng trần.",
             "Thân thể này màu bồ câu trắng\nNhư trái bầu, thu đến vứt đi.\nChết rồi thi thể gớm ghê\nCó gì vui thích, mải mê thân này?",
             "Ôi, thân thể như thành trì cổ\nDựng bằng xương, máu đỏ, thịt, gân\nChứa già, chết, bệnh từng phần\nCống cao, lừa dối; dáng duyên nỗi gì!",
-            "Xe vua đẹp có ngày cũng cũ\nThân thể rồi ủ rũ, tàn phai\nPháp lành trẻ mãi, còn hoài\nHãy nên khắc cốt những lời thánh nhân.",
+            "Xe vua đẹp có ngày cũng cũ\nThân thể rồi u rũ, tàn phai\nPháp lành trẻ mãi, còn hoài\nHãy nên khắc cốt những lời thánh nhân.",
             "Trẻ ít học, già không hiểu biết\nChẳng khác gì bò đực lớn đầu\nThân to, cơ bắp, khỏe, mau\nNhưng không trí tuệ, khác nào bóng đêm?",
             "Lang thang suốt luân hồi bao kiếp\nQuyết đi tìm “ông xếp” xây nhà\nTìm hoài, tìm mãi, không ra\nTái sanh, khổ lụy, đọa sa ba đường.",
             "Nay ta cấm ngươi không xây nữa\nPhá cột kèo, ván cửa, rui mè…\nNay ta đã chứng niết-bàn\nÁi tham, chấp thủ tiêu tan hết rồi.",
@@ -322,7 +331,7 @@
             "Người biếng nhác thường ham hưởng thụ\nĂn uống nhiều, nằm ngủ cả ngày\nKhác gì như lợn mập thây\nKẻ ngu sinh tử, khó ngày thoát ra.",
             "Bao ngày trước, tâm thường lêu lổng\nTheo thú vui, dục vọng quay cuồng.\nHôm nay, chế ngự được lòng\nNhư người quản tượng cương thường điều voi.",
             "Hãy vui thích với không phóng dật\nGiữ gìn tâm, tỉnh thức, lạc an\nVượt ngoài kiết sử buộc ràng\nNhư voi nỗ lực thoát vòng lầy sa.",
-            "Khi gặp được những người hiền trí\nNên sống chung, thỏa chí đồng hành\nVượt qua tất cả hiểm nàn\nSống trong chánh niệm, an lành niềm vui.",
+            "Khi gặp được những người hiền trí\nNên sống chung, thỏa chí đồng hành\nChết là kết thúc, tái sanh hồng trần.\nVượt qua tất cả hiểm nàn\nSống trong chánh niệm, an lành niềm vui.",
             "Nếu không gặp bạn hiền tuệ đức\nĐáng sống chung, hạnh phúc đồng hành\nThà vua bỏ lại nước, thành\nNhư voi cất bước quẩn quanh rừng già.",
             "Thà đơn độc, sống trong hạnh phúc\nGiới trang nghiêm, không bạn kẻ ngu\nKhông còn buồn khổ, vô tư\nNhư voi trong chốn rừng sâu một mình.",
             "Thật hạnh phúc, bạn khi cần thiết\nBiết đủ là hạnh phúc nào hơn.\nVui thay, chết để đức nhân\nKhổ đau chấm dứt, trần gian niết-bàn.",
@@ -330,7 +339,7 @@
             "Thật hạnh phúc tuổi già có đức\nPhúc nào hơn tuệ giác cao siêu\nVui thay, chánh tín, hiểu nhiều\nPhúc thay, từ bỏ bao nhiêu ác tà.",
             // PHẦN 4
             "Người tu học tự mình dò xét\nĐánh giá mình nhân cách đục trong\nGiữ gìn chánh niệm, tự phòng\nTrụ an lạc, để tâm không muộn phiền.",
-            "Người tu Phật tự mình nương tựa\nTìm được nguồn ẩn trú bản thân\nTự mình điều phục nguồn tâm\nNhư người buôn có ngựa thuần đường xa.",
+            "Người tu Phật tự mình nương tựa\nTìm được nguồn ẩn trú bản thân\nTự mình điều phục nguồn tâm\nNhư người buôn có ngựa thuần dung dăng.",
             "Người tu sĩ tâm thường hoan hỷ\nĐặt niềm tin pháp vị cao siêu\nAn lành tịch tịnh trọn nên\nCác hành hữu lậu lặng yên, nhẹ nhàng.",
             "Bậc hành giả tuổi đời tuy nhỏ\nTu pháp môn sáng tỏ nguồn tâm\nTrí mầu soi sáng thế gian\nNhư vầng trăng thoát mây ngàn bủa giăng.",
             "Hãy tinh tấn dứt dòng ái dục\nBỏ thú vui vật chất bao đời\nCác hành đoạn diệt, thảnh thơi\nBà-la-môn ấy rạng ngời vô vi.",
@@ -1106,14 +1115,36 @@
             const [showEventModal, setShowEventModal] = useState(false);
             const [animClass, setAnimClass] = useState('');
             const [touchStart, setTouchStart] = useState(null);
-            const onTouchStart = (e) => { if(e.touches.length > 1) return; setTouchStart(e.targetTouches[0].clientX); }
+            
+            // START: Logic vuốt sang ngang để chuyển tháng (Sửa lỗi 1)
+            const onTouchStart = (e) => { 
+                if (e.touches.length > 1) return; 
+                setTouchStart(e.targetTouches[0].clientX); 
+            };
+            
             const onTouchEnd = (e) => {
                 if (!touchStart || e.changedTouches.length > 1) return;
                 const distance = touchStart - e.changedTouches[0].clientX;
-                if (distance > 50) { setAnimClass('anim-next'); setTimeout(() => { setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)); setAnimClass(''); }, 400); }
-                if (distance < -50) { setAnimClass('anim-prev'); setTimeout(() => { setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)); setAnimClass(''); }, 400); }
+                // Vuốt sang trái (distance > 50) -> chuyển sang tháng sau
+                if (distance > 50) { 
+                    setAnimClass('anim-next'); 
+                    setTimeout(() => { 
+                        setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)); 
+                        setAnimClass(''); 
+                    }, 300); 
+                }
+                // Vuốt sang phải (distance < -50) -> chuyển sang tháng trước
+                if (distance < -50) { 
+                    setAnimClass('anim-prev'); 
+                    setTimeout(() => { 
+                        setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)); 
+                        setAnimClass(''); 
+                    }, 300); 
+                }
                 setTouchStart(null);
-            }
+            };
+            // END: Logic vuốt sang ngang để chuyển tháng
+
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -1175,6 +1206,7 @@
                 return 'text-slate-500'; 
             };
             return (
+                // SỬA LỖI 1: Gắn trực tiếp onTouchStart và onTouchEnd vào thẻ div bọc ngoài của CalendarView
                 <div className="p-4 select-none perspective-container" style={{ color: theme.textColor }} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
                     <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-xl shadow-sm border border-slate-150">
                         <button onClick={() => setCurrentDate(new Date(year, month - 1, 1))} className="p-2 hover:bg-gray-100 rounded-full"><ChevronLeft className="text-gray-600" /></button>
@@ -1428,7 +1460,7 @@
                 await updateDoc(doc(todoRef, itemB.id), { order: orderB });
             };
             return (
-                <div className="p-4 pb-24 min-h-full" style={{ color: theme.textColor }}>
+                <div className="p-4 pb-24 min-h-full font-sans" style={{ color: theme.textColor }}>
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-bold">Danh sách việc</h2>
                         <button onClick={()=>setEditing({})} className="bg-blue-100 text-blue-600 px-3 py-2 rounded-lg flex items-center gap-1 text-sm font-bold"><Plus size={16}/> Mới</button>
@@ -1446,10 +1478,10 @@
                                         {t.completed ? <CheckSquare className="text-green-500"/> : <div className="w-5 h-5 border-2 rounded"></div>}
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <div className={`font-medium truncate ${t.completed ? 'line-through text-gray-400' : ''}`} style={{ color: t.completed ? '#9ca3af' : theme.textColor }}>{t.text}</div>
+                                        <div className={`font-semibold truncate ${t.completed ? 'line-through text-gray-400' : ''}`} style={{ color: t.completed ? '#9ca3af' : theme.textColor }}>{t.text}</div>
                                         <div className="flex gap-3 mt-1 flex-wrap">
-                                            {t.deadlineTime && <div className={`text-[10px] flex items-center gap-1 ${timeStatus?.isOverdue && !t.completed ? 'text-red-600 font-bold' : 'text-gray-500'}`}><AlertCircle size={10}/> {t.completed ? `Thời hạn: ${formatDisplayDate(t.deadlineTime.seconds)}` : timeStatus?.text}</div>}
-                                            {t.reminderTime && !t.completed && <div className="text-[10px] text-orange-500 flex items-center gap-1"><Bell size={10} /> Nhắc: {formatDisplayDate(t.reminderTime.seconds)}</div>}
+                                            {t.deadlineTime && <div className={`text-[10px] flex items-center gap-1 font-medium ${timeStatus?.isOverdue && !t.completed ? 'text-red-600 font-bold' : 'text-gray-500'}`}><AlertCircle size={10}/> {t.completed ? `Thời hạn: ${formatDisplayDate(t.deadlineTime.seconds)}` : timeStatus?.text}</div>}
+                                            {t.reminderTime && !t.completed && <div className="text-[10px] text-orange-500 flex items-center gap-1 font-medium"><Bell size={10} /> Nhắc: {formatDisplayDate(t.reminderTime.seconds)}</div>}
                                         </div>
                                     </div>
                                     {/* THÊM TÍNH NĂNG CHỈNH SỬA TODO */}
@@ -1478,7 +1510,7 @@
             const [reminder, setReminder] = useState(initialReminder || '');
             const [color, setColor] = useState(initialColor || '#FEFCE8'); 
             return (
-                <div className="fixed inset-0 bg-white z-40 flex flex-col animate-in slide-in-from-bottom-5">
+                <div className="fixed inset-0 bg-white z-40 flex flex-col animate-in slide-in-from-bottom-5 font-sans">
                     <div className="flex justify-between items-center p-4 border-b">
                         <button onClick={onCancel}><X/></button> <button onClick={()=>onSave(title, content, reminder, color)} className="text-blue-600 font-bold"><Save/> Lưu</button>
                     </div>
@@ -1490,7 +1522,7 @@
                     </div>
                     <div className="px-4 py-2 bg-gray-50 border-b flex items-center gap-2">
                         <Bell size={16} className="text-gray-500"/>
-                        <span className="text-xs text-gray-600 font-medium">Nhắc tôi vào:</span>
+                        <span className="text-xs text-gray-600 font-semibold">Nhắc tôi vào:</span>
                         <input type="datetime-local" className="bg-white border rounded px-2 py-1 text-xs text-gray-700 outline-none" value={reminder} onChange={e=>setReminder(e.target.value)} />
                     </div>
                     <div className="p-4 flex-1 flex flex-col gap-4" style={{ backgroundColor: color }}>
@@ -1517,14 +1549,14 @@
             const handleDelete = (e, id) => {
                 e.stopPropagation();
                 if (deleteConfirm === id) { deleteDoc(doc(noteRef, id)); setDeleteConfirm(null); } 
-                else { setDeleteConfirm(id); setTimeout(() => setDeleteConfirm(prev => prev === id ? null : prev), 3000); }
+                else { setDeleteConfirm(id); setTimeout(() => setDeleteConfirm(null), 3000); }
             };
             if (editing) {
                 const currentReminderStr = editing.reminderTime ? formatDateTimeForInput(editing.reminderTime.seconds * 1000) : '';
                 return <NoteEditor initialTitle={editing.title} initialContent={editing.content} initialReminder={currentReminderStr} initialColor={editing.color} isNew={!editing.id} onSave={save} onCancel={() => setEditing(null)} />;
             }
             return (
-                <div className="p-4" style={{color: theme.textColor}}>
+                <div className="p-4 font-sans" style={{color: theme.textColor}}>
                     <div className="flex justify-between mb-4"><h2 className="text-xl font-bold">Sổ tay</h2><button onClick={()=>setEditing({})} className="bg-blue-100 text-blue-600 px-3 py-2 rounded-lg flex items-center gap-1 text-sm font-bold"><Plus size={16}/> Mới</button></div>
                     <div className="grid grid-cols-2 gap-3">
                         {notes.length === 0 && <div className="col-span-2 text-center text-gray-400 mt-10"><StickyNote size={48} className="mx-auto mb-2 opacity-20" /><p>Trống trơn...</p></div>}
@@ -1534,7 +1566,7 @@
                                     <h4 className="font-bold truncate text-gray-800 flex-1">{n.title}</h4>
                                     {n.reminderTime && <Bell size={12} className="text-orange-500 mt-1 ml-1" />}
                                 </div>
-                                <p className="text-xs overflow-hidden flex-1 leading-relaxed whitespace-pre-wrap" style={{color: theme.textColor, opacity: 0.8}}>{n.content}</p>
+                                <p className="text-xs overflow-hidden flex-1 leading-relaxed whitespace-pre-wrap font-medium" style={{color: theme.textColor, opacity: 0.8}}>{n.content}</p>
                                 {n.reminderTime && <div className="text-[9px] text-orange-600 font-medium mt-1 mb-1 flex items-center gap-1"><Clock size={10}/> {formatDisplayDate(n.reminderTime.seconds)}</div>}
                                 <div className="flex justify-between items-center mt-1 pt-2 border-t border-black/10">
                                     <span className="text-[10px] text-slate-500">{n.updatedAt ? new Date(n.updatedAt.seconds*1000).toLocaleDateString('vi-VN') : ''}</span>
@@ -1605,7 +1637,7 @@
             const [showMenu, setShowMenu] = useState(false);
             const [connectionError, setConnectionError] = useState(false);
             
-            // START: Quản lý Trạng thái Ngoại tuyến (UI/UX) - Yêu cầu 2 & 4
+            // START: Quản lý Trạng thái Ngoại tuyến (UI/UX)
             const [isOffline, setIsOffline] = useState(!navigator.onLine);
             const [showOfflineBadge, setShowOfflineBadge] = useState(false);
             // END: Quản lý Trạng thái Ngoại tuyến (UI/UX)
@@ -1645,7 +1677,7 @@
                 localStorage.setItem('vt_completed_alerts', JSON.stringify(completedAlerts));
             }, [completedAlerts]);
 
-            // START: Đăng ký lắng nghe tình trạng Internet thay đổi và tự động đồng bộ (Yêu cầu 3)
+            // START: Đăng ký lắng nghe tình trạng Internet thay đổi và tự động đồng bộ
             useEffect(() => {
                 const handleOnline = () => {
                     setIsOffline(false);
@@ -1731,7 +1763,7 @@
                         });
                         setConnectionError(false);
                     } catch (e) {
-                        // Sửa logic xử lý lỗi kết nối mạng (Yêu cầu 2)
+                        // Sửa logic xử lý lỗi kết nối mạng
                         // Nếu do mất mạng không khởi tạo được Firebase khi mở ứng dụng, ta vẫn cho phép chạy tiếp bằng LocalCache
                         console.warn("Lỗi kết nối khởi tạo hệ thống Google Firebase:", e);
                         setIsOffline(true);
@@ -1964,6 +1996,18 @@
                 setUnlockedTabs(prev => ({ ...prev, [tab]: true }));
             };
 
+            // START: Thêm đoạn code đăng ký Service Worker chạy ngầm (Yêu cầu 3)
+            useEffect(() => {
+                if ('serviceWorker' in navigator) {
+                    window.addEventListener('load', () => {
+                        navigator.serviceWorker.register('./sw.js')
+                            .then(reg => console.log('Đăng ký Service Worker thành công:', reg.scope))
+                            .catch(err => console.log('Lỗi đăng ký Service Worker:', err));
+                    });
+                }
+            }, []);
+            // END: Thêm đoạn code đăng ký Service Worker chạy ngầm
+
             if (loading) return <div className="h-screen flex items-center justify-center text-blue-500">Đang tải...</div>;
             if (!user) return <AuthScreen auth={getAuth(app)} appId={MANUAL_CONFIG.projectId} />;
 
@@ -1992,7 +2036,7 @@
                         </div>
                     </header>
 
-                    <main className="flex-1 overflow-y-auto relative flex flex-col font-sans" style={{ backgroundColor: theme.bgColor }}>
+                    <main className="flex-1 overflow-y-auto relative flex flex-col" style={{ backgroundColor: theme.bgColor }}>
                         {/* Tab Lịch ngày */}
                         <div style={{ display: activeTab === 'day' ? 'flex' : 'none', flex: 1, flexDirection: 'column' }}>
                             <DailyView 
@@ -2208,15 +2252,6 @@
 
         const root = createRoot(document.getElementById('root'));
         root.render(<App />);
-    </script>
-   <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then((reg) => console.log('Đăng ký Service Worker thành công với phạm vi: ', reg.scope))
-                    .catch((err) => console.error('Đăng ký Service Worker thất bại: ', err));
-            });
-        }
     </script>
 </body>
 </html>
