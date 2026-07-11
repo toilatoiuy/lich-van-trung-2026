@@ -1,1 +1,31 @@
+name: Gửi thông báo nhắc nhở
 
+on:
+  schedule:
+    # Chạy mỗi 5 phút (GitHub có thể trễ vài phút vào giờ cao điểm, đây là giới hạn
+    # chung của GitHub Actions, không phải lỗi của ứng dụng).
+    - cron: '*/5 * * * *'
+  workflow_dispatch: {}   # cho phép bấm nút "Run workflow" để chạy thử thủ công
+
+jobs:
+  send-reminders:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lấy mã nguồn
+        uses: actions/checkout@v4
+
+      - name: Cài đặt Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Cài thư viện
+        run: npm install
+
+      - name: Chạy quét & gửi nhắc nhở
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          VAPID_PUBLIC_KEY: ${{ secrets.VAPID_PUBLIC_KEY }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          VAPID_SUBJECT: ${{ secrets.VAPID_SUBJECT }}
+        run: npm run send-reminders
