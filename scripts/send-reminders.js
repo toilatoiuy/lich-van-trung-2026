@@ -140,14 +140,26 @@ async function processCollection(colName) {
 async function main() {
   console.log('🚀 Bắt đầu quét nhắc nhở lúc', new Date().toISOString());
   let totalNotified = 0;
+  let hadError = false;
   for (const colName of Object.keys(TYPE_META)) {
     try {
       totalNotified += await processCollection(colName);
     } catch (err) {
+      hadError = true;
       console.error(`❌ Lỗi khi xử lý collection "${colName}":`, err.message);
+      // Firestore thường trả kèm 1 đường link để tự tạo Index còn thiếu — in rõ ra để dễ thấy.
+      const urlMatch = String(err.message).match(/https:\/\/[^\s]+/);
+      if (urlMatch) {
+        console.error('👉 THIẾU INDEX FIRESTORE. Mở link sau, đăng nhập, bấm "Create Index" (hoặc "Save"), đợi vài phút cho index build xong rồi chạy lại workflow:');
+        console.error('   ' + urlMatch[0]);
+      }
     }
   }
   console.log(`✅ Hoàn tất. Đã gửi thông báo cho ${totalNotified} mục.`);
+  if (hadError) {
+    console.error('⚠️ Có lỗi xảy ra ở ít nhất 1 collection (xem chi tiết phía trên). Đánh dấu lần chạy này là THẤT BẠI để anh dễ nhận ra, dù các collection khác có thể vẫn chạy tốt.');
+    process.exitCode = 1;
+  }
 }
 
 main().then(() => process.exit(0)).catch(err => {
