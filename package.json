@@ -1,0 +1,13 @@
+{
+  "name": "lich-van-trung-reminders",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Script gửi thông báo nhắc nhở nền (chạy bởi GitHub Actions, miễn phí) cho ứng dụng Lịch đa năng - Văn Trung",
+  "scripts": {
+    "send-reminders": "node scripts/send-reminders.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "web-push": "^3.6.6"
+  }
+}
